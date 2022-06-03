@@ -1,6 +1,6 @@
 <template>
     <div id = "app">
-         <div class="_1side_menu_logo">
+         <div class="dashboard_header">
             <h3 style="text-align: center">{{ headerTitle }}</h3>
             <!--<img src="/img/logo.jpg" style="width: 108px;margin-left: 68px;"/>-->
         </div>

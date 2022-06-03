@@ -25,7 +25,7 @@ div .py-4{
       box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
       box-shadow: 0 10px 20px rgba(47, 91, 231, 0.1);
   }
-  ._1side_menu_logo {
+  .dashboard_header {
       text-align: center;
       height: 56px;
       padding-top: 18px;

@@ -19773,7 +19773,7 @@ var _hoisted_1 = {
   id: "app"
 };
 var _hoisted_2 = {
-  "class": "_1side_menu_logo"
+  "class": "dashboard_header"
 };
 var _hoisted_3 = {
   style: {
