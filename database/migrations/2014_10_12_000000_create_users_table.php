@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('contact_no');
             $table->string('ic_no');
             $table->string('address');
-            $table->string('role');
+            $table->enum('role',['Admin','Manager','Staff'])->default('Staff');
             $table->string('employed_in');
             $table->bigInteger('warehouse_id');
             $table->rememberToken();
