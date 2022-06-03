@@ -12,7 +12,10 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .vue()
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+    .vue();
+
+mix.styles(
+    [
+        'public/css/grid.min.css',
+        'public/css/dashboard.css'
+    ], 'public/css/app.css'); 

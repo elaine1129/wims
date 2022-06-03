@@ -1,11 +1,14 @@
 require('./bootstrap');
 
 import { createApp } from 'vue'
-import HelloWorld from './components/welcome'
+import DashBoard from './components/dashboard'
 import router from './router'
+import ViewUIPlus from 'view-ui-plus'
+import 'view-ui-plus/dist/styles/viewuiplus.css'
 
 const app = createApp({})
 
-app.component('hello-world', HelloWorld)
+app.component('top-side-dashboard', DashBoard)
 app.use(router)
+app.use(ViewUIPlus)
 app.mount('#app')
