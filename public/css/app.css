@@ -11,7 +11,7 @@
 div .py-4{
   padding: 0 !important
 }
-  ._1side_menu {
+._1side_menu {
       width: 248px;
       position: fixed;
       left: 0;
@@ -48,7 +48,7 @@ div .py-4{
 
 
   /* GLOBAL SHARED STYLES*/
-    ._box_shadow {
+._box_shadow {
       background: #fff;
       /*box-shadow: 0px 2px 28px 0px rgba(48, 48, 48, 0.1);
       box-shadow: 0px 2px 18px 0px rgba(186, 212, 247, 0.43);*/

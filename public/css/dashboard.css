@@ -4,7 +4,7 @@
 div .py-4{
   padding: 0 !important
 }
-  ._1side_menu {
+._1side_menu {
       width: 248px;
       position: fixed;
       left: 0;
@@ -34,14 +34,14 @@ div .py-4{
       overflow: auto;
   }
 
-    .content {
+.content {
       background-color: #fafafa;
       padding:0
-  }
+}
 
 
   /* GLOBAL SHARED STYLES*/
-    ._box_shadow {
+._box_shadow {
       background: #fff;
       /*box-shadow: 0px 2px 28px 0px rgba(48, 48, 48, 0.1);
       box-shadow: 0px 2px 18px 0px rgba(186, 212, 247, 0.43);*/
@@ -49,14 +49,14 @@ div .py-4{
       box-shadow: 0 10px 20px rgba(47, 91, 231, 0.1);
   }
 
-    ._border_radious{
+._border_radious{
       border-radius: 3px;
-  }
+}
 
-    ._padd10 {
+._padd10 {
       padding-left: 10px;
       padding-right: 10px;
-  }
+}
   ._padd15 {
       padding-left: 15px;
       padding-right: 15px;

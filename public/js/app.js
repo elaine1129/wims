@@ -19738,8 +19738,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      theme: 'primary',
-      headerTitle: ''
+      theme: "primary",
+      headerTitle: ""
     };
   },
   methods: {
@@ -19749,7 +19749,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     //read logged in staff's warehouse name
-    var title = 'Check In/Out Stock - ' + 'WAREHOUSE NAME';
+    var title = "Check In/Out Stock - " + "WAREHOUSE NAME";
     this.setHeaderTitle(title);
   }
 });
