@@ -1,0 +1,80 @@
+Name,warehouse_id,cost_per_unit,qty_on_hand,category_id
+Authentic Tea House Da Hong Pao Oolong Tea  300 ml,4,1.6,111,1
+Starbucks Frappuccino Chilled Mocha Drink 281 ml,3,13,134,1
+Yit Foh Instant 3 In 1 Premix Milk Tea Teh Tarik (12 Sticks) 40 g,5,13.2,136,1
+"Grante 100% Pomegranate, Grape And Apple Juice 250 ml",3,6.6,49,1
+Delica 2 In 1 Instant Premix Ipoh White Coffee (15 Packets) 25 g,4,14.15,89,1
+Ma Ma Mi Roasted Robusta Ground Coffee 250 g,1,24.6,103,1
+Coffee Cherry Roasted Robusta Coffee Beans 250 g,5,24.6,70,1
+Nescafé Mild & Smooth Latte Caramel Premix Coffee (20 Sticks) 25 g,5,13.15,110,1
+Delica De Mountain Black Coffee Blend (10 Pieces) 10 g,0,12.6,15,1
+Nutrigold 3 In 1 Instant Premix Coffee Rich (25 Sticks) 20 x 20,0,11.7,98,1
+Nescafé Hazelnut Flavour Latte Premix Coffee (20 Sticks) 24 g,4,13.15,90,1
+F&N Seasons Ice Peach Tea Drink 1 L,3,3.95,142,1
+Nutrigold 3 In 1 Regulart Instant Premix Coffee (30 Sticks) 20 g,0,11.7,27,1
+F&N Seasons Ice Lemon Tea Drink 1 L,1,3.95,67,1
+Delica 3 In 1 Less Sugar Premix Ipoh White Coffee (15 Packets) 32 g,3,15.1,43,1
+Boncafe 100% Pure Mocca Gourmet Ground Coffee 200 x 21,0,21.4,59,1
+Haco Suiss Special Blend Medium Roast Freeze Dried Soluble Coffee 100 x 20,5,38,31,1
+Haco Suis Mocha Medium Roast Freeze Dried Soluble Coffee 100 x 20,5,38,119,1
+Nutrigold 3 In 1 Instant Premix Coffee Mild (30 Sticks) 20 x 20,4,11.7,64,1
+Ikan Brand Instant Rendang Paste (Perencah Rendang Segera) 200 g,0,5.9,39,2
+Carnation Sweetened And Condensed Creamer 500 g,5,3.75,21,2
+Amazin' Graze Banana Bread Granola 250 g,3,18.8,120,2
+Amazin' Graze Salted Gula Melaka Granola 250 g,2,18.8,52,2
+Amazin' Graze Blueberry Goji Coconut Granola 250 g,5,18.8,143,2
+Amazin' Graze Hazelnut Blackforest Granola 250 g,4,18.8,131,2
+Thai Heritage Padthai Paste 125 g,2,5,83,2
+Superfish Dried Isi Ikan Talang 120 g,5,8.5,68,2
+Superfish Dried Gelama Jeruk 150 g,4,4.2,92,2
+Superfish Dried Pari Masin 150 g,5,8.7,114,2
+Superfish Dried Tulang Ikan Merah 200 g,3,4.7,84,2
+Superfish Dried Tulang Ikan Kurau 200 g,1,5.7,114,2
+Superfish Dried Fish Cencaru 150 g,2,3.5,88,2
+Superfish Dried Anchovies (Isi Bilis Sedang Tempatan) 120 g,1,11.5,55,2
+SIMPLY NATURAL Organic Handmade Pumpkin Pan Mee 200 g,4,8.9,35,2
+SIMPLY NATURAL Organic Gluten Free Red Lentil Rigatoni Pasta 250 g,3,13.9,14,2
+SIMPLY NATURAL Organic Gluten Free Multigrain Red Macaroni Pasta 250 g,5,13.9,85,2
+SIMPLY NATURAL Organic Gluten Free Multigrain Black Fussili Pasta 250 g,0,13.9,36,2
+SIMPLY NATURAL Organic Handmade Rainbow Noodle 200 g,2,9.5,104,2
+SIMPLY NATURAL Organic Handmade Rainbow Mee Sua 200 g,5,9.5,146,2
+Kise Traditional Biscuits (Kacang Gula) 160 g,0,5.1,5,3
+Tao Kae Noi Spicy Flavoured Roasted Seaweed (3 Pieces) 36 g,0,4.9,123,3
+Kise Kisbit+ Premiere Sweet & Sour Preserved Fruits (Kana Merah) 120 g,1,4,9,3
+Kise Kisbit+ Premiere Sweet & Sour Preserved Fruits Red Cherry 120 g,1,4.7,53,3
+Tao Kae Noi Spicy Salted Egg Tempura Flavoured Seaweed 45 g,3,7.8,40,3
+Amaze Me Tropical Mixed Dried Fruits 1 packet,4,9,75,3
+Crocodile Brand Agar Agar Strips 1 packet,5,2.4,56,3
+Dalana Sweet Heart Choco Beans 50 g,1,2.2,21,3
+Sweetkiss Assorted Milk Chocolate 1 packet,0,17,18,3
+Dalana Tiramisu Cheese Almond Chocolate 200 g,4,14.15,135,3
+M&M's M&M's Minis In Smooth Milk Chocolate Bar 46 g,1,3.7,116,3
+Dalana Tiramisu Green Tea Almond Chocolate 200 g,4,14.15,111,3
+Cadbury Black Forest Dairy Milk Chocolate Bar 100 g,3,5.95,28,3
+Vico Vico Nuggets 30 g,1,2,146,3
+Fishersman's Friend Provide Legendary Extra Strong Cough And Sore Throat Relief. 25 g,0,4.9,21,3
+Mamee Sweet Corn Mister Potato Crisps 130 g,0,4.7,81,3
+Pocky Family Pack Cookies & Cream 160 g,2,11.95,21,3
+Cadbury Dairy Milk Hazelnut Chocolate 90 g,4,5.95,45,3
+Mission Foods Tortilla Chips With Nori Wasabi Flavour 170 g,4,7.55,144,3
+Kise Kacang Campuran 330 g,2,7.9,79,3
+Ramly Beef Burger Classic Oblong 70 g,0,11.15,107,4
+Ramly Chicken Burger Classic Oblong 70 g,4,10,143,4
+Ramly Minced Chicken (4 Pieces) 800 g,5,17.45,113,4
+Brahim's Chinese Style Fried Rice 180 g,0,6.8,130,4
+Frozen Chicken Wing 1 packet,5,4.72,40,4
+Frozen Chicken Whole Leg 1 packet,2,3.5,10,4
+Frozen Australian Beef Feet 1 packet,1,5.62,83,4
+Fresh Kembung Rebus 1 packet,3,10,139,4
+Barracuda (Ikan Kacang Alu) 1 packet,5,3.45,96,4
+Mushroom Steamboat Selection 500 g,4,13.05,34,4
+Mushroom Lobster Flavour Ball 500 g,2,13.45,60,4
+Figo Chicken Slice 500 g,3,11.45,26,4
+Kawan Frozen Sweet Corn 500g 500 g,2,6.5,21,4
+KG Frozen Garden Peas 500 g,2,6,140,4
+Ayam A1 Beef Patty Burger (5 Pieces) 300 g,4,5.3,140,4
+First Pride Fully Cooked Cornflakes Chicken Nuggets 420 g,5,13.1,129,4
+Ayamas Chicken Meatball With Cheese 450G 450 g,3,13.8,89,4
+Figo Cheesy Fish Curd 500 g,5,13.15,132,4
+Ayam A1 8 Jumbo Chicken Frankfurter With Cheese 880 g,4,15,33,4
+Ayam A1 Honey Fried Chicken 850 g,0,12.75,130,4

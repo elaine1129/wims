@@ -41,10 +41,10 @@ div .py-4{
       overflow: auto;
   }
 
-    .content {
+.content {
       background-color: #fafafa;
       padding:0
-  }
+}
 
 
   /* GLOBAL SHARED STYLES*/
@@ -56,14 +56,14 @@ div .py-4{
       box-shadow: 0 10px 20px rgba(47, 91, 231, 0.1);
   }
 
-    ._border_radious{
+._border_radious{
       border-radius: 3px;
-  }
+}
 
-    ._padd10 {
+._padd10 {
       padding-left: 10px;
       padding-right: 10px;
-  }
+}
   ._padd15 {
       padding-left: 15px;
       padding-right: 15px;

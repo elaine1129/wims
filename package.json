@@ -17,6 +17,9 @@
         "vue-loader": "^17.0.0"
     },
     "dependencies": {
+        "datatables.net": "^1.12.1",
+        "datatables.net-dt": "^1.12.1",
+        "jquery": "^3.6.0",
         "view-ui-plus": "^1.1.0",
         "vue": "^3.2.36",
         "vue-router": "^4.0.15"
