@@ -19801,13 +19801,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         quantity: 0,
         remarks: "",
         inventory_id: "",
-        staff_id: ""
+        staff_id: "",
+        mode: "checkin"
       },
       checkOutForm: {
         quantity: 0,
         remarks: "",
-        inventory_id: "",
-        staff_id: ""
+        inventory_id: -1,
+        staff_id: "",
+        mode: "checkout"
       }
     };
   },
@@ -19874,26 +19876,63 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   _this.smtgWentWrong();
                 }
 
-                _context.next = 18;
+                _context.next = 22;
                 break;
 
               case 10:
                 if (!(_this.checkInOrOutStatus == "checkout")) {
-                  _context.next = 18;
+                  _context.next = 22;
                   break;
                 }
 
-                _this.checkOutForm.quantity = -Math.abs(_this.checkOutForm.quantity);
+                if (!(_this.checkOutForm.quantity >= _this.checkInOutModalInv.qty_on_hand)) {
+                  _context.next = 15;
+                  break;
+                }
+
+                _this.error("The quantity to check out cannot be larger than the quantity on hand! Please try again.");
+
+                _context.next = 22;
+                break;
+
+              case 15:
+                //   this.checkOutForm.quantity = -Math.abs(this.checkOutForm.quantity);
                 console.log("checkOutStock");
                 _this.checkOutForm.inventory_id = _this.checkInOutModalInv.id;
                 _this.checkOutForm.staff_id = 1;
-                _context.next = 17;
+                _context.next = 20;
                 return _this.callApi("POST", "/api/stock", _this.checkOutForm);
 
-              case 17:
+              case 20:
                 _res = _context.sent;
 
-              case 18:
+                if (_res.status == 201) {
+                  _this.checkOutForm = {
+                    quantity: 0,
+                    remarks: "",
+                    inventory_id: "",
+                    staff_id: ""
+                  };
+                  _this.checkInOutModal = false;
+
+                  _this.success("Successfully checked out INV_ID: " + _this.checkInOutModalInv.id);
+                } else if (_res.status == 422) {
+                  console.log(_res);
+
+                  _this.error(Object.values(_res.data.errors)[0], _res.data.message);
+                } else {
+                  _this.checkOutForm = {
+                    quantity: 0,
+                    remarks: "",
+                    inventory_id: "",
+                    staff_id: ""
+                  };
+                  _this.checkInOutModal = false;
+
+                  _this.smtgWentWrong();
+                }
+
+              case 22:
               case "end":
                 return _context.stop();
             }
@@ -20180,9 +20219,36 @@ var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 
 var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Check In/Out Stock");
 
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Cancel");
+var _hoisted_7 = {
+  "class": "row"
+};
 
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Confirm");
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "col-6"
+}, "Inventory ID:", -1
+/* HOISTED */
+);
+
+var _hoisted_9 = {
+  "class": "col-6"
+};
+var _hoisted_10 = {
+  "class": "row"
+};
+
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "col-6"
+}, "Quantity On Hand:", -1
+/* HOISTED */
+);
+
+var _hoisted_12 = {
+  "class": "col-6"
+};
+
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Cancel");
+
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Confirm");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Button = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Button");
@@ -20249,7 +20315,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     footer: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, null, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_7];
+          return [_hoisted_13];
         }),
         _: 1
         /* STABLE */
@@ -20259,7 +20325,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: $options.checkInOutStock
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_8];
+          return [_hoisted_14];
         }),
         _: 1
         /* STABLE */
@@ -20269,7 +20335,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       , ["onClick"])];
     }),
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Tabs, {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.checkInOutModalInv.id), 1
+      /* TEXT */
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.checkInOutModalInv.qty_on_hand), 1
+      /* TEXT */
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Tabs, {
         type: "card",
         onOnClick: $options.handleTabClickingEvent
       }, {

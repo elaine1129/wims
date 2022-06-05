@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Warehouse;
 use App\Models\Category;
+use App\Models\Stock;
+
 
 class Inventory extends Model
 {
@@ -20,5 +22,10 @@ class Inventory extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class);
     }
 }

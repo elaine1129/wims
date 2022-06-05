@@ -39,6 +39,18 @@
         <template #header>
           <p>Check In/ Out Inventory - {{ checkInOutModalInv.name }}</p>
         </template>
+        <div class="row">
+          <p class="col-6">Inventory ID:</p>
+          <p class="col-6">
+            {{ checkInOutModalInv.id }}
+          </p>
+        </div>
+        <div class="row">
+          <p class="col-6">Quantity On Hand:</p>
+          <p class="col-6">
+            {{ checkInOutModalInv.qty_on_hand }}
+          </p>
+        </div>
         <Tabs type="card" @on-click="handleTabClickingEvent">
           <TabPane label="Check In" name="checkin">
             <Form :model="checkInForm" :label-width="80">
@@ -120,12 +132,14 @@ export default {
         remarks: "",
         inventory_id: "",
         staff_id: "",
+        mode: "checkin",
       },
       checkOutForm: {
         quantity: 0,
         remarks: "",
-        inventory_id: "",
+        inventory_id: -1,
         staff_id: "",
+        mode: "checkout",
       },
     };
   },
@@ -170,11 +184,45 @@ export default {
           this.smtgWentWrong();
         }
       } else if (this.checkInOrOutStatus == "checkout") {
-        this.checkOutForm.quantity = -Math.abs(this.checkOutForm.quantity);
-        console.log("checkOutStock");
-        this.checkOutForm.inventory_id = this.checkInOutModalInv.id;
-        this.checkOutForm.staff_id = 1;
-        const res = await this.callApi("POST", "/api/stock", this.checkOutForm);
+        if (this.checkOutForm.quantity >= this.checkInOutModalInv.qty_on_hand) {
+          this.error(
+            "The quantity to check out cannot be larger than the quantity on hand! Please try again."
+          );
+        } else {
+          //   this.checkOutForm.quantity = -Math.abs(this.checkOutForm.quantity);
+          console.log("checkOutStock");
+          this.checkOutForm.inventory_id = this.checkInOutModalInv.id;
+          this.checkOutForm.staff_id = 1;
+          const res = await this.callApi(
+            "POST",
+            "/api/stock",
+            this.checkOutForm
+          );
+          if (res.status == 201) {
+            this.checkOutForm = {
+              quantity: 0,
+              remarks: "",
+              inventory_id: "",
+              staff_id: "",
+            };
+            this.checkInOutModal = false;
+            this.success(
+              "Successfully checked out INV_ID: " + this.checkInOutModalInv.id
+            );
+          } else if (res.status == 422) {
+            console.log(res);
+            this.error(Object.values(res.data.errors)[0], res.data.message);
+          } else {
+            this.checkOutForm = {
+              quantity: 0,
+              remarks: "",
+              inventory_id: "",
+              staff_id: "",
+            };
+            this.checkInOutModal = false;
+            this.smtgWentWrong();
+          }
+        }
       }
     },
   },
