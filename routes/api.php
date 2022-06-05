@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\StockController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,3 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::get('inventories', [InventoryController::class, 'index']);
+
+
+// check in out stock
+Route::post('stock', [StockController::class, 'store']);

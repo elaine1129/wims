@@ -26,10 +26,50 @@
             <td>{{ inventory.category.name }}</td>
             <td>{{ inventory.created_by }}</td>
             <td>{{ inventory.updated_by }}</td>
-            <td><Button type="primary">Check In/Out Stock</Button></td>
+            <td>
+              <Button type="primary" @click="openCheckInOutModal(inventory.id)"
+                >Check In/Out Stock</Button
+              >
+            </td>
           </tr>
         </tbody>
       </table>
+
+      <Modal v-model="checkInOutModal">
+        <template #header>
+          <p>Check In/ Out Inventory - {{ checkInOutModalInv.name }}</p>
+        </template>
+        <Tabs type="card" @on-click="handleTabClickingEvent">
+          <TabPane label="Check In" name="checkin">
+            <Form :model="checkInForm" :label-width="80">
+              <FormItem label="Quantity">
+                <Input
+                  class="check-in-stock-quantity-input"
+                  v-model="checkInForm.quantity"
+                  type="number"
+                  placeholder="Enter quantity"
+                ></Input>
+              </FormItem>
+              <FormItem label="Remarks">
+                <Input
+                  class="check-in-stock-remarks-input"
+                  v-model="checkInForm.remarks"
+                  type="textarea"
+                  :autosize="{ minRows: 2, maxRows: 5 }"
+                  :show-word-limit="true"
+                  maxlength="191"
+                  placeholder="Enter remarks"
+                ></Input>
+              </FormItem>
+            </Form>
+          </TabPane>
+          <TabPane label="Check Out" name="checkout">标签二的内容</TabPane>
+        </Tabs>
+        <template #footer class="d-flex justify-content-center">
+          <Button>Cancel</Button>
+          <Button type="primary" @click="checkInOutStock">Confirm</Button>
+        </template>
+      </Modal>
     </div>
   </div>
 </template>
@@ -49,7 +89,39 @@ export default {
       data: {
         inventories: [],
       },
+      checkInOutModal: false,
+      checkInOutModalInv: {},
+      checkInOutInventory: null,
+      checkInOrOutStatus: "checkin",
+      checkInForm: {
+        quantity: 0,
+        remarks: "",
+        inventory_id: "",
+        staff_id: "",
+      },
     };
+  },
+  methods: {
+    openCheckInOutModal(id) {
+      let inventory = _.find(this.data.inventories, { id: id });
+      this.checkInOutModalInv = inventory;
+      this.checkInOutModal = true;
+    },
+    handleTabClickingEvent(name) {
+      this.checkInOrOutStatus = name;
+      console.log(this.checkInOrOutStatus);
+    },
+    async checkInOutStock() {
+      if (this.checkInOrOutStatus == "checkin") {
+        console.log("checkInOutStock");
+
+        this.checkInForm.inventory_id = this.checkInOutModalInv.id;
+        this.checkInForm.staff_id = 1;
+        const res = await this.callApi("POST", "/api/stock", this.checkInForm);
+      } else if (this.checkInOrOutStatus == "checkout") {
+        this.checkOutForm.quantity = -Math.abs(this.checkOutForm.quantity);
+      }
+    },
   },
   async created() {
     const res = await this.callApi("GET", "/api/inventories");
