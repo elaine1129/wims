@@ -10,7 +10,7 @@ class Warehouse extends Model
 {
     use HasFactory;
     protected $casts = [
-        'storage_bins' => 'json',
+        'storage_bins' => 'array',
     ];
 
     public function inventories()

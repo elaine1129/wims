@@ -22,7 +22,6 @@ class InventoryResource extends JsonResource
             'qty_on_hand' => $this->qty_on_hand,
             'warehouse' => $this->warehouse,
             'storage_bin' => Arr::where($this->warehouse->storage_bins, function ($value, $key) {
-
                 return $value['inventory_id'] == $this->id;
             }),
             'category' => $this->category,
