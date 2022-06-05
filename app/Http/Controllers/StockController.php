@@ -9,6 +9,10 @@ class StockController extends Controller
 {
     public function store(Request $req)
     {
+        $req->validate([
+            'quantity' => 'required | gt:0',
+            'remarks' => 'required'
+        ]);
         return Stock::create($req->all());
     }
 }

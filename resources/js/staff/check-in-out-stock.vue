@@ -145,6 +145,30 @@ export default {
         this.checkInForm.inventory_id = this.checkInOutModalInv.id;
         this.checkInForm.staff_id = 1;
         const res = await this.callApi("POST", "/api/stock", this.checkInForm);
+        if (res.status == 201) {
+          this.checkInForm = {
+            quantity: 0,
+            remarks: "",
+            inventory_id: "",
+            staff_id: "",
+          };
+          this.checkInOutModal = false;
+          this.success(
+            "Successfully checked in INV_ID: " + this.checkInOutModalInv.id
+          );
+        } else if (res.status == 422) {
+          console.log(res);
+          this.error(Object.values(res.data.errors)[0], res.data.message);
+        } else {
+          this.checkInForm = {
+            quantity: 0,
+            remarks: "",
+            inventory_id: "",
+            staff_id: "",
+          };
+          this.checkInOutModal = false;
+          this.smtgWentWrong();
+        }
       } else if (this.checkInOrOutStatus == "checkout") {
         this.checkOutForm.quantity = -Math.abs(this.checkOutForm.quantity);
         console.log("checkOutStock");

@@ -19835,7 +19835,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 if (!(_this.checkInOrOutStatus == "checkin")) {
-                  _context.next = 9;
+                  _context.next = 10;
                   break;
                 }
 
@@ -19847,12 +19847,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
                 res = _context.sent;
-                _context.next = 17;
+
+                if (res.status == 201) {
+                  _this.checkInForm = {
+                    quantity: 0,
+                    remarks: "",
+                    inventory_id: "",
+                    staff_id: ""
+                  };
+                  _this.checkInOutModal = false;
+
+                  _this.success("Successfully checked in INV_ID: " + _this.checkInOutModalInv.id);
+                } else if (res.status == 422) {
+                  console.log(res);
+
+                  _this.error(Object.values(res.data.errors)[0], res.data.message);
+                } else {
+                  _this.checkInForm = {
+                    quantity: 0,
+                    remarks: "",
+                    inventory_id: "",
+                    staff_id: ""
+                  };
+                  _this.checkInOutModal = false;
+
+                  _this.smtgWentWrong();
+                }
+
+                _context.next = 18;
                 break;
 
-              case 9:
+              case 10:
                 if (!(_this.checkInOrOutStatus == "checkout")) {
-                  _context.next = 17;
+                  _context.next = 18;
                   break;
                 }
 
@@ -19860,13 +19887,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 console.log("checkOutStock");
                 _this.checkOutForm.inventory_id = _this.checkInOutModalInv.id;
                 _this.checkOutForm.staff_id = 1;
-                _context.next = 16;
+                _context.next = 17;
                 return _this.callApi("POST", "/api/stock", _this.checkOutForm);
 
-              case 16:
+              case 17:
                 _res = _context.sent;
 
-              case 17:
+              case 18:
               case "end":
                 return _context.stop();
             }
@@ -20483,6 +20510,42 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee, null, [[0, 6]]);
       }))();
+    },
+    info: function info(desc) {
+      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Hey";
+      this.$Notice.info({
+        title: title,
+        desc: desc
+      });
+    },
+    success: function success(desc) {
+      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Great";
+      this.$Notice.success({
+        title: title,
+        desc: desc
+      });
+    },
+    warning: function warning(desc) {
+      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Ooops!";
+      this.$Notice.warning({
+        title: title,
+        desc: desc
+      });
+    },
+    error: function error(desc) {
+      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Ooops";
+      this.$Notice.error({
+        title: title,
+        desc: desc
+      });
+    },
+    smtgWentWrong: function smtgWentWrong() {
+      var desc = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Something went wrong! Please try again.';
+      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Ooops";
+      this.$Notice.error({
+        title: title,
+        desc: desc
+      });
     }
   }
 });
