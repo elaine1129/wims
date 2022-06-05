@@ -5,22 +5,28 @@
       <table id="inventories" class="display" style="width: 100%">
         <thead>
           <tr>
+            <th>Inventory ID</th>
             <th>Name</th>
-            <th>Position</th>
-            <th>Office</th>
-            <th>Age</th>
-            <th>Start date</th>
-            <th>Salary</th>
+            <th>Cost per Unit</th>
+            <th>Quantity On Hand</th>
+            <th>Storage Bin Number</th>
+            <th>Category ID</th>
+            <th>Created By</th>
+            <th>Updated By</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Tiger Nixon</td>
-            <td>System Architect</td>
-            <td>Edinburgh</td>
-            <td>61</td>
-            <td>2011-04-25</td>
-            <td>$320,800</td>
+          <tr v-for="inventory in data.inventories" :key="inventory.id">
+            <td>{{ inventory.id }}</td>
+            <td>{{ inventory.name }}</td>
+            <td>{{ inventory.cost_per_unit }}</td>
+            <td>{{ inventory.qty_on_hand }}</td>
+            <td>{{ inventory.storage_bin[0].bin_number }}</td>
+            <td>{{ inventory.category.name }}</td>
+            <td>{{ inventory.created_by }}</td>
+            <td>{{ inventory.updated_by }}</td>
+            <td><Button type="primary">Check In/Out Stock</Button></td>
           </tr>
         </tbody>
       </table>
@@ -38,8 +44,23 @@ import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 export default {
-  mounted() {
-    $("#inventories").DataTable();
+  data() {
+    return {
+      data: {
+        inventories: [],
+      },
+    };
+  },
+  async created() {
+    const res = await this.callApi("GET", "/api/inventories");
+    if (res.status == 200) {
+      console.log(res.data.data);
+
+      this.data.inventories = res.data.data;
+    }
+    $(document).ready(function () {
+      $("#inventories").DataTable();
+    });
   },
 };
 </script>
