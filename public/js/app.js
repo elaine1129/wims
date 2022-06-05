@@ -19802,6 +19802,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         remarks: "",
         inventory_id: "",
         staff_id: ""
+      },
+      checkOutForm: {
+        quantity: 0,
+        remarks: "",
+        inventory_id: "",
+        staff_id: ""
       }
     };
   },
@@ -19822,7 +19828,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var res;
+        var res, _res;
+
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -19832,7 +19839,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   break;
                 }
 
-                console.log("checkInOutStock");
+                console.log("checkInStock");
                 _this.checkInForm.inventory_id = _this.checkInOutModalInv.id;
                 _this.checkInForm.staff_id = 1;
                 _context.next = 6;
@@ -19840,15 +19847,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
                 res = _context.sent;
-                _context.next = 10;
+                _context.next = 17;
                 break;
 
               case 9:
-                if (_this.checkInOrOutStatus == "checkout") {
-                  _this.checkOutForm.quantity = -Math.abs(_this.checkOutForm.quantity);
+                if (!(_this.checkInOrOutStatus == "checkout")) {
+                  _context.next = 17;
+                  break;
                 }
 
-              case 10:
+                _this.checkOutForm.quantity = -Math.abs(_this.checkOutForm.quantity);
+                console.log("checkOutStock");
+                _this.checkOutForm.inventory_id = _this.checkInOutModalInv.id;
+                _this.checkOutForm.staff_id = 1;
+                _context.next = 16;
+                return _this.callApi("POST", "/api/stock", _this.checkOutForm);
+
+              case 16:
+                _res = _context.sent;
+
+              case 17:
               case "end":
                 return _context.stop();
             }
@@ -20135,11 +20153,9 @@ var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 
 var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Check In/Out Stock");
 
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("标签二的内容");
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Cancel");
 
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Cancel");
-
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Confirm");
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Confirm");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Button = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Button");
@@ -20194,7 +20210,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* KEYED_FRAGMENT */
   ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Modal, {
     modelValue: $data.checkInOutModal,
-    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
       return $data.checkInOutModal = $event;
     })
   }, {
@@ -20206,7 +20222,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     footer: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, null, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_8];
+          return [_hoisted_7];
         }),
         _: 1
         /* STABLE */
@@ -20216,7 +20232,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: $options.checkInOutStock
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_9];
+          return [_hoisted_8];
         }),
         _: 1
         /* STABLE */
@@ -20246,7 +20262,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   }, {
                     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
-                        "class": "check-in-stock-quantity-input",
+                        "class": "check-in-out-stock-quantity-input",
                         modelValue: $data.checkInForm.quantity,
                         "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
                           return $data.checkInForm.quantity = $event;
@@ -20265,7 +20281,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   }, {
                     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
-                        "class": "check-in-stock-remarks-input",
+                        "class": "check-in-out-stock-remarks-input",
                         modelValue: $data.checkInForm.remarks,
                         "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
                           return $data.checkInForm.remarks = $event;
@@ -20302,7 +20318,63 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             name: "checkout"
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-              return [_hoisted_7];
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Form, {
+                model: $data.checkOutForm,
+                "label-width": 80
+              }, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
+                    label: "Quantity"
+                  }, {
+                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
+                        "class": "check-in-out-stock-quantity-input",
+                        modelValue: $data.checkOutForm.quantity,
+                        "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+                          return $data.checkOutForm.quantity = $event;
+                        }),
+                        type: "number",
+                        placeholder: "Enter quantity"
+                      }, null, 8
+                      /* PROPS */
+                      , ["modelValue"])];
+                    }),
+                    _: 1
+                    /* STABLE */
+
+                  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
+                    label: "Remarks"
+                  }, {
+                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
+                        "class": "check-in-out-stock-remarks-input",
+                        modelValue: $data.checkOutForm.remarks,
+                        "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+                          return $data.checkOutForm.remarks = $event;
+                        }),
+                        type: "textarea",
+                        autosize: {
+                          minRows: 2,
+                          maxRows: 5
+                        },
+                        "show-word-limit": true,
+                        maxlength: "191",
+                        placeholder: "Enter remarks"
+                      }, null, 8
+                      /* PROPS */
+                      , ["modelValue"])];
+                    }),
+                    _: 1
+                    /* STABLE */
+
+                  })];
+                }),
+                _: 1
+                /* STABLE */
+
+              }, 8
+              /* PROPS */
+              , ["model"])];
             }),
             _: 1
             /* STABLE */

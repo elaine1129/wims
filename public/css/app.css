@@ -52,11 +52,11 @@ div .py-4{
     justify-content: center;
 }
 
-.ivu-input-wrapper.check-in-stock-quantity-input{
+.ivu-input-wrapper.check-in-out-stock-quantity-input{
     width:20%;
 }
 
-.ivu-input-wrapper.check-in-stock-remarks-input{
+.ivu-input-wrapper.check-in-out-stock-remarks-input{
     width:80%;
 }
 

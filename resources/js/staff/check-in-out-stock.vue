@@ -44,7 +44,7 @@
             <Form :model="checkInForm" :label-width="80">
               <FormItem label="Quantity">
                 <Input
-                  class="check-in-stock-quantity-input"
+                  class="check-in-out-stock-quantity-input"
                   v-model="checkInForm.quantity"
                   type="number"
                   placeholder="Enter quantity"
@@ -52,7 +52,7 @@
               </FormItem>
               <FormItem label="Remarks">
                 <Input
-                  class="check-in-stock-remarks-input"
+                  class="check-in-out-stock-remarks-input"
                   v-model="checkInForm.remarks"
                   type="textarea"
                   :autosize="{ minRows: 2, maxRows: 5 }"
@@ -63,7 +63,29 @@
               </FormItem>
             </Form>
           </TabPane>
-          <TabPane label="Check Out" name="checkout">标签二的内容</TabPane>
+          <TabPane label="Check Out" name="checkout">
+            <Form :model="checkOutForm" :label-width="80">
+              <FormItem label="Quantity">
+                <Input
+                  class="check-in-out-stock-quantity-input"
+                  v-model="checkOutForm.quantity"
+                  type="number"
+                  placeholder="Enter quantity"
+                ></Input>
+              </FormItem>
+              <FormItem label="Remarks">
+                <Input
+                  class="check-in-out-stock-remarks-input"
+                  v-model="checkOutForm.remarks"
+                  type="textarea"
+                  :autosize="{ minRows: 2, maxRows: 5 }"
+                  :show-word-limit="true"
+                  maxlength="191"
+                  placeholder="Enter remarks"
+                ></Input>
+              </FormItem>
+            </Form>
+          </TabPane>
         </Tabs>
         <template #footer class="d-flex justify-content-center">
           <Button>Cancel</Button>
@@ -99,6 +121,12 @@ export default {
         inventory_id: "",
         staff_id: "",
       },
+      checkOutForm: {
+        quantity: 0,
+        remarks: "",
+        inventory_id: "",
+        staff_id: "",
+      },
     };
   },
   methods: {
@@ -113,13 +141,16 @@ export default {
     },
     async checkInOutStock() {
       if (this.checkInOrOutStatus == "checkin") {
-        console.log("checkInOutStock");
-
+        console.log("checkInStock");
         this.checkInForm.inventory_id = this.checkInOutModalInv.id;
         this.checkInForm.staff_id = 1;
         const res = await this.callApi("POST", "/api/stock", this.checkInForm);
       } else if (this.checkInOrOutStatus == "checkout") {
         this.checkOutForm.quantity = -Math.abs(this.checkOutForm.quantity);
+        console.log("checkOutStock");
+        this.checkOutForm.inventory_id = this.checkInOutModalInv.id;
+        this.checkOutForm.staff_id = 1;
+        const res = await this.callApi("POST", "/api/stock", this.checkOutForm);
       }
     },
   },
