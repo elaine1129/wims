@@ -6,6 +6,7 @@ import router from './router'
 import ViewUIPlus from 'view-ui-plus'
 import 'view-ui-plus/dist/styles/viewuiplus.css'
 import 'jquery/dist/jquery.min.js';
+import '../../public/css/tailwind.css'
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables"
 import "datatables.net-dt/css/jquery.dataTables.min.css"

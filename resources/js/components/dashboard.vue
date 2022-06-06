@@ -1,8 +1,7 @@
-<template>
+ <template>
   <div id="app">
     <div class="dashboard_header">
       <h3 style="text-align: center">{{ headerTitle }}</h3>
-      <!--<img src="/img/logo.jpg" style="width: 108px;margin-left: 68px;"/>-->
     </div>
     <Menu mode="horizontal" :theme="theme" active-name="1">
       <MenuItem name="1" to="/staff-check-in-out-stock">
