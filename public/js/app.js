@@ -19839,9 +19839,11 @@ var navigation = [{
     var router = (0,vue_router__WEBPACK_IMPORTED_MODULE_7__.useRouter)();
 
     function logout() {
-      store.commit("logout");
-      router.push({
-        name: "Login"
+      store.dispatch("logout").then(function () {
+        console.log(store.state.user);
+        router.push({
+          name: "Login"
+        });
       });
     }
 
@@ -21492,12 +21494,20 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_1__.createStore)({
         commit('setUser', data);
         return data;
       });
+    },
+    logout: function logout(_ref3) {
+      var commit = _ref3.commit;
+      return _axios__WEBPACK_IMPORTED_MODULE_0__["default"].post('/logout').then(function (response) {
+        commit('logout');
+        return response;
+      });
     }
   },
   mutations: {
     logout: function logout(state) {
       state.user.data = {};
       state.user.token = null;
+      sessionStorage.removeItem("TOKEN");
     },
     setUser: function setUser(state, userData) {
       state.user.token = userData.token;
