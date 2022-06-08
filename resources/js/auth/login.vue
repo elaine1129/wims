@@ -45,24 +45,17 @@
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign in to your account
         </h2>
-        <p class="mt-2 text-center text-sm text-gray-600">
-          Or
-          {{ " " }}
-          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-            start your 14-day free trial
-          </a>
-        </p>
       </div>
-      <form class="mt-8 space-y-6" action="#" method="POST">
+      <form class="mt-8 space-y-6" @submit="login">
         <input type="hidden" name="remember" value="true" />
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
-            <label for="email-address" class="sr-only">Email address</label>
+            <label for="username" class="sr-only">Username</label>
             <input
-              id="email-address"
-              name="email"
-              type="email"
-              autocomplete="email"
+              id="username"
+              name="username"
+              type="username"
+              autocomplete="username"
               required=""
               class="
                 appearance-none
@@ -82,7 +75,8 @@
                 focus:z-10
                 sm:text-sm
               "
-              placeholder="Email address"
+              placeholder="Username"
+              v-model="user.username"
             />
           </div>
           <div>
@@ -112,6 +106,7 @@
                 sm:text-sm
               "
               placeholder="Password"
+              v-model="user.password"
             />
           </div>
         </div>
@@ -130,6 +125,7 @@
                 border-gray-300
                 rounded
               "
+              v-model="user.remember"
             />
             <label for="remember-me" class="ml-2 block text-sm text-gray-900">
               Remember me
@@ -184,6 +180,53 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { LockClosedIcon } from "@heroicons/vue/solid";
+import store from "../store";
+import router from "../router";
+import { inject, ref } from "vue";
+import common from "../common";
+// const user = {
+//   username: "",
+//   password: "",
+//   remember: false,
+// };
+
+export default {
+  components: {
+    LockClosedIcon,
+  },
+  data() {
+    return {
+      user: {
+        username: "",
+        password: "",
+        remember: false,
+      },
+    };
+  },
+
+  methods: {
+    login(ev) {
+      ev.preventDefault();
+      store
+        .dispatch("login", this.user)
+        .then(() => {
+          console.log(router);
+          router.push("/staff-check-in-out-stock");
+        })
+        .catch((err) => {
+          console.log(err.response);
+          if (err.response.data.errors) {
+            this.error(
+              Object.values(err.response.data.errors)[0],
+              err.response.data.message
+            );
+          } else {
+            this.error(err.response.data.error);
+          }
+        });
+    },
+  },
+};
 </script>

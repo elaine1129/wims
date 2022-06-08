@@ -1,8 +1,10 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import TestVueRouter from './components/pages/testvuerouter';
 import CheckInOutStock from './staff/check-in-out-stock'
+import ViewInventory from './staff/view-inventory';
 import Dashboard from './components/dashboard-test';
-import Login from './components/pages/login';
+import Login from './auth/login';
+import store from './store';
 
 const routes = [
     {
@@ -14,20 +16,26 @@ const routes = [
     // },
     {
         path: '/login',
-        name: 'login',
+        name: 'Login',
         component: Login
     },
     {
         path: '/',
         redirect: '/staff-check-in-out-stock',
-        name: 'dashboard',
+        name: 'Dashboard',
         component: Dashboard,
+        meta: { requiresAuth: true },
         children: [
             {
                 path: '/staff-check-in-out-stock',
-                name: 'Check In/Out Stock',
+                name: 'staff-check-in-out-stock',
                 component: CheckInOutStock
 
+            },
+            {
+                path: '/staff-view-inventory',
+                name: 'view-inventory',
+                component: ViewInventory
             }
         ]
     }
@@ -36,5 +44,16 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth && !store.state.user.token) {
+        next({ name: 'Login' });
+    } else if (store.state.user.token && (to.name === 'Login')) {
+        next({ name: 'Dashboard' });
+    }
+    else {
+        next();
+    }
+})
 
 export default router;

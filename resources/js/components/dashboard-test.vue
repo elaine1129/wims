@@ -8,262 +8,182 @@
     <body class="h-full">
     ```
   -->
-
-  <div class="tw-min-h-full tw-min-w-full">
-    <Disclosure as="nav" class="tw-bg-gray-800" v-slot="{ open }">
-      <div class="tw-max-w-7xl tw-mx-auto tw-px-4 sm:tw-px-6 lg:tw-px-8">
-        <div class="tw-flex tw-items-center tw-justify-between tw-h-16">
-          <div class="tw-flex tw-items-center">
-            <div class="tw-flex-shrink-0">
+  <div class="min-h-full min-w-full">
+    <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
               <img
-                class="tw-h-8 tw-w-8"
+                class="h-8 w-8"
                 src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
                 alt="Workflow"
               />
             </div>
-            <div class="tw-hidden md:tw-block">
-              <div class="tw-ml-10 tw-flex tw-items-baseline tw-space-x-4">
-                <a
+            <div class="hidden md:block">
+              <div class="ml-10 flex items-baseline space-x-4">
+                <router-link
                   v-for="item in navigation"
                   :key="item.name"
-                  :href="item.href"
+                  :to="item.to"
+                  active-class="bg-gray-900 text-white"
                   :class="[
-                    item.current
-                      ? 'tw-bg-gray-900 tw-text-white'
-                      : 'tw-text-gray-300 hover:tw-bg-gray-700 hover:tw-text-white',
-                    'tw-px-3 tw-py-2 tw-rounded-md tw-text-sm tw-font-medium',
+                    this.$route.name === item.to.name
+                      ? ''
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'px-3 py-2 rounded-md text-sm font-medium',
                   ]"
-                  :aria-current="item.current ? 'page' : undefined"
-                  >{{ item.name }}</a
+                  >{{ item.name }}</router-link
                 >
               </div>
             </div>
           </div>
-          <div class="tw-hidden md:tw-block">
-            <div class="tw-ml-4 tw-flex tw-items-center md:tw-ml-6">
-              <button
-                type="button"
-                class="
-                  tw-bg-gray-800 tw-p-1 tw-rounded-full tw-text-gray-400
-                  hover:
-                  tw-text-white
-                  focus:
-                  tw-outline-none
-                  focus:
-                  tw-ring-2
-                  focus:
-                  tw-ring-offset-2
-                  focus:
-                  tw-ring-offset-gray-800
-                  focus:
-                  tw-ring-white
-                "
-              >
-                <span class="tw-sr-only">View notifications</span>
-                <BellIcon class="tw-h-6 tw-w-6" aria-hidden="true" />
-              </button>
-
+          <div class="hidden md:block">
+            <div class="ml-4 flex items-center md:ml-6">
               <!-- Profile dropdown -->
-              <Menu as="div" class="tw-ml-3 tw-relative">
+              <Menu as="div" class="ml-3 relative">
                 <div>
                   <MenuButton
                     class="
-                      tw-max-w-xs
-                      tw-bg-gray-800
-                      tw-rounded-full
-                      tw-flex
-                      tw-items-center
-                      tw-text-sm
-                      focus:
-                      tw-outline-none
-                      focus:
-                      tw-ring-2
-                      focus:
-                      tw-ring-offset-2
-                      focus:
-                      tw-ring-offset-gray-800
-                      focus:
-                      tw-ring-white
+                      max-w-xs
+                      bg-gray-800
+                      rounded-full
+                      flex
+                      items-center
+                      text-sm
+                      focus:outline-none
+                      focus:ring-2
+                      focus:ring-offset-2
+                      focus:ring-offset-gray-800
+                      focus:ring-white
                     "
                   >
-                    <span class="tw-sr-only">Open user menu</span>
+                    <span class="sr-only">Open user menu</span>
                     <img
-                      class="tw-h-8 tw-w-8 tw-rounded-full"
+                      class="h-8 w-8 rounded-full"
                       :src="user.imageUrl"
                       alt=""
                     />
                   </MenuButton>
                 </div>
                 <transition
-                  enter-active-class=" tw-transition  tw-ease-out  tw-duration-100"
-                  enter-from-class=" tw-transform  tw-opacity-0  tw-scale-95"
-                  enter-to-class=" tw-transform  tw-opacity-100  tw-scale-100"
-                  leave-active-class=" tw-transition  tw-ease-in  tw-duration-75"
-                  leave-from-class=" tw-transform  tw-opacity-100  tw-scale-100"
-                  leave-to-class=" tw-transform  tw-opacity-0  tw-scale-95"
+                  enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95"
+                  enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75"
+                  leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95"
                 >
                   <MenuItems
                     class="
-                      tw-origin-top-right
-                      tw-absolute
-                      tw-right-0
-                      tw-mt-2
-                      tw-w-48
-                      tw-rounded-md
-                      tw-shadow-lg
-                      tw-py-1
-                      tw-bg-white
-                      tw-ring-1
-                      tw-ring-black
-                      tw-ring-opacity-5
-                      focus:
-                      tw-outline-none
+                      origin-top-right
+                      absolute
+                      right-0
+                      mt-2
+                      w-48
+                      rounded-md
+                      shadow-lg
+                      py-1
+                      bg-white
+                      ring-1 ring-black ring-opacity-5
+                      focus:outline-none
                     "
                   >
-                    <MenuItem
-                      v-for="item in userNavigation"
-                      :key="item.name"
-                      v-slot="{ active }"
+                    <a
+                      @click="logout"
+                      :class="[
+                        'block px-4 py-2 text-sm text-gray-700 cursor-pointer',
+                      ]"
+                      >Sign Out</a
                     >
-                      <a
-                        :href="item.href"
-                        :class="[
-                          active ? ' tw-bg-gray-100' : '',
-                          ' tw-block  tw-px-4  tw-py-2  tw-text-sm  tw-text-gray-700',
-                        ]"
-                        >{{ item.name }}</a
-                      >
-                    </MenuItem>
                   </MenuItems>
                 </transition>
               </Menu>
             </div>
           </div>
-          <div class="-tw-mr-2 tw-flex md:tw-hidden">
+          <div class="-mr-2 flex md:hidden">
             <!-- Mobile menu button -->
             <DisclosureButton
               class="
-                tw-bg-gray-800
-                tw-inline-flex
-                tw-items-center
-                tw-justify-center
-                tw-p-2
-                tw-rounded-md
-                tw-text-gray-400
-                hover:tw-text-white hover:tw-bg-gray-700
-                focus:tw-outline-none
-                focus:tw-ring-2
-                focus:tw-ring-offset-2
-                focus:tw-ring-offset-gray-800
-                focus:tw-ring-white
+                bg-gray-800
+                inline-flex
+                items-center
+                justify-center
+                p-2
+                rounded-md
+                text-gray-400
+                hover:text-white hover:bg-gray-700
+                focus:outline-none
+                focus:ring-2
+                focus:ring-offset-2
+                focus:ring-offset-gray-800
+                focus:ring-white
               "
             >
-              <span class="tw-sr-only">Open main menu</span>
-              <MenuIcon
-                v-if="!open"
-                class="tw-block tw-h-6 tw-w-6"
-                aria-hidden="true"
-              />
-              <XIcon v-else class="tw-block tw-h-6 tw-w-6" aria-hidden="true" />
+              <span class="sr-only">Open main menu</span>
+              <MenuIcon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+              <XIcon v-else class="block h-6 w-6" aria-hidden="true" />
             </DisclosureButton>
           </div>
         </div>
       </div>
 
-      <DisclosurePanel class="md:tw-hidden">
-        <div class="tw-px-2 tw-pt-2 tw-pb-3 tw-space-y-1 sm:tw-px-3">
-          <DisclosureButton
+      <DisclosurePanel class="md:hidden">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <router-link
             v-for="item in navigation"
             :key="item.name"
             as="a"
-            :href="item.href"
+            :to="item.to"
+            active-class="bg-gray-900 text-white"
             :class="[
-              item.current
-                ? 'tw-bg-gray-900 tw-text-white'
-                : 'tw-text-gray-300 hover:tw-bg-gray-700 hover:tw-text-white',
-              'tw-block tw-px-3 tw-py-2 tw-rounded-md tw-text-base tw-font-medium',
+              this.$route.name === item.to.name
+                ? ''
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+              'block px-3 py-2 rounded-md text-base font-medium',
             ]"
-            :aria-current="item.current ? 'page' : undefined"
-            >{{ item.name }}</DisclosureButton
+            >{{ item.name }}</router-link
           >
         </div>
-        <div class="tw-pt-4 tw-pb-3 tw-border-t tw-border-gray-700">
-          <div class="tw-flex tw-items-center tw-px-5">
-            <div class="tw-flex-shrink-0">
-              <img
-                class="tw-h-10 tw-w-10 tw-rounded-full"
-                :src="user.imageUrl"
-                alt=""
-              />
+        <div class="pt-4 pb-3 border-t border-gray-700">
+          <div class="flex items-center px-5">
+            <div class="flex-shrink-0">
+              <img class="h-10 w-10 rounded-full" :src="user.imageUrl" alt="" />
             </div>
-            <div class="tw-ml-3">
-              <div
-                class="
-                  tw-text-base tw-font-medium tw-leading-none tw-text-white
-                "
-              >
+            <div class="ml-3">
+              <div class="text-base font-medium leading-none text-white">
                 {{ user.name }}
               </div>
-              <div
-                class="
-                  tw-text-sm tw-font-medium tw-leading-none tw-text-gray-400
-                "
-              >
+              <div class="text-sm font-medium leading-none text-gray-400">
                 {{ user.email }}
               </div>
             </div>
-            <button
-              type="button"
-              class="
-                tw-ml-auto
-                tw-bg-gray-800
-                tw-flex-shrink-0
-                tw-p-1
-                tw-rounded-full
-                tw-text-gray-400
-                hover:tw-text-white
-                focus:tw-outline-none
-                focus:tw-ring-2
-                focus:tw-ring-offset-2
-                focus:tw-ring-offset-gray-800
-                focus:tw-ring-white
-              "
-            >
-              <span class="tw-sr-only">View notifications</span>
-              <BellIcon class="tw-h-6 tw-w-6" aria-hidden="true" />
-            </button>
           </div>
-          <div class="tw-mt-3 tw-px-2 tw-space-y-1">
-            <DisclosureButton
-              v-for="item in userNavigation"
-              :key="item.name"
-              as="a"
-              :href="item.href"
+          <div class="mt-3 px-2 space-y-1">
+            <a
+              @click="logout"
               class="
-                tw-block tw-px-3 tw-py-2 tw-
+                block
+                px-3
+                py-2
                 rounded-md
-                tw-text-base tw-font-medium tw-text-gray-400
-                hover:tw-text-white hover:tw-bg-gray-700
+                text-base
+                font-medium
+                text-gray-400
+                hover:text-white hover:bg-gray-700
+                cursor-pointer
               "
-              >{{ item.name }}</DisclosureButton
+              >Sign out</a
             >
           </div>
         </div>
       </DisclosurePanel>
     </Disclosure>
-
-    <header class="tw-bg-white tw-shadow">
-      <div
-        class="tw-max-w-7xl tw-mx-auto tw-py-6 tw-px-4 sm:tw-px-6 lg:tw-px-8"
-      >
-        <h1 class="tw-text-3xl tw-font-bold tw-text-gray-900">Dashboard</h1>
-      </div>
-    </header>
     <router-view />
   </div>
 </template>
 
-<script setup>
+<script>
 import {
   Disclosure,
   DisclosureButton,
@@ -274,23 +194,42 @@ import {
   MenuItems,
 } from "@headlessui/vue";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
-
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+import { useStore } from "vuex";
+import { computed } from "vue";
+import { useRouter } from "vue-router";
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-  { name: "Reports", href: "#", current: false },
+  { name: "Check In/Out Stock", to: { name: "staff-check-in-out-stock" } },
+  { name: "View Inventory", to: { name: "view-inventory" } },
 ];
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
+
+export default {
+  components: {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+    BellIcon,
+    MenuIcon,
+    XIcon,
+  },
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+
+    function logout() {
+      store.commit("logout");
+      router.push({
+        name: "Login",
+      });
+    }
+    return {
+      user: computed(() => store.state.user.data),
+      navigation,
+      logout, //so that is accessible in the component
+    };
+  },
+};
 </script>
