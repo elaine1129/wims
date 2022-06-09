@@ -21,9 +21,30 @@
               />
             </div>
             <div class="hidden md:block">
-              <div class="ml-10 flex items-baseline space-x-4">
+              <div
+                class="ml-10 flex items-baseline space-x-4"
+                v-if="user.role == 'Staff'"
+              >
                 <router-link
-                  v-for="item in navigation"
+                  v-for="item in navigation.staff"
+                  :key="item.name"
+                  :to="item.to"
+                  active-class="bg-gray-900 text-white"
+                  :class="[
+                    this.$route.name === item.to.name
+                      ? ''
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'px-3 py-2 rounded-md text-sm font-medium',
+                  ]"
+                  >{{ item.name }}</router-link
+                >
+              </div>
+              <div
+                class="ml-10 flex items-baseline space-x-4"
+                v-if="user.role == 'Admin'"
+              >
+                <router-link
+                  v-for="item in navigation.admin"
                   :key="item.name"
                   :to="item.to"
                   active-class="bg-gray-900 text-white"
@@ -129,9 +150,31 @@
       </div>
 
       <DisclosurePanel class="md:hidden">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div
+          class="px-2 pt-2 pb-3 space-y-1 sm:px-3"
+          v-if="user.role == 'Staff'"
+        >
           <router-link
-            v-for="item in navigation"
+            v-for="item in navigation.staff"
+            :key="item.name"
+            as="a"
+            :to="item.to"
+            active-class="bg-gray-900 text-white"
+            :class="[
+              this.$route.name === item.to.name
+                ? ''
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+              'block px-3 py-2 rounded-md text-base font-medium',
+            ]"
+            >{{ item.name }}</router-link
+          >
+        </div>
+        <div
+          class="px-2 pt-2 pb-3 space-y-1 sm:px-3"
+          v-if="user.role == 'Admin'"
+        >
+          <router-link
+            v-for="item in navigation.admin"
             :key="item.name"
             as="a"
             :to="item.to"
@@ -197,10 +240,25 @@ import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
 import { useStore } from "vuex";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-const navigation = [
-  { name: "Check In/Out Stock", to: { name: "staff-check-in-out-stock" } },
-  { name: "View Inventory", to: { name: "view-inventory" } },
-];
+const navigation = {
+  //admin
+  admin: [
+    {
+      name: "Manage Inventory",
+      to: { name: "admin-manage-inventory" },
+    },
+  ],
+  staff: [
+    {
+      name: "Check In/Out Stock",
+      to: { name: "staff-check-in-out-stock" },
+    },
+    {
+      name: "View Inventory",
+      to: { name: "view-inventory" },
+    },
+  ],
+};
 
 export default {
   components: {
@@ -218,7 +276,25 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
-
+    const routes = {
+      //admin
+      admin: [
+        {
+          name: "Manage Inventory",
+          to: { name: "admin-manage-inventory" },
+        },
+      ],
+      staff: [
+        {
+          name: "Check In/Out Stock",
+          to: { name: "staff-check-in-out-stock" },
+        },
+        {
+          name: "View Inventory",
+          to: { name: "view-inventory" },
+        },
+      ],
+    };
     function logout() {
       store.dispatch("logout").then(() => {
         console.log(store.state.user);

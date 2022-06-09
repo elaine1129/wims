@@ -16,17 +16,30 @@ class UserSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => 'staff',
-            'username' => 'staff',
-            'password' => Hash::make('staff'),
-            'email' => 'staff@wims.com',
+            'name' => 'manager',
+            'username' => 'manager',
+            'password' => Hash::make('manager'),
+            'email' => 'manager@wims.com',
             'contact_no' => '0123456789',
             'ic_no' => '1234567-67-1234',
             'address' => 'asdfsd',
-            'role' => 'Staff',
+            'role' => 'Manager',
             'employed_in' => 'June 2020',
             'warehouse_id' => 1
 
         ]);
+        // DB::table('users')->insert([
+        //     'name' => 'staff',
+        //     'username' => 'staff',
+        //     'password' => Hash::make('staff'),
+        //     'email' => 'staff@wims.com',
+        //     'contact_no' => '0123456789',
+        //     'ic_no' => '1234567-67-1234',
+        //     'address' => 'asdfsd',
+        //     'role' => 'Staff',
+        //     'employed_in' => 'June 2020',
+        //     'warehouse_id' => 1
+
+        // ]);
     }
 }

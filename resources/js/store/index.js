@@ -1,5 +1,7 @@
 import { useRoute } from "vue-router";
 import { createStore } from "vuex";
+import createPersistedState from 'vuex-persistedstate'
+import Cookies from 'js-cookie'
 import axiosClient from "../axios";
 const store = createStore({
     state: {
@@ -38,7 +40,10 @@ const store = createStore({
             sessionStorage.setItem("TOKEN", userData.token);
         }
     },
-    modules: {}
+    modules: {},
+    plugins: [createPersistedState({
+        storage: window.sessionStorage,
+    })],
 
 })
 

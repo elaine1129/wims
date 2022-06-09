@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from 'vue-router';
 import TestVueRouter from './components/pages/testvuerouter';
 import CheckInOutStock from './staff/check-in-out-stock'
 import ViewInventory from './staff/view-inventory';
+import ManageInventory from './admin/manage-inventory';
 import Dashboard from './components/dashboard-test';
 import Login from './auth/login';
 import store from './store';
@@ -21,7 +22,13 @@ const routes = [
     },
     {
         path: '/',
-        redirect: '/staff-check-in-out-stock',
+        redirect: to => {
+            if (store.state.user.role == 'Staff') {
+                return { path: '/staff-check-in-out-stock' }
+            }
+            return { path: '/admin-manage-inventory' }
+
+        },
         name: 'Dashboard',
         component: Dashboard,
         meta: { requiresAuth: true },
@@ -36,6 +43,11 @@ const routes = [
                 path: '/staff-view-inventory',
                 name: 'view-inventory',
                 component: ViewInventory
+            },
+            {
+                path: '/admin-manage-inventory',
+                name: 'admin-manage-inventory',
+                component: ManageInventory
             }
         ]
     }
@@ -55,5 +67,4 @@ router.beforeEach((to, from, next) => {
         next();
     }
 })
-
 export default router;

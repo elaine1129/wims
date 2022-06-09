@@ -26,9 +26,12 @@
         "datatables.net": "^1.12.1",
         "datatables.net-dt": "^1.12.1",
         "jquery": "^3.6.0",
+        "js-cookie": "^3.0.1",
         "view-ui-plus": "^1.1.0",
         "vue": "^3.2.36",
         "vue-router": "^4.0.15",
-        "vuex": "^4.0.2"
+        "vue-router-user-roles": "^0.1.92",
+        "vuex": "^4.0.2",
+        "vuex-persistedstate": "^4.1.0"
     }
 }
