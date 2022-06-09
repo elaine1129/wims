@@ -131,12 +131,15 @@ import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import PageComponent from "../default-page.vue";
+import { mapState, useStore } from "vuex";
+const store = useStore();
 export default {
   components: {
     PageComponent,
   },
   data() {
     return {
+      channel: null,
       data: {
         inventories: [],
       },
@@ -160,6 +163,7 @@ export default {
       },
     };
   },
+
   methods: {
     openCheckInOutModal(id) {
       let inventory = _.find(this.data.inventories, { id: id });
@@ -243,15 +247,47 @@ export default {
       }
     },
   },
+
   async created() {
     const res = await this.callApi("GET", "/api/inventories");
     if (res.status == 200) {
       console.log(res.data.data);
 
       this.data.inventories = res.data.data;
+      console.log("store", this.$store.getters.getUser);
+      // Echo.private(
+      //   "check-in-out-stock." + this.$store.getters.getUser.warehouse_id
+      // ).listen("StockCreated", (e) => {
+      //   console.log("Listen event");
+      //   let invToReplace = _.findIndex(this.data.inventories, {
+      //     id: e.inventory.id,
+      //   });
+      //   this.data.inventories[invToReplace] = e.inventory;
+      // });
     }
     $(document).ready(function () {
       $("#inventories").DataTable();
+    });
+  },
+  mounted() {
+    let pusher = new Pusher("c89ac2e37c8ac332133e", {
+      cluster: "ap1",
+      encrypted: false,
+    });
+    //Subscribe to the channel we specified in our Adonis Application
+    let channel = pusher.subscribe(
+      "check-in-out-stock." + this.$store.getters.getUser.warehouse_id
+    );
+    console.log(channel);
+    let event = `App\\Events\\StockCreated`;
+    console.log("event", event);
+
+    channel.bind(event, (e) => {
+      console.log("stock created", e);
+      let invToReplace = _.findIndex(this.data.inventories, {
+        id: e.inventory.id,
+      });
+      this.data.inventories[invToReplace] = e.inventory;
     });
   },
 };

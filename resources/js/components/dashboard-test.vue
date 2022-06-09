@@ -310,5 +310,8 @@ export default {
       logout, //so that is accessible in the component
     };
   },
+  created() {
+    console.log("dashboard", this.user);
+  },
 };
 </script>

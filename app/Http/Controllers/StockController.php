@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Stock;
 use App\Models\Inventory;
+use App\Events\StockCreated;
+use App\Http\Resources\InventoryResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class StockController extends Controller
 {
@@ -20,6 +23,7 @@ class StockController extends Controller
         $inventory =  Inventory::findOrFail($req->inventory_id);
         $inventory->qty_on_hand += $req->quantity;
         $inventory->save();
+        event(new StockCreated($inventory));
         return Stock::create($req->all());
     }
 }

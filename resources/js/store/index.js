@@ -10,7 +10,11 @@ const store = createStore({
             token: sessionStorage.getItem('TOKEN')
         }
     },
-    getters: {},
+    getters: {
+        getUser(state) {
+            return state.user.data;
+        }
+    },
     actions: {
         login({ commit }, user) {
             return axiosClient.post('/login', user)
