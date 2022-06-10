@@ -1,9 +1,13 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import TestVueRouter from './components/pages/testvuerouter';
-import CheckInOutStock from './staff/check-in-out-stock'
-import ViewInventory from './staff/view-inventory';
-import ManageInventory from './admin/manage-inventory';
+import CheckInOutStock from './pages/staff/check-in-out-stock'
+import ViewInventory from './pages/staff/view-inventory';
+import ManageInventory from './pages/admin/manage-inventory';
 import Dashboard from './components/dashboard-test';
+import ManageCycleCounting from './pages/manager/manage-cycle-counting';
+import ViewCycleCounting from './pages/manager/view-cycle-counting';
+import StartCycleCounting from './pages/manager/start-cycle-counting';
+
 import Login from './auth/login';
 import store from './store';
 
@@ -24,9 +28,15 @@ const routes = [
         path: '/',
         redirect: to => {
             if (store.state.user.role == 'Staff') {
-                return { path: '/staff-check-in-out-stock' }
+                return { path: '/admin-manage-inventory' }
             }
-            return { path: '/admin-manage-inventory' }
+            else if (store.state.user.role == 'Admin') {
+                return { path: '/admin-manage-inventory' }
+
+            }
+            else {
+                return { path: '/manager-start-cycle-counting' }
+            }
 
         },
         name: 'Dashboard',
@@ -48,6 +58,21 @@ const routes = [
                 path: '/admin-manage-inventory',
                 name: 'admin-manage-inventory',
                 component: ManageInventory
+            },
+            // {
+            //     path: '/manager-manage-cycle-counting',
+            //     name: 'manager-manage-cycle-counting',
+            //     component: ManageCycleCounting
+            // },
+            {
+                path: '/manager-start-cycle-counting',
+                name: 'manager-start-cycle-counting',
+                component: StartCycleCounting
+            },
+            {
+                path: '/manager-view-cycle-counting',
+                name: 'manager-view-cycle-counting',
+                component: ViewCycleCounting
             }
         ]
     }

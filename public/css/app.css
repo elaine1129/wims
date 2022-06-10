@@ -660,6 +660,12 @@ select {
 .block {
   display: block;
 }
+.inline-block {
+  display: inline-block;
+}
+.inline {
+  display: inline;
+}
 .flex {
   display: flex;
 }
@@ -728,6 +734,12 @@ select {
 }
 .w-10 {
   width: 2.5rem;
+}
+.w-2\.5 {
+  width: 0.625rem;
+}
+.w-2 {
+  width: 0.5rem;
 }
 .min-w-full {
   min-width: 100%;

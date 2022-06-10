@@ -213,7 +213,7 @@ export default {
         .dispatch("login", this.user)
         .then(() => {
           console.log(router);
-          router.push("/staff-check-in-out-stock");
+          router.push("/");
         })
         .catch((err) => {
           console.log(err.response);

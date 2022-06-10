@@ -130,7 +130,7 @@ import "jquery/dist/jquery.min.js";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
-import PageComponent from "../default-page.vue";
+import PageComponent from "../../components/pages/default-page.vue";
 import { mapState, useStore } from "vuex";
 const store = useStore();
 export default {

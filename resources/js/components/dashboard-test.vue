@@ -57,6 +57,54 @@
                   >{{ item.name }}</router-link
                 >
               </div>
+              <div
+                class="ml-10 flex items-baseline space-x-4"
+                v-if="user.role == 'Manager'"
+              >
+                <span v-for="item in navigation.manager" :key="item.name">
+                  <span v-if="item.name !== 'Manage Cycle Counting'">
+                    <router-link
+                      active-class="bg-gray-900 text-white"
+                      :class="[
+                        this.$route.name === item.to.name
+                          ? ''
+                          : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        'px-3 py-2 rounded-md text-sm font-medium',
+                      ]"
+                      >{{ item.name }}</router-link
+                    >
+                  </span>
+
+                  <span v-else>
+                    <Dropdown>
+                      <a href="javascript:void(0)">
+                        {{ item.name }}
+                        <Icon type="ios-arrow-down"></Icon>
+                      </a>
+                      <template #list>
+                        <DropdownMenu>
+                          <DropdownItem
+                            v-for="item in managerNavigation"
+                            :key="item.name"
+                          >
+                            <router-link
+                              :to="item.to"
+                              active-class="bg-gray-900 text-white"
+                              :class="[
+                                this.$route.name === item.to.name
+                                  ? ''
+                                  : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                'px-3 py-2 rounded-md text-sm font-medium',
+                              ]"
+                              >{{ item.name }}</router-link
+                            >
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </template>
+                    </Dropdown>
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
           <div class="hidden md:block">
@@ -188,6 +236,25 @@
             >{{ item.name }}</router-link
           >
         </div>
+        <div
+          class="px-2 pt-2 pb-3 space-y-1 sm:px-3"
+          v-if="user.role == 'Manager'"
+        >
+          <router-link
+            v-for="item in navigation.manager"
+            :key="item.name"
+            as="a"
+            :to="item.to"
+            active-class="bg-gray-900 text-white"
+            :class="[
+              this.$route.name === item.to.name
+                ? ''
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+              'block px-3 py-2 rounded-md text-base font-medium',
+            ]"
+            >{{ item.name }}</router-link
+          >
+        </div>
         <div class="pt-4 pb-3 border-t border-gray-700">
           <div class="flex items-center px-5">
             <div class="flex-shrink-0">
@@ -238,8 +305,9 @@ import {
 } from "@headlessui/vue";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, provide } from "vue";
 import { useRouter } from "vue-router";
+import success from "../common";
 const navigation = {
   //admin
   admin: [
@@ -258,7 +326,24 @@ const navigation = {
       to: { name: "view-inventory" },
     },
   ],
+  manager: [
+    {
+      name: "Manage Cycle Counting",
+      to: { name: "manager-manage-cycle-counting" },
+    },
+  ],
 };
+
+const managerNavigation = [
+  {
+    name: "Start Cycle Counting",
+    to: { name: "manager-start-cycle-counting" },
+  },
+  {
+    name: "View Cycle Counting",
+    to: { name: "manager-view-cycle-counting" },
+  },
+];
 
 export default {
   components: {
@@ -274,6 +359,7 @@ export default {
     XIcon,
   },
   setup() {
+    provide(success);
     const store = useStore();
     const router = useRouter();
     const routes = {
@@ -307,6 +393,7 @@ export default {
     return {
       user: computed(() => store.state.user.data),
       navigation,
+      managerNavigation,
       logout, //so that is accessible in the component
     };
   },
