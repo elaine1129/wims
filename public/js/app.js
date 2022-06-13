@@ -19735,13 +19735,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @heroicons/vue/solid */ "./node_modules/@heroicons/vue/solid/esm/LockClosedIcon.js");
+/* harmony import */ var _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @heroicons/vue/solid */ "./node_modules/@heroicons/vue/solid/esm/LockClosedIcon.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../store */ "./resources/js/store/index.js");
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../router */ "./resources/js/router.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common */ "./resources/js/common.js");
-
-
 
 
  // const user = {
@@ -19752,7 +19748,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    LockClosedIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_4__["default"]
+    LockClosedIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -19797,16 +19793,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _headlessui_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @headlessui/vue */ "./node_modules/@headlessui/vue/dist/components/disclosure/disclosure.js");
-/* harmony import */ var _headlessui_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @headlessui/vue */ "./node_modules/@headlessui/vue/dist/components/menu/menu.js");
-/* harmony import */ var _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @heroicons/vue/outline */ "./node_modules/@heroicons/vue/outline/esm/BellIcon.js");
-/* harmony import */ var _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @heroicons/vue/outline */ "./node_modules/@heroicons/vue/outline/esm/MenuIcon.js");
-/* harmony import */ var _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @heroicons/vue/outline */ "./node_modules/@heroicons/vue/outline/esm/XIcon.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var _headlessui_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @headlessui/vue */ "./node_modules/@headlessui/vue/dist/components/disclosure/disclosure.js");
+/* harmony import */ var _headlessui_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @headlessui/vue */ "./node_modules/@headlessui/vue/dist/components/menu/menu.js");
+/* harmony import */ var _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @heroicons/vue/outline */ "./node_modules/@heroicons/vue/outline/esm/BellIcon.js");
+/* harmony import */ var _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @heroicons/vue/outline */ "./node_modules/@heroicons/vue/outline/esm/MenuIcon.js");
+/* harmony import */ var _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @heroicons/vue/outline */ "./node_modules/@heroicons/vue/outline/esm/XIcon.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm-bundler.js");
-/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common */ "./resources/js/common.js");
-
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm-bundler.js");
 
 
 
@@ -19851,21 +19845,20 @@ var managerNavigation = [{
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    Disclosure: _headlessui_vue__WEBPACK_IMPORTED_MODULE_2__.Disclosure,
-    DisclosureButton: _headlessui_vue__WEBPACK_IMPORTED_MODULE_2__.DisclosureButton,
-    DisclosurePanel: _headlessui_vue__WEBPACK_IMPORTED_MODULE_2__.DisclosurePanel,
-    Menu: _headlessui_vue__WEBPACK_IMPORTED_MODULE_3__.Menu,
-    MenuButton: _headlessui_vue__WEBPACK_IMPORTED_MODULE_3__.MenuButton,
-    MenuItem: _headlessui_vue__WEBPACK_IMPORTED_MODULE_3__.MenuItem,
-    MenuItems: _headlessui_vue__WEBPACK_IMPORTED_MODULE_3__.MenuItems,
-    BellIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_4__["default"],
-    MenuIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_5__["default"],
-    XIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_6__["default"]
+    Disclosure: _headlessui_vue__WEBPACK_IMPORTED_MODULE_1__.Disclosure,
+    DisclosureButton: _headlessui_vue__WEBPACK_IMPORTED_MODULE_1__.DisclosureButton,
+    DisclosurePanel: _headlessui_vue__WEBPACK_IMPORTED_MODULE_1__.DisclosurePanel,
+    Menu: _headlessui_vue__WEBPACK_IMPORTED_MODULE_2__.Menu,
+    MenuButton: _headlessui_vue__WEBPACK_IMPORTED_MODULE_2__.MenuButton,
+    MenuItem: _headlessui_vue__WEBPACK_IMPORTED_MODULE_2__.MenuItem,
+    MenuItems: _headlessui_vue__WEBPACK_IMPORTED_MODULE_2__.MenuItems,
+    BellIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_3__["default"],
+    MenuIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_4__["default"],
+    XIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   setup: function setup() {
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)(_common__WEBPACK_IMPORTED_MODULE_1__["default"]);
-    var store = (0,vuex__WEBPACK_IMPORTED_MODULE_7__.useStore)();
-    var router = (0,vue_router__WEBPACK_IMPORTED_MODULE_8__.useRouter)();
+    var store = (0,vuex__WEBPACK_IMPORTED_MODULE_6__.useStore)();
+    var router = (0,vue_router__WEBPACK_IMPORTED_MODULE_7__.useRouter)();
     var routes = {
       //admin
       admin: [{
@@ -20049,6 +20042,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       assignStaffModal: false,
+      selectInvModal: false,
       workdays: [{
         value: "monday",
         text: "Monday"
@@ -20093,8 +20087,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         classBType: "",
         classC: 0,
         classCType: "",
-        staffs_assigned: "",
-        inventories: "",
+        staffs_assigned: [],
+        staffs_assigned_str: "",
+        inventories: [],
+        inventories_str: "",
         start_end_date: ""
       },
       minDate: {
@@ -20103,20 +20099,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       },
       staffs: [],
-      indeterminate: true,
-      checkAll: false,
-      checkAllGroup: []
+      inventories: [],
+      staff_indeterminate: true,
+      staff_checkAll: false,
+      checkAllGroup: [],
+      inv_indeterminate: true,
+      inv_checkAll: false,
+      inv_checkAllGroup: []
     };
   },
   methods: {
     assignStaff: function assignStaff() {
       var _this = this;
 
-      console.log(this.staffs);
-      this.startCycleCountingForm.staffs_assigned = "";
+      this.startCycleCountingForm.staffs_assigned_str = "";
+      this.startCycleCountingForm.staffs_assigned = _.sortBy(this.startCycleCountingForm.staffs_assigned, function (d) {
+        return _.parseInt(_.split(d, ":", 1)[0]);
+      });
 
-      _.forEach(this.staffs, function (staff) {
-        _this.startCycleCountingForm.staffs_assigned += "".concat(staff.id, ":").concat(staff.name);
+      _.forEach(this.startCycleCountingForm.staffs_assigned, function (staff) {
+        if (_this.startCycleCountingForm.staffs_assigned_str.length > 0) {
+          _this.startCycleCountingForm.staffs_assigned_str += ", ".concat(staff);
+        } else {
+          _this.startCycleCountingForm.staffs_assigned_str += staff;
+        }
       });
     },
     getStaffs: function getStaffs() {
@@ -20149,31 +20155,110 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    handleCheckAll: function handleCheckAll() {
-      if (this.indeterminate) {
-        this.checkAll = false;
+    staffHandleCheckAll: function staffHandleCheckAll() {
+      if (this.staff_indeterminate) {
+        this.staff_checkAll = false;
       } else {
-        this.checkAll = !this.checkAll;
+        this.staff_checkAll = !this.staff_checkAll;
       }
 
-      this.indeterminate = false;
+      this.staff_indeterminate = false;
 
-      if (this.checkAll) {
-        this.checkAllGroup = ["香蕉", "苹果", "西瓜"];
+      if (this.staff_checkAll) {
+        this.startCycleCountingForm.staffs_assigned = _.map(this.staffs, function (staff) {
+          return "".concat(staff.id, ":").concat(staff.name);
+        });
       } else {
-        this.checkAllGroup = [];
+        this.startCycleCountingForm.staffs_assigned = [];
       }
     },
-    checkAllGroupChange: function checkAllGroupChange(data) {
-      if (data.length === 3) {
-        this.indeterminate = false;
-        this.checkAll = true;
+    staffCheckAllGroupChange: function staffCheckAllGroupChange(data) {
+      if (data.length === this.staffs.length) {
+        this.staff_indeterminate = false;
+        this.staff_checkAll = true;
       } else if (data.length > 0) {
-        this.indeterminate = true;
-        this.checkAll = false;
+        this.staff_indeterminate = true;
+        this.staff_checkAll = false;
       } else {
-        this.indeterminate = false;
-        this.checkAll = false;
+        this.staff_indeterminate = false;
+        this.staff_checkAll = false;
+      }
+    },
+    selectInv: function selectInv() {
+      var _this3 = this;
+
+      this.startCycleCountingForm.inventories_str = "";
+      this.startCycleCountingForm.inventories = _.sortBy(this.startCycleCountingForm.inventories, function (d) {
+        return _.parseInt(_.split(d, ":", 1)[0]);
+      });
+
+      _.forEach(this.startCycleCountingForm.inventories, function (inventory) {
+        if (_this3.startCycleCountingForm.inventories_str.length > 0) {
+          _this3.startCycleCountingForm.inventories_str += ", ".concat(inventory);
+        } else {
+          _this3.startCycleCountingForm.inventories_str += inventory;
+        }
+      });
+
+      console.log(this.startCycleCountingForm.inventories_str);
+    },
+    getInvs: function getInvs() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var res;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return _this4.callApi("GET", "/api/getInvByWarehouse/".concat(_this4.$store.getters.getUser.warehouse_id));
+
+              case 2:
+                res = _context2.sent;
+
+                if (res.status == 200) {
+                  _this4.inventories = res.data.data;
+                  _this4.selectInvModal = true;
+                } else {
+                  _this4.smtgWentWrong();
+                }
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    invHandleCheckAll: function invHandleCheckAll() {
+      if (this.inv_indeterminate) {
+        this.inv_checkAll = false;
+      } else {
+        this.inv_checkAll = !this.inv_checkAll;
+      }
+
+      this.inv_indeterminate = false;
+
+      if (this.inv_checkAll) {
+        this.startCycleCountingForm.inventories = _.map(this.inventories, function (inventory) {
+          return "".concat(inventory.id, ":").concat(inventory.name);
+        });
+      } else {
+        this.startCycleCountingForm.inventories = [];
+      }
+    },
+    invCheckAllGroupChange: function invCheckAllGroupChange(data) {
+      if (data.length === this.inventories.length) {
+        this.inv_indeterminate = false;
+        this.inv_checkAll = true;
+      } else if (data.length > 0) {
+        this.inv_indeterminate = true;
+        this.inv_checkAll = false;
+      } else {
+        this.inv_indeterminate = false;
+        this.inv_checkAll = false;
       }
     }
   },
@@ -21471,6 +21556,16 @@ var _hoisted_12 = {
 
 var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Select All");
 
+var _hoisted_14 = {
+  style: {
+    "border-bottom": "1px solid #e9e9e9",
+    "padding-bottom": "6px",
+    "margin-bottom": "6px"
+  }
+};
+
+var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Select All");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Option = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Option");
 
@@ -21784,9 +21879,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
-                modelValue: $data.startCycleCountingForm.staffs_assigned,
+                modelValue: $data.startCycleCountingForm.staffs_assigned_str,
                 "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
-                  return $data.startCycleCountingForm.staffs_assigned = $event;
+                  return $data.startCycleCountingForm.staffs_assigned_str = $event;
                 }),
                 type: "textarea",
                 disabled: "",
@@ -21818,9 +21913,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
-                modelValue: $data.startCycleCountingForm.inventories,
+                modelValue: $data.startCycleCountingForm.inventories_str,
                 "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
-                  return $data.startCycleCountingForm.inventories = $event;
+                  return $data.startCycleCountingForm.inventories_str = $event;
                 }),
                 type: "textarea",
                 disabled: "",
@@ -21831,14 +21926,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 placeholder: "Select inventories"
               }, null, 8
               /* PROPS */
-              , ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, null, {
+              , ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
+                onClick: $options.getInvs
+              }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                   return [_hoisted_7];
                 }),
                 _: 1
                 /* STABLE */
 
-              })];
+              }, 8
+              /* PROPS */
+              , ["onClick"])];
             }),
             _: 1
             /* STABLE */
@@ -21869,7 +21968,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     _: 1
                     /* STABLE */
 
-                  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Col span=\"2\" style=\"text-align: center\">to </Col>\r\n          <Col span=\"5\">\r\n            <DatePicker\r\n              v-model=\"startCycleCountingForm.end_date\"\r\n              type=\"date\"\r\n              placement=\"bottom-end\"\r\n              placeholder=\"End date\"\r\n            ></DatePicker>\r\n          </Col> ")];
+                  })];
                 }),
                 _: 1
                 /* STABLE */
@@ -21913,9 +22012,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Checkbox, {
-            indeterminate: $data.indeterminate,
-            "model-value": $data.checkAll,
-            onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($options.handleCheckAll, ["prevent"])
+            indeterminate: $data.staff_indeterminate,
+            "model-value": $data.staff_checkAll,
+            onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($options.staffHandleCheckAll, ["prevent"])
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
               return [_hoisted_13];
@@ -21926,28 +22025,74 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           }, 8
           /* PROPS */
           , ["indeterminate", "model-value", "onClick"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_CheckboxGroup, {
-            modelValue: $data.checkAllGroup,
+            modelValue: $data.startCycleCountingForm.staffs_assigned,
             "onUpdate:modelValue": _cache[11] || (_cache[11] = function ($event) {
-              return $data.checkAllGroup = $event;
+              return $data.startCycleCountingForm.staffs_assigned = $event;
             }),
-            onOnChange: $options.checkAllGroupChange
+            onOnChange: $options.staffCheckAllGroupChange
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
               return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.staffs, function (staff) {
                 return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Checkbox, {
-                  key: staff.id
-                }, {
-                  "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                    return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(staff.id) + ": " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(staff.name), 1
-                    /* TEXT */
-                    )];
-                  }),
-                  _: 2
-                  /* DYNAMIC */
+                  key: staff.id,
+                  label: "".concat(staff.id, ":").concat(staff.name)
+                }, null, 8
+                /* PROPS */
+                , ["label"]);
+              }), 128
+              /* KEYED_FRAGMENT */
+              ))];
+            }),
+            _: 1
+            /* STABLE */
 
-                }, 1024
-                /* DYNAMIC_SLOTS */
-                );
+          }, 8
+          /* PROPS */
+          , ["modelValue", "onOnChange"])];
+        }),
+        _: 1
+        /* STABLE */
+
+      }, 8
+      /* PROPS */
+      , ["modelValue", "onOnOk", "onOnCancel"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Modal, {
+        modelValue: $data.selectInvModal,
+        "onUpdate:modelValue": _cache[14] || (_cache[14] = function ($event) {
+          return $data.selectInvModal = $event;
+        }),
+        title: "Select Inventory",
+        onOnOk: $options.selectInv,
+        onOnCancel: _ctx.cancel
+      }, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Checkbox, {
+            indeterminate: $data.inv_indeterminate,
+            "model-value": $data.inv_checkAll,
+            onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($options.invHandleCheckAll, ["prevent"])
+          }, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+              return [_hoisted_15];
+            }),
+            _: 1
+            /* STABLE */
+
+          }, 8
+          /* PROPS */
+          , ["indeterminate", "model-value", "onClick"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_CheckboxGroup, {
+            modelValue: $data.startCycleCountingForm.inventories,
+            "onUpdate:modelValue": _cache[13] || (_cache[13] = function ($event) {
+              return $data.startCycleCountingForm.inventories = $event;
+            }),
+            onOnChange: $options.invCheckAllGroupChange
+          }, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+              return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.inventories, function (inventory) {
+                return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Checkbox, {
+                  key: inventory.id,
+                  label: "".concat(inventory.id, ":").concat(inventory.name)
+                }, null, 8
+                /* PROPS */
+                , ["label"]);
               }), 128
               /* KEYED_FRAGMENT */
               ))];

@@ -14,6 +14,11 @@ class InventoryController extends Controller
         return $inventories;
     }
 
+    public function getInvByWarehouse($warehouseId)
+    {
+        return InventoryResource::collection(Inventory::where('warehouse_id', '=', $warehouseId)->get());
+    }
+
     // public function appendStorageBin($inventories)
     // {
     //     foreach ($inventories as $inventory) {

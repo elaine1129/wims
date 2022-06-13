@@ -28,6 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('inventories', [InventoryController::class, 'index']);
 
 Route::get('/getStaffByWarehouse/{warehouseId}', [UserController::class, 'getStaffByWarehouse']);
+Route::get('/getInvByWarehouse/{warehouseId}', [InventoryController::class, 'getInvByWarehouse']);
+
 // check in out stock
 Route::post('stock', [StockController::class, 'store']);
 

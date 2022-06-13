@@ -305,9 +305,8 @@ import {
 } from "@headlessui/vue";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
 import { useStore } from "vuex";
-import { computed, provide } from "vue";
+import { computed } from "vue";
 import { useRouter } from "vue-router";
-import success from "../common";
 const navigation = {
   //admin
   admin: [
@@ -359,7 +358,6 @@ export default {
     XIcon,
   },
   setup() {
-    provide(success);
     const store = useStore();
     const router = useRouter();
     const routes = {

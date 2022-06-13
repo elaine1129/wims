@@ -184,8 +184,6 @@
 import { LockClosedIcon } from "@heroicons/vue/solid";
 import store from "../store";
 import router from "../router";
-import { inject, ref } from "vue";
-import common from "../common";
 // const user = {
 //   username: "",
 //   password: "",

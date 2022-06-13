@@ -101,7 +101,7 @@
       <div class="form-label">Assign Staff(s):</div>
       <FormItem label-width="0">
         <Input
-          v-model="startCycleCountingForm.staffs_assigned"
+          v-model="startCycleCountingForm.staffs_assigned_str"
           type="textarea"
           disabled
           :autosize="{ minRows: 2, maxRows: 5 }"
@@ -112,13 +112,13 @@
       <div class="form-label">Select Inventories(s):</div>
       <FormItem label-width="0">
         <Input
-          v-model="startCycleCountingForm.inventories"
+          v-model="startCycleCountingForm.inventories_str"
           type="textarea"
           disabled
           :autosize="{ minRows: 2, maxRows: 5 }"
           placeholder="Select inventories"
         ></Input>
-        <Button>Select inventories</Button>
+        <Button @click="getInvs">Select inventories</Button>
       </FormItem>
       <div class="form-label">Start and End date:</div>
       <FormItem label-width="0">
@@ -132,15 +132,6 @@
               placeholder="Start and End date"
             ></DatePicker>
           </Col>
-          <!-- <Col span="2" style="text-align: center">to </Col>
-          <Col span="5">
-            <DatePicker
-              v-model="startCycleCountingForm.end_date"
-              type="date"
-              placement="bottom-end"
-              placeholder="End date"
-            ></DatePicker>
-          </Col> -->
         </Row>
       </FormItem>
       <div class="flex justify-center">
@@ -162,16 +153,54 @@
         "
       >
         <Checkbox
-          :indeterminate="indeterminate"
-          :model-value="checkAll"
-          @click.prevent="handleCheckAll"
+          :indeterminate="staff_indeterminate"
+          :model-value="staff_checkAll"
+          @click.prevent="staffHandleCheckAll"
           >Select All</Checkbox
         >
       </div>
-      <CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
-        <Checkbox v-for="staff in staffs" :key="staff.id">
-          {{ staff.id }}: {{ staff.name }}</Checkbox
+      <CheckboxGroup
+        v-model="startCycleCountingForm.staffs_assigned"
+        @on-change="staffCheckAllGroupChange"
+      >
+        <Checkbox
+          v-for="staff in staffs"
+          :key="staff.id"
+          :label="`${staff.id}:${staff.name}`"
         >
+        </Checkbox>
+      </CheckboxGroup>
+    </Modal>
+    <Modal
+      v-model="selectInvModal"
+      title="Select Inventory"
+      @on-ok="selectInv"
+      @on-cancel="cancel"
+    >
+      <div
+        style="
+          border-bottom: 1px solid #e9e9e9;
+          padding-bottom: 6px;
+          margin-bottom: 6px;
+        "
+      >
+        <Checkbox
+          :indeterminate="inv_indeterminate"
+          :model-value="inv_checkAll"
+          @click.prevent="invHandleCheckAll"
+          >Select All</Checkbox
+        >
+      </div>
+      <CheckboxGroup
+        v-model="startCycleCountingForm.inventories"
+        @on-change="invCheckAllGroupChange"
+      >
+        <Checkbox
+          v-for="inventory in inventories"
+          :key="inventory.id"
+          :label="`${inventory.id}:${inventory.name}`"
+        >
+        </Checkbox>
       </CheckboxGroup>
     </Modal>
   </PageComponent>
@@ -186,6 +215,7 @@ export default {
   data() {
     return {
       assignStaffModal: false,
+      selectInvModal: false,
       workdays: [
         {
           value: "monday",
@@ -243,8 +273,10 @@ export default {
         classBType: "",
         classC: 0,
         classCType: "",
-        staffs_assigned: "",
-        inventories: "",
+        staffs_assigned: [],
+        staffs_assigned_str: "",
+        inventories: [],
+        inventories_str: "",
         start_end_date: "",
       },
       minDate: {
@@ -253,17 +285,31 @@ export default {
         },
       },
       staffs: [],
-      indeterminate: true,
-      checkAll: false,
+      inventories: [],
+      staff_indeterminate: true,
+      staff_checkAll: false,
       checkAllGroup: [],
+      inv_indeterminate: true,
+      inv_checkAll: false,
+      inv_checkAllGroup: [],
     };
   },
   methods: {
     assignStaff() {
-      console.log(this.staffs);
-      this.startCycleCountingForm.staffs_assigned = "";
-      _.forEach(this.staffs, (staff) => {
-        this.startCycleCountingForm.staffs_assigned += `${staff.id}:${staff.name}`;
+      this.startCycleCountingForm.staffs_assigned_str = "";
+
+      this.startCycleCountingForm.staffs_assigned = _.sortBy(
+        this.startCycleCountingForm.staffs_assigned,
+        (d) => {
+          return _.parseInt(_.split(d, ":", 1)[0]);
+        }
+      );
+      _.forEach(this.startCycleCountingForm.staffs_assigned, (staff) => {
+        if (this.startCycleCountingForm.staffs_assigned_str.length > 0) {
+          this.startCycleCountingForm.staffs_assigned_str += `, ${staff}`;
+        } else {
+          this.startCycleCountingForm.staffs_assigned_str += staff;
+        }
       });
     },
     async getStaffs() {
@@ -278,30 +324,96 @@ export default {
         this.smtgWentWrong();
       }
     },
-    handleCheckAll() {
-      if (this.indeterminate) {
-        this.checkAll = false;
+    staffHandleCheckAll() {
+      if (this.staff_indeterminate) {
+        this.staff_checkAll = false;
       } else {
-        this.checkAll = !this.checkAll;
+        this.staff_checkAll = !this.staff_checkAll;
       }
-      this.indeterminate = false;
+      this.staff_indeterminate = false;
 
-      if (this.checkAll) {
-        this.checkAllGroup = ["香蕉", "苹果", "西瓜"];
+      if (this.staff_checkAll) {
+        this.startCycleCountingForm.staffs_assigned = _.map(
+          this.staffs,
+          (staff) => {
+            return `${staff.id}:${staff.name}`;
+          }
+        );
       } else {
-        this.checkAllGroup = [];
+        this.startCycleCountingForm.staffs_assigned = [];
       }
     },
-    checkAllGroupChange(data) {
-      if (data.length === 3) {
-        this.indeterminate = false;
-        this.checkAll = true;
+    staffCheckAllGroupChange(data) {
+      if (data.length === this.staffs.length) {
+        this.staff_indeterminate = false;
+        this.staff_checkAll = true;
       } else if (data.length > 0) {
-        this.indeterminate = true;
-        this.checkAll = false;
+        this.staff_indeterminate = true;
+        this.staff_checkAll = false;
       } else {
-        this.indeterminate = false;
-        this.checkAll = false;
+        this.staff_indeterminate = false;
+        this.staff_checkAll = false;
+      }
+    },
+    selectInv() {
+      this.startCycleCountingForm.inventories_str = "";
+
+      this.startCycleCountingForm.inventories = _.sortBy(
+        this.startCycleCountingForm.inventories,
+        (d) => {
+          return _.parseInt(_.split(d, ":", 1)[0]);
+        }
+      );
+      _.forEach(this.startCycleCountingForm.inventories, (inventory) => {
+        if (this.startCycleCountingForm.inventories_str.length > 0) {
+          this.startCycleCountingForm.inventories_str += `, ${inventory}`;
+        } else {
+          this.startCycleCountingForm.inventories_str += inventory;
+        }
+      });
+      console.log(this.startCycleCountingForm.inventories_str);
+    },
+    async getInvs() {
+      const res = await this.callApi(
+        "GET",
+        `/api/getInvByWarehouse/${this.$store.getters.getUser.warehouse_id}`
+      );
+      if (res.status == 200) {
+        this.inventories = res.data.data;
+        this.selectInvModal = true;
+      } else {
+        this.smtgWentWrong();
+      }
+    },
+    invHandleCheckAll() {
+      if (this.inv_indeterminate) {
+        this.inv_checkAll = false;
+      } else {
+        this.inv_checkAll = !this.inv_checkAll;
+      }
+      this.inv_indeterminate = false;
+
+      if (this.inv_checkAll) {
+        this.startCycleCountingForm.inventories = _.map(
+          this.inventories,
+          (inventory) => {
+            return `${inventory.id}:${inventory.name}`;
+          }
+        );
+      } else {
+        this.startCycleCountingForm.inventories = [];
+      }
+    },
+    invCheckAllGroupChange(data) {
+      if (data.length === this.inventories.length) {
+        this.inv_indeterminate = false;
+        this.inv_checkAll = true;
+      } else if (data.length > 0) {
+        this.inv_indeterminate = true;
+        this.inv_checkAll = false;
+      } else {
+        this.inv_indeterminate = false;
+        this.inv_checkAll = false;
       }
     },
   },
