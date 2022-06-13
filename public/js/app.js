@@ -22773,11 +22773,11 @@ var routes = [{
 }, {
   path: '/',
   redirect: function redirect(to) {
-    if (_store__WEBPACK_IMPORTED_MODULE_9__["default"].state.user.role == 'Staff') {
+    if (_store__WEBPACK_IMPORTED_MODULE_9__["default"].getters.getUser.role == 'Staff') {
       return {
-        path: '/admin-manage-inventory'
+        path: '/staff-check-in-out-stock'
       };
-    } else if (_store__WEBPACK_IMPORTED_MODULE_9__["default"].state.user.role == 'Admin') {
+    } else if (_store__WEBPACK_IMPORTED_MODULE_9__["default"].getters.getUser.role == 'Admin') {
       return {
         path: '/admin-manage-inventory'
       };

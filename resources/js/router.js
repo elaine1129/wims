@@ -27,12 +27,11 @@ const routes = [
     {
         path: '/',
         redirect: to => {
-            if (store.state.user.role == 'Staff') {
-                return { path: '/admin-manage-inventory' }
+            if (store.getters.getUser.role == 'Staff') {
+                return { path: '/staff-check-in-out-stock' }
             }
-            else if (store.state.user.role == 'Admin') {
+            else if (store.getters.getUser.role == 'Admin') {
                 return { path: '/admin-manage-inventory' }
-
             }
             else {
                 return { path: '/manager-start-cycle-counting' }
