@@ -58,11 +58,11 @@ const routes = [
                 name: 'admin-manage-inventory',
                 component: ManageInventory
             },
-            // {
-            //     path: '/manager-manage-cycle-counting',
-            //     name: 'manager-manage-cycle-counting',
-            //     component: ManageCycleCounting
-            // },
+            {
+                path: '/manager-manage-cycle-counting',
+                name: 'manager-manage-cycle-counting',
+                component: ManageCycleCounting
+            },
             {
                 path: '/manager-start-cycle-counting',
                 name: 'manager-start-cycle-counting',

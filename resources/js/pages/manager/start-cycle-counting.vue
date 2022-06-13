@@ -6,7 +6,7 @@
       label-position="left"
     >
       <div class="form-label">Working day of warehouse:</div>
-      <FormItem label-width="0">
+      <FormItem :label-width="0">
         <Row>
           <Col span="6"
             ><Select
@@ -16,7 +16,7 @@
               <Option
                 v-for="item in workdays"
                 :key="item.value"
-                value="item.value"
+                :value="item.value"
                 >{{ item.text }}</Option
               >
             </Select>
@@ -30,7 +30,7 @@
               <Option
                 v-for="item in workdays"
                 :key="item.value"
-                value="item.value"
+                :value="item.value"
                 >{{ item.text }}</Option
               >
             </Select>
@@ -53,7 +53,7 @@
           <Option
             v-for="item in cycleCountingFreqType"
             :key="item.value"
-            value="item.value"
+            :value="item.value"
             >{{ item.text }}</Option
           >
         </Select>
@@ -73,7 +73,7 @@
           <Option
             v-for="item in cycleCountingFreqType"
             :key="item.value"
-            value="item.value"
+            :value="item.value"
             >{{ item.text }}</Option
           >
         </Select>
@@ -93,13 +93,13 @@
           <Option
             v-for="item in cycleCountingFreqType"
             :key="item.value"
-            value="item.value"
+            :value="item.value"
             >{{ item.text }}</Option
           >
         </Select>
       </FormItem>
       <div class="form-label">Assign Staff(s):</div>
-      <FormItem label-width="0">
+      <FormItem :label-width="0">
         <Input
           v-model="startCycleCountingForm.staffs_assigned_str"
           type="textarea"
@@ -110,7 +110,7 @@
         <Button @click="getStaffs">Assign Staff</Button>
       </FormItem>
       <div class="form-label">Select Inventories(s):</div>
-      <FormItem label-width="0">
+      <FormItem :label-width="0">
         <Input
           v-model="startCycleCountingForm.inventories_str"
           type="textarea"
@@ -121,7 +121,7 @@
         <Button @click="getInvs">Select inventories</Button>
       </FormItem>
       <div class="form-label">Start and End date:</div>
-      <FormItem label-width="0">
+      <FormItem :label-width="0">
         <Row>
           <Col span="5">
             <DatePicker
@@ -136,14 +136,14 @@
       </FormItem>
       <div class="flex justify-center">
         <Button type="error">Cancel</Button>
-        <Button>Submit</Button>
+        <Button @click="startCycleCounting">Submit</Button>
       </div>
     </Form>
     <Modal
       v-model="assignStaffModal"
       title="Assign Staff"
       @on-ok="assignStaff"
-      @on-cancel="cancel"
+      @on-cancel="closeAssignStaffModal"
     >
       <div
         style="
@@ -175,7 +175,7 @@
       v-model="selectInvModal"
       title="Select Inventory"
       @on-ok="selectInv"
-      @on-cancel="cancel"
+      @on-cancel="closeSelectInvModal"
     >
       <div
         style="
@@ -415,6 +415,15 @@ export default {
         this.inv_indeterminate = false;
         this.inv_checkAll = false;
       }
+    },
+    closeAssignStaffModal() {
+      this.assignStaffModal = false;
+    },
+    closeSelectInvModal() {
+      this.selectInvModal = false;
+    },
+    startCycleCounting() {
+      console.log(this.startCycleCountingForm);
     },
   },
   created() {},

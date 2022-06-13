@@ -131,8 +131,8 @@ import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import PageComponent from "../../components/pages/default-page.vue";
-import { mapState, useStore } from "vuex";
-const store = useStore();
+// import { mapState, useStore } from "vuex";
+// const store = useStore();
 export default {
   components: {
     PageComponent,
@@ -274,7 +274,6 @@ export default {
       cluster: "ap1",
       encrypted: false,
     });
-    //Subscribe to the channel we specified in our Adonis Application
     let channel = pusher.subscribe(
       "check-in-out-stock." + this.$store.getters.getUser.warehouse_id
     );
