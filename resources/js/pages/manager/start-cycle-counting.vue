@@ -277,7 +277,30 @@ export default {
         staffs_assigned_str: "",
         inventories: [],
         inventories_str: "",
-        start_end_date: "",
+        start_end_date: [],
+        start_date: "",
+        end_date: "",
+        sku_list: [],
+        cycle_count_class: [
+          {
+            class: "A",
+            number_of_skus: 0,
+            frequency: 0,
+            daily_count: 0,
+          },
+          {
+            class: "B",
+            number_of_skus: 0,
+            frequency: 0,
+            daily_count: 0,
+          },
+          {
+            class: "C",
+            number_of_skus: 0,
+            frequency: 0,
+            daily_count: 0,
+          },
+        ],
       },
       minDate: {
         disabledDate(date) {
@@ -423,7 +446,118 @@ export default {
       this.selectInvModal = false;
     },
     startCycleCounting() {
+      this.processSKU();
+      let total_days = this.convertDateToDays(
+        this.startCycleCountingForm.start_end_date[0],
+        this.startCycleCountingForm.start_end_date[1]
+      );
+      this.startCycleCountingForm.start_date = this.convertDate(
+        this.startCycleCountingForm.start_end_date[0]
+      );
+      this.startCycleCountingForm.end_date = this.convertDate(
+        this.startCycleCountingForm.start_end_date[1]
+      );
+      _.forEach(this.startCycleCountingForm.cycle_count_class, (c) => {
+        _.forEach(this.startCycleCountingForm.sku_list, (sku) => {
+          if (c.class == sku.class) {
+            c.number_of_skus += 1;
+          }
+        });
+        if (c.class == "A") {
+          //recount total days based on working days
+          // let total_days_for_a = this.countFreqPerType(
+          //   this.startCycleCountingForm.start_end_date[0],
+          //   this.startCycleCountingForm.start_end_date[1],
+          //   this.startCycleCountingForm.workday_start,
+          //   this.startCycleCountingForm.workday_end,
+          //   this.startCycleCountingForm.classAType
+          // );
+
+          c.frequency = this.countFreqPerType(
+            this.startCycleCountingForm.start_end_date[0],
+            this.startCycleCountingForm.start_end_date[1],
+            this.startCycleCountingForm.workday_start,
+            this.startCycleCountingForm.workday_end,
+            this.startCycleCountingForm.classA,
+            this.startCycleCountingForm.classAType
+          );
+
+          c.daily_count = this.getDailyCount(
+            c,
+            this.startCycleCountingForm.classA,
+            this.startCycleCountingForm.classAType
+          );
+        } else if (c.class == "B") {
+          c.frequency = this.countFreqPerType(
+            this.startCycleCountingForm.start_end_date[0],
+            this.startCycleCountingForm.start_end_date[1],
+            this.startCycleCountingForm.workday_start,
+            this.startCycleCountingForm.workday_end,
+            this.startCycleCountingForm.classB,
+            this.startCycleCountingForm.classBType
+          );
+          c.daily_count = this.getDailyCount(
+            c,
+            this.startCycleCountingForm.classB,
+            this.startCycleCountingForm.classBType
+          );
+        } else {
+          c.frequency = this.countFreqPerType(
+            this.startCycleCountingForm.start_end_date[0],
+            this.startCycleCountingForm.start_end_date[1],
+            this.startCycleCountingForm.workday_start,
+            this.startCycleCountingForm.workday_end,
+            this.startCycleCountingForm.classC,
+            this.startCycleCountingForm.classCType
+          );
+          c.daily_count = this.getDailyCount(
+            c,
+            this.startCycleCountingForm.classC,
+            this.startCycleCountingForm.classCType
+          );
+        }
+      });
+      console.log("after process: ", this.startCycleCountingForm);
+    },
+    getDailyCount(classType, freq, freq_type) {
+      let number_of_days = this.convertFreqToDays(freq, freq_type);
+      return classType.number_of_skus / number_of_days;
+    },
+    processSKU() {
       console.log(this.startCycleCountingForm);
+
+      let stock_values = [];
+      _.forEach(this.inventories, (inventory) => {
+        stock_values.push(inventory.cost_per_unit * inventory.qty_on_hand);
+      });
+      console.log(stock_values);
+      let max = _.max(stock_values);
+      let min = _.min(stock_values);
+      console.log(min, max);
+      let skulist = [];
+      _.forEach(this.startCycleCountingForm.inventories, (inventory) => {
+        let sku = {};
+        let id = _.parseInt(_.split(inventory, ":", 1)[0]);
+        let tempInv = _.find(this.inventories, (inventory) => {
+          return inventory.id == id;
+        });
+        sku.inventory = tempInv;
+        sku.stock_value = tempInv.cost_per_unit * tempInv.qty_on_hand;
+        sku.transformed_stock_value = _.round(
+          (sku.stock_value - min) / (max - min),
+          2
+        );
+        if (sku.transformed_stock_value <= 0.8) {
+          sku.class = "A";
+        } else if (sku.transformed_stock_value <= 0.95) {
+          sku.class = "B";
+        } else {
+          sku.class = "C";
+        }
+        skulist.push(sku);
+      });
+      console.log(skulist);
+      this.startCycleCountingForm.sku_list = skulist;
     },
   },
   created() {},
