@@ -60,10 +60,11 @@ export default {
         },
         countFreqPerType(start_date, end_date, workday_start, workday_end, freq, type) {
             //days = array of working days you are looking: 0= sunday,.. 6 = saturday
-            var days = [];
-            var start_index = _.indexOf(this.working_days, workday_start);//1
-            var end_index = _.indexOf(this.working_days, workday_end);//5
+
             if (type == "day") {
+                var days = [];
+                var start_index = _.indexOf(this.working_days, workday_start);//1
+                var end_index = _.indexOf(this.working_days, workday_end);//5
                 for (let i = start_index; i <= end_index; i++) {
                     days.push(i); //1,2,3,4,5
                 }
@@ -76,30 +77,87 @@ export default {
 
             }
             else if (type == "week") {
-                days.push(start_date.getDay()) //1
+                var days = [];
+                var start_index = _.indexOf(this.working_days, workday_start);//1
+                var end_index = _.indexOf(this.working_days, workday_end);//5
+                for (let i = start_index; i <= end_index; i++) {
+                    days.push(i); //1,2,3,4,5
+                }
+                var first_day = _.find(days, (day) => {
+                    if (start_index < day[0]) { //1<2
+                        return day > start_index;
+                    } else if (start_index == days[0]) {
+                        return start_index;
+                    } else {
+                        return day < start_index;
+                    }
+                })
                 var ndays = 1 + Math.round((end_date - start_date) / (24 * 3600 * 1000)); //31
                 var sum = function (a, b) {
                     console.log(a, b);
                     return a + Math.floor((ndays + (start_date.getDay() + 6 - b) % 7) / 7);
-                }; //0 + Math.floor((31 + 0) / 7);
-                return days.reduce(sum, 0) / freq;
+                };
+                return sum(0, first_day) / freq;
             }
             else if (type == "month") {
+                var days = [];
+                var start_index = _.indexOf(this.working_days, workday_start);//1
+                var end_index = _.indexOf(this.working_days, workday_end);//5
+                for (let i = start_index; i <= end_index; i++) {
+                    days.push(i); //1,2,3,4,5
+                }
+                var start_day_index = start_date.getDay();
+                var days_from_range = _.forEach(days, (day) => {
+                    if (start_day_index == day) {
+                        return 0;
+                    } else {
+                        if (start_day_index < days[0]) {
+                            return days[0] - start_day_index;
+                        }
+                        else {
+                            7 - (start_day_index - days[0]);
+                        }
+                    }
+
+                })
+                var first_date = moment(start_date).add(days_from_range, 'days')._d;
+                console.log(first_date);
                 var months;
-                months = (end_date.getFullYear() - start_date.getFullYear()) * 12;
-                months -= start_date.getMonth();
+                months = (end_date.getFullYear() - first_date.getFullYear()) * 12;
+                months -= first_date.getMonth();
                 months += end_date.getMonth();
-                if (end_date.getDate() >= start_date.getDate()) {
+                if (end_date.getDate() >= first_date.getDate()) {
                     months += 1;
                 }
                 months /= freq;
                 return months <= 0 ? 1 : months;
             }
             else {
-                var diff = (end_date.getTime() - start_date.getTime()) / 1000;
+                var days = [];
+                var start_index = _.indexOf(this.working_days, workday_start);//1
+                var end_index = _.indexOf(this.working_days, workday_end);//5
+                for (let i = start_index; i <= end_index; i++) {
+                    days.push(i); //1,2,3,4,5
+                }
+                var start_day_index = start_date.getDay();
+                var days_from_range = _.forEach(days, (day) => {
+                    if (start_day_index == day) {
+                        return 0;
+                    } else {
+                        if (start_day_index < days[0]) {
+                            return days[0] - start_day_index;
+                        }
+                        else {
+                            7 - (start_day_index - days[0]);
+                        }
+                    }
+
+                })
+                var first_date = moment(start_date).add(days_from_range, 'days')._d;
+                var diff = (end_date.getTime() - first_date.getTime()) / 1000;
                 diff /= (60 * 60 * 24);
                 console.log(diff / 365.25);
-                if ((end_date.getDate() >= start_date.getDate()) && (end_date.getMonth() >= start_date.getMonth())) {
+                if ((end_date.getDate() >= first_date.getDate()) && (end_date.getMonth() >= first_date.getMonth())) {
                     return (Math.abs(Math.round(diff / 365.25)) + 1) / freq;
                 }
                 return Math.abs(Math.round(diff / 365.25)) / freq;
