@@ -203,6 +203,43 @@
         </Checkbox>
       </CheckboxGroup>
     </Modal>
+    <Modal
+      v-model="confirmStartCycleCountingModal"
+      title="Are you sure to start the cycle counting with the following information?"
+      @on-ok="createCycleCountSchedule"
+      @on-cancel="confirmStartCycleCountingModal = false"
+    >
+      <Row>
+        <Col span="5">
+          <div>No. of staff:</div>
+        </Col>
+        <Col span="5">
+          <div>{{ startCycleCountingForm.staffs_assigned.length }}</div>
+        </Col>
+        <Col span="14" class="text-right">
+          <Icon type="ios-calendar-outline" />
+          {{ startCycleCountingForm.start_date }} -
+          {{ startCycleCountingForm.end_date }}
+        </Col>
+      </Row>
+      <Row>
+        <Col span="5">
+          <div>No. of SKU(s):</div>
+        </Col>
+        <Col span="5">
+          <div>{{ startCycleCountingForm.sku_list.length }}</div>
+        </Col>
+      </Row>
+
+      <Table
+        :columns="confirm_start_cycle_counting_table_columns"
+        :data="startCycleCountingForm.cycle_count_class"
+        border
+        show-summary
+        :summary-method="handleSummary"
+        height="200"
+      ></Table>
+    </Modal>
   </PageComponent>
 </template>
 
@@ -216,7 +253,12 @@ export default {
     return {
       assignStaffModal: false,
       selectInvModal: false,
+      confirmStartCycleCountingModal: false,
       workdays: [
+        {
+          value: "sunday",
+          text: "Sunday",
+        },
         {
           value: "monday",
           text: "Monday",
@@ -240,10 +282,6 @@ export default {
         {
           value: "saturday",
           text: "Saturday",
-        },
-        {
-          value: "sunday",
-          text: "Sunday",
         },
       ],
       cycleCountingFreqType: [
@@ -307,6 +345,24 @@ export default {
           return date && date.valueOf() < Date.now() - 86400000;
         },
       },
+      confirm_start_cycle_counting_table_columns: [
+        {
+          title: "Group",
+          key: "class",
+        },
+        {
+          title: "Items",
+          key: "number_of_skus",
+        },
+        {
+          title: "Frequency(within date range)",
+          key: "frequency",
+        },
+        {
+          title: "Daily Count",
+          key: "daily_count",
+        },
+      ],
       staffs: [],
       inventories: [],
       staff_indeterminate: true,
@@ -505,6 +561,7 @@ export default {
         }
       });
       console.log("after process: ", this.startCycleCountingForm);
+      this.confirmStartCycleCountingModal = true;
     },
     getDailyCount(classType, freq, freq_type) {
       let number_of_days = this.convertFreqToDays(freq, freq_type);
@@ -542,6 +599,45 @@ export default {
         skulist.push(sku);
       });
       this.startCycleCountingForm.sku_list = skulist;
+    },
+    createCycleCountSchedule() {
+      this.confirmStartCycleCountingModal = false;
+      console.log("confirmed");
+    },
+    handleSummary({ columns, data }) {
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "Total",
+          };
+          return;
+        }
+        const values = data.map((item) => Number(item[key]));
+        if (!values.every((value) => isNaN(value))) {
+          const v = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+          sums[key] = {
+            key,
+            value: v,
+          };
+        } else {
+          sums[key] = {
+            key,
+            value: "N/A",
+          };
+        }
+      });
+
+      return sums;
     },
   },
   created() {},
