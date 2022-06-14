@@ -446,11 +446,8 @@ export default {
       this.selectInvModal = false;
     },
     startCycleCounting() {
-      this.processSKU();
-      let total_days = this.convertDateToDays(
-        this.startCycleCountingForm.start_end_date[0],
-        this.startCycleCountingForm.start_end_date[1]
-      );
+      this.classifySKU();
+
       this.startCycleCountingForm.start_date = this.convertDate(
         this.startCycleCountingForm.start_end_date[0]
       );
@@ -464,15 +461,6 @@ export default {
           }
         });
         if (c.class == "A") {
-          //recount total days based on working days
-          // let total_days_for_a = this.countFreqPerType(
-          //   this.startCycleCountingForm.start_end_date[0],
-          //   this.startCycleCountingForm.start_end_date[1],
-          //   this.startCycleCountingForm.workday_start,
-          //   this.startCycleCountingForm.workday_end,
-          //   this.startCycleCountingForm.classAType
-          // );
-
           c.frequency = this.countFreqPerType(
             this.startCycleCountingForm.start_end_date[0],
             this.startCycleCountingForm.start_end_date[1],
@@ -481,7 +469,6 @@ export default {
             this.startCycleCountingForm.classA,
             this.startCycleCountingForm.classAType
           );
-
           c.daily_count = this.getDailyCount(
             c,
             this.startCycleCountingForm.classA,
@@ -523,17 +510,15 @@ export default {
       let number_of_days = this.convertFreqToDays(freq, freq_type);
       return classType.number_of_skus / number_of_days;
     },
-    processSKU() {
+    classifySKU() {
       console.log(this.startCycleCountingForm);
 
       let stock_values = [];
       _.forEach(this.inventories, (inventory) => {
         stock_values.push(inventory.cost_per_unit * inventory.qty_on_hand);
       });
-      console.log(stock_values);
       let max = _.max(stock_values);
       let min = _.min(stock_values);
-      console.log(min, max);
       let skulist = [];
       _.forEach(this.startCycleCountingForm.inventories, (inventory) => {
         let sku = {};
@@ -556,7 +541,6 @@ export default {
         }
         skulist.push(sku);
       });
-      console.log(skulist);
       this.startCycleCountingForm.sku_list = skulist;
     },
   },

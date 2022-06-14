@@ -75,7 +75,6 @@ export default {
 
                 var ndays = 1 + Math.round((end_date - start_date) / (24 * 3600 * 1000)); //31
                 var sum = function (a, b) {
-                    console.log(a, b);
                     return a + Math.floor((ndays + (start_date.getDay() + 6 - b) % 7) / 7);
                 };
                 return days.reduce(sum, 0) / freq;
@@ -97,7 +96,6 @@ export default {
                 var ndays = 1 + Math.round((end_date - start_date) / (24 * 3600 * 1000)); //31
                 //calculate sum of the same working day as the first day in the date range = weekly
                 var sum = function (a, b) {
-                    console.log(a, b);
                     return a + Math.floor((ndays + (start_date.getDay() + 6 - b) % 7) / 7);
                 };
                 return sum(0, first_day) / freq;
@@ -120,7 +118,6 @@ export default {
                 })
                 //add the number of days to get the first working day in the date range
                 var first_date = moment(start_date).add(days_from_range, 'days')._d;
-                console.log(first_date);
                 //calculate the month between the end date and the first working day = monthly
                 var months;
                 months = (end_date.getFullYear() - first_date.getFullYear()) * 12;
@@ -153,7 +150,6 @@ export default {
                 var first_date = moment(start_date).add(days_from_range, 'days')._d;
                 var diff = (end_date.getTime() - first_date.getTime()) / 1000;
                 diff /= (60 * 60 * 24);
-                console.log(diff / 365.25);
                 //consider the partial year by adding one
                 if ((end_date.getDate() >= first_date.getDate()) && (end_date.getMonth() >= first_date.getMonth())) {
                     return (Math.abs(Math.round(diff / 365.25)) + 1) / freq;
