@@ -55,9 +55,6 @@ export default {
         convertDate(date) {
             return moment(date).format('YYYY-MM-DD');
         },
-        convertDateToDays(start_date, end_date) {
-            return Math.ceil((end_date.getTime() - start_date.getTime()) / (1000 * 3600 * 24));
-        },
         getArrayOfWorkingDays(start_index, end_index) {
             var days = [];
 
@@ -66,7 +63,7 @@ export default {
             }
             return days;
         },
-        countFreqPerType(start_date, end_date, workday_start, workday_end, freq, type) {
+        countFreqPerClass(start_date, end_date, workday_start, workday_end, count_freq, type) {
             //days = array of working days you are looking: 0= sunday,.. 6 = saturday
             var start_index = _.indexOf(this.working_days, workday_start);//1
             var end_index = _.indexOf(this.working_days, workday_end);//5
@@ -77,45 +74,76 @@ export default {
                 var sum = function (a, b) {
                     return a + Math.floor((ndays + (start_date.getDay() + 6 - b) % 7) / 7);
                 };
-                return days.reduce(sum, 0) / freq;
+                return days.reduce(sum, 0) / count_freq;
 
             }
             else if (type == "week") {
                 var days = this.getArrayOfWorkingDays(start_index, end_index);
                 //find the first day of the date range according to working days
-                var first_day = _.find(days, (day) => {
-                    if (start_index < day[0]) { //1<2
-                        return day > start_index;
-                    } else if (start_index == days[0]) {
-                        return start_index;
-                    } else {
-                        return day < start_index;
+                var first_day = (function () {
+                    if (days.includes(start_date.getDay())) {
+                        return start_date.getDay();
                     }
-                })
+                    else {
+                        if (start_date.getDay() < day[0]) { //1<2
+                            _.find(days, (day) => {
+                                return day > start_date.getDay();
+                            })
+                        }
+                        else {
+                            _.find(days, (day) => {
+                                return day < start_date.getDay();
+                            })
+                        }
+                    }
+                })();
+
+                // var first_day = _.forEach(days, (day) => {
+                //     if (start_date.getDay() < day[0]) { //1<2
+                //         return day > start_date.getDay();
+                //     } else if (start_date.getDay() == days[0]) {
+                //         return start_date.getDay();
+                //     } else {
+                //         return day < start_date.getDay();
+                //     }
+                // })
                 //calculate total days in the date range
                 var ndays = 1 + Math.round((end_date - start_date) / (24 * 3600 * 1000)); //31
                 //calculate sum of the same working day as the first day in the date range = weekly
                 var sum = function (a, b) {
                     return a + Math.floor((ndays + (start_date.getDay() + 6 - b) % 7) / 7);
                 };
-                return sum(0, first_day) / freq;
+                return sum(0, first_day) / count_freq;
             }
             else if (type == "month") {
                 var days = this.getArrayOfWorkingDays(start_index, end_index);
                 //calculate the number of days betweem start of the date range from the first working day
                 var start_day_index = start_date.getDay();
-                var days_from_range = _.forEach(days, (day) => {
-                    if (start_day_index == day) {
+                var days_from_range = (function () {
+                    if (days.includes(start_date.getDay())) {
                         return 0;
-                    } else {
-                        if (start_day_index < days[0]) {
+                    }
+                    else {
+                        if (start_date.getDay() < day[0]) { //1<2
                             return days[0] - start_day_index;
                         }
                         else {
                             7 - (start_day_index - days[0]);
                         }
                     }
-                })
+                })();
+                // var days_from_range = _.forEach(days, (day) => {
+                //     if (start_day_index == day) {
+                //         return 0;
+                //     } else {
+                //         if (start_day_index < days[0]) {
+                //             return days[0] - start_day_index;
+                //         }
+                //         else {
+                //             7 - (start_day_index - days[0]);
+                //         }
+                //     }
+                // })
                 //add the number of days to get the first working day in the date range
                 var first_date = moment(start_date).add(days_from_range, 'days')._d;
                 //calculate the month between the end date and the first working day = monthly
@@ -126,7 +154,7 @@ export default {
                 if (end_date.getDate() >= first_date.getDate()) { //make sure to consider partial month by adding 1 
                     months += 1;
                 }
-                months /= freq;
+                months /= count_freq;
                 return months <= 0 ? 1 : months;
             }
             else {
@@ -152,15 +180,21 @@ export default {
                 diff /= (60 * 60 * 24);
                 //consider the partial year by adding one
                 if ((end_date.getDate() >= first_date.getDate()) && (end_date.getMonth() >= first_date.getMonth())) {
-                    return (Math.abs(Math.round(diff / 365.25)) + 1) / freq;
+                    return (Math.abs(Math.round(diff / 365.25)) + 1) / count_freq;
                 }
-                return Math.abs(Math.round(diff / 365.25)) / freq;
+                return Math.abs(Math.round(diff / 365.25)) / count_freq;
             }
-
         },
+        calculateTotalWorkingDays(start_date, end_date, workday_start, workday_end) {
+            var start_index = _.indexOf(this.working_days, workday_start);//1
+            var end_index = _.indexOf(this.working_days, workday_end);//5
+            var days = this.getArrayOfWorkingDays(start_index, end_index);
 
-        convertFreqToDays(freq, type) {
-            return (freq * this.multiplications[_.indexOf(this.freq_types, type)]);
+            var ndays = 1 + Math.round((end_date - start_date) / (24 * 3600 * 1000)); //31
+            var sum = function (a, b) {
+                return a + Math.floor((ndays + (start_date.getDay() + 6 - b) % 7) / 7);
+            };
+            return days.reduce(sum, 0);
         }
     }
 }

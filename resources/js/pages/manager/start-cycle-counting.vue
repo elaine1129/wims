@@ -359,7 +359,7 @@ export default {
           key: "frequency",
         },
         {
-          title: "Daily Count",
+          title: "Daily Count(per working day)",
           key: "daily_count",
         },
       ],
@@ -503,69 +503,18 @@ export default {
     },
     startCycleCounting() {
       this.classifySKU();
-
-      this.startCycleCountingForm.start_date = this.convertDate(
-        this.startCycleCountingForm.start_end_date[0]
-      );
-      this.startCycleCountingForm.end_date = this.convertDate(
-        this.startCycleCountingForm.start_end_date[1]
-      );
-      _.forEach(this.startCycleCountingForm.cycle_count_class, (c) => {
-        _.forEach(this.startCycleCountingForm.sku_list, (sku) => {
-          if (c.class == sku.class) {
-            c.number_of_skus += 1;
-          }
-        });
-        if (c.class == "A") {
-          c.frequency = this.countFreqPerType(
-            this.startCycleCountingForm.start_end_date[0],
-            this.startCycleCountingForm.start_end_date[1],
-            this.startCycleCountingForm.workday_start,
-            this.startCycleCountingForm.workday_end,
-            this.startCycleCountingForm.classA,
-            this.startCycleCountingForm.classAType
-          );
-          c.daily_count = this.getDailyCount(
-            c,
-            this.startCycleCountingForm.classA,
-            this.startCycleCountingForm.classAType
-          );
-        } else if (c.class == "B") {
-          c.frequency = this.countFreqPerType(
-            this.startCycleCountingForm.start_end_date[0],
-            this.startCycleCountingForm.start_end_date[1],
-            this.startCycleCountingForm.workday_start,
-            this.startCycleCountingForm.workday_end,
-            this.startCycleCountingForm.classB,
-            this.startCycleCountingForm.classBType
-          );
-          c.daily_count = this.getDailyCount(
-            c,
-            this.startCycleCountingForm.classB,
-            this.startCycleCountingForm.classBType
-          );
-        } else {
-          c.frequency = this.countFreqPerType(
-            this.startCycleCountingForm.start_end_date[0],
-            this.startCycleCountingForm.start_end_date[1],
-            this.startCycleCountingForm.workday_start,
-            this.startCycleCountingForm.workday_end,
-            this.startCycleCountingForm.classC,
-            this.startCycleCountingForm.classCType
-          );
-          c.daily_count = this.getDailyCount(
-            c,
-            this.startCycleCountingForm.classC,
-            this.startCycleCountingForm.classCType
-          );
-        }
-      });
+      this.calculateFrequency_DailyCount();
       console.log("after process: ", this.startCycleCountingForm);
       this.confirmStartCycleCountingModal = true;
     },
-    getDailyCount(classType, freq, freq_type) {
-      let number_of_days = this.convertFreqToDays(freq, freq_type);
-      return classType.number_of_skus / number_of_days;
+    getDailyCount(number_of_skus, freq) {
+      let total_working_days = this.calculateTotalWorkingDays(
+        this.startCycleCountingForm.start_end_date[0],
+        this.startCycleCountingForm.start_end_date[1],
+        this.startCycleCountingForm.workday_start,
+        this.startCycleCountingForm.workday_end
+      );
+      return ((number_of_skus * freq) / total_working_days).toFixed(2);
     },
     classifySKU() {
       console.log(this.startCycleCountingForm);
@@ -599,6 +548,50 @@ export default {
         skulist.push(sku);
       });
       this.startCycleCountingForm.sku_list = skulist;
+    },
+    calculateFrequency_DailyCount() {
+      this.startCycleCountingForm.start_date = this.convertDate(
+        this.startCycleCountingForm.start_end_date[0]
+      );
+      this.startCycleCountingForm.end_date = this.convertDate(
+        this.startCycleCountingForm.start_end_date[1]
+      );
+      _.forEach(this.startCycleCountingForm.cycle_count_class, (c) => {
+        _.forEach(this.startCycleCountingForm.sku_list, (sku) => {
+          if (c.class == sku.class) {
+            c.number_of_skus += 1;
+          }
+        });
+        if (c.class == "A") {
+          c.frequency = this.countFreqPerClass(
+            this.startCycleCountingForm.start_end_date[0],
+            this.startCycleCountingForm.start_end_date[1],
+            this.startCycleCountingForm.workday_start,
+            this.startCycleCountingForm.workday_end,
+            this.startCycleCountingForm.classA,
+            this.startCycleCountingForm.classAType
+          );
+        } else if (c.class == "B") {
+          c.frequency = this.countFreqPerClass(
+            this.startCycleCountingForm.start_end_date[0],
+            this.startCycleCountingForm.start_end_date[1],
+            this.startCycleCountingForm.workday_start,
+            this.startCycleCountingForm.workday_end,
+            this.startCycleCountingForm.classB,
+            this.startCycleCountingForm.classBType
+          );
+        } else {
+          c.frequency = this.countFreqPerClass(
+            this.startCycleCountingForm.start_end_date[0],
+            this.startCycleCountingForm.start_end_date[1],
+            this.startCycleCountingForm.workday_start,
+            this.startCycleCountingForm.workday_end,
+            this.startCycleCountingForm.classC,
+            this.startCycleCountingForm.classCType
+          );
+        }
+        c.daily_count = this.getDailyCount(c.number_of_skus, c.frequency);
+      });
     },
     createCycleCountSchedule() {
       this.confirmStartCycleCountingModal = false;
