@@ -628,7 +628,7 @@ export default {
       }
       return days;
     },
-    countFrequency(start_date, end_date, count_freq, type) {
+    countFrequency(count_freq, type) {
       //days = array of working days you are looking: 0= sunday,.. 6 = saturday
       var start_index = _.indexOf(
         _.map(this.workdays, "value"),
