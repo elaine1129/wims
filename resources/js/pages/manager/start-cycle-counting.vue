@@ -245,6 +245,8 @@
 
 <script>
 import PageComponent from "../../components/pages/default-page.vue";
+import moment from "moment";
+
 export default {
   components: {
     PageComponent,
@@ -510,11 +512,42 @@ export default {
     getDailyCount(number_of_skus, freq) {
       let total_working_days = this.calculateTotalWorkingDays(
         this.startCycleCountingForm.start_end_date[0],
-        this.startCycleCountingForm.start_end_date[1],
-        this.startCycleCountingForm.workday_start,
-        this.startCycleCountingForm.workday_end
+        this.startCycleCountingForm.start_end_date[1]
       );
       return ((number_of_skus * freq) / total_working_days).toFixed(2);
+    },
+    calculateTotalWorkingDays() {
+      var start_index = _.indexOf(
+        _.map(this.workdays, "value"),
+        this.startCycleCountingForm.workday_start
+      ); //1
+      var end_index = _.indexOf(
+        _.map(this.workdays, "value"),
+        this.startCycleCountingForm.workday_end
+      ); //5
+      var days = this.getArrayOfWorkingDays(start_index, end_index);
+
+      var ndays =
+        1 +
+        Math.round(
+          (this.startCycleCountingForm.start_end_date[1] -
+            this.startCycleCountingForm.start_end_date[0]) /
+            (24 * 3600 * 1000)
+        ); //31
+      var sum = (a, b) => {
+        return (
+          a +
+          Math.floor(
+            (ndays +
+              ((this.startCycleCountingForm.start_end_date[0].getDay() +
+                6 -
+                b) %
+                7)) /
+              7
+          )
+        );
+      };
+      return days.reduce(sum, 0);
     },
     classifySKU() {
       console.log(this.startCycleCountingForm);
@@ -563,35 +596,184 @@ export default {
           }
         });
         if (c.class == "A") {
-          c.frequency = this.countFreqPerClass(
+          c.frequency = this.countFrequency(
             this.startCycleCountingForm.start_end_date[0],
             this.startCycleCountingForm.start_end_date[1],
-            this.startCycleCountingForm.workday_start,
-            this.startCycleCountingForm.workday_end,
             this.startCycleCountingForm.classA,
             this.startCycleCountingForm.classAType
           );
         } else if (c.class == "B") {
-          c.frequency = this.countFreqPerClass(
+          c.frequency = this.countFrequency(
             this.startCycleCountingForm.start_end_date[0],
             this.startCycleCountingForm.start_end_date[1],
-            this.startCycleCountingForm.workday_start,
-            this.startCycleCountingForm.workday_end,
             this.startCycleCountingForm.classB,
             this.startCycleCountingForm.classBType
           );
         } else {
-          c.frequency = this.countFreqPerClass(
+          c.frequency = this.countFrequency(
             this.startCycleCountingForm.start_end_date[0],
             this.startCycleCountingForm.start_end_date[1],
-            this.startCycleCountingForm.workday_start,
-            this.startCycleCountingForm.workday_end,
             this.startCycleCountingForm.classC,
             this.startCycleCountingForm.classCType
           );
         }
         c.daily_count = this.getDailyCount(c.number_of_skus, c.frequency);
       });
+    },
+    getArrayOfWorkingDays(start_index, end_index) {
+      var days = [];
+
+      for (let i = start_index; i <= end_index; i++) {
+        days.push(i); //1,2,3,4,5
+      }
+      return days;
+    },
+    countFrequency(start_date, end_date, count_freq, type) {
+      //days = array of working days you are looking: 0= sunday,.. 6 = saturday
+      var start_index = _.indexOf(
+        _.map(this.workdays, "value"),
+        this.startCycleCountingForm.workday_start
+      ); //1
+      var end_index = _.indexOf(
+        _.map(this.workdays, "value"),
+        this.startCycleCountingForm.workday_end
+      ); //5
+      //calculate total days in the date range
+      var ndays =
+        1 +
+        Math.round(
+          (this.startCycleCountingForm.start_end_date[1] -
+            this.startCycleCountingForm.start_end_date[0]) /
+            (24 * 3600 * 1000)
+        ); //31
+      //calculate sum of the same working day as the first day in the date range = weekly
+      var sum = (a, b) => {
+        return (
+          a +
+          Math.floor(
+            (ndays +
+              ((this.startCycleCountingForm.start_end_date[0].getDay() +
+                6 -
+                b) %
+                7)) /
+              7
+          )
+        );
+      };
+      if (type == "day") {
+        var days = this.getArrayOfWorkingDays(start_index, end_index);
+        return days.reduce(sum, 0) / count_freq;
+      } else if (type == "week") {
+        var days = this.getArrayOfWorkingDays(start_index, end_index);
+        //find the first day of the date range according to working days
+        var first_day = (() => {
+          if (
+            days.includes(
+              this.startCycleCountingForm.start_end_date[0].getDay()
+            )
+          ) {
+            return this.startCycleCountingForm.start_end_date[0].getDay();
+          } else {
+            if (
+              this.startCycleCountingForm.start_end_date[0].getDay() < day[0]
+            ) {
+              //1<2
+              _.find(days, (day) => {
+                return (
+                  day > this.startCycleCountingForm.start_end_date[0].getDay()
+                );
+              });
+            } else {
+              _.find(days, (day) => {
+                return (
+                  day < this.startCycleCountingForm.start_end_date[0].getDay()
+                );
+              });
+            }
+          }
+        })();
+
+        return sum(0, first_day) / count_freq;
+      } else if (type == "month") {
+        var days = this.getArrayOfWorkingDays(start_index, end_index);
+        //calculate the number of days betweem start of the date range from the first working day
+        var start_day_index =
+          this.startCycleCountingForm.start_end_date[0].getDay();
+        var days_from_range = (() => {
+          if (
+            days.includes(
+              this.startCycleCountingForm.start_end_date[0].getDay()
+            )
+          ) {
+            return 0;
+          } else {
+            if (
+              this.startCycleCountingForm.start_end_date[0].getDay() < day[0]
+            ) {
+              //1<2
+              return days[0] - start_day_index;
+            } else {
+              7 - (start_day_index - days[0]);
+            }
+          }
+        })();
+        //add the number of days to get the first working day in the date range
+        var first_date = moment(
+          this.startCycleCountingForm.start_end_date[0]
+        ).add(days_from_range, "days")._d;
+        //calculate the month between the end date and the first working day = monthly
+        var months;
+        months =
+          (this.startCycleCountingForm.start_end_date[1].getFullYear() -
+            first_date.getFullYear()) *
+          12;
+        months -= first_date.getMonth();
+        months += this.startCycleCountingForm.start_end_date[1].getMonth();
+        if (
+          this.startCycleCountingForm.start_end_date[1].getDate() >=
+          first_date.getDate()
+        ) {
+          //make sure to consider partial month by adding 1
+          months += 1;
+        }
+        months /= count_freq;
+        return months <= 0 ? 1 : months;
+      } else {
+        var days = this.getArrayOfWorkingDays(start_index, end_index);
+        var start_day_index =
+          this.startCycleCountingForm.start_end_date[0].getDay();
+        //get the number of days between the starting of date range to the first working day
+        var days_from_range = _.forEach(days, (day) => {
+          if (start_day_index == day) {
+            return 0;
+          } else {
+            if (start_day_index < days[0]) {
+              return days[0] - start_day_index;
+            } else {
+              7 - (start_day_index - days[0]);
+            }
+          }
+        });
+        //add the days to obtain the first working day to start the calculation of year
+        var first_date = moment(
+          this.startCycleCountingForm.start_end_date[0]
+        ).add(days_from_range, "days")._d;
+        var diff =
+          (this.startCycleCountingForm.start_end_date[1].getTime() -
+            first_date.getTime()) /
+          1000;
+        diff /= 60 * 60 * 24;
+        //consider the partial year by adding one
+        if (
+          this.startCycleCountingForm.start_end_date[1].getDate() >=
+            first_date.getDate() &&
+          this.startCycleCountingForm.start_end_date[1].getMonth() >=
+            first_date.getMonth()
+        ) {
+          return (Math.abs(Math.round(diff / 365.25)) + 1) / count_freq;
+        }
+        return Math.abs(Math.round(diff / 365.25)) / count_freq;
+      }
     },
     createCycleCountSchedule() {
       this.confirmStartCycleCountingModal = false;
