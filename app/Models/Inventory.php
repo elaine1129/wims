@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Warehouse;
 use App\Models\Category;
 use App\Models\Stock;
-
+use App\Models\Sku;
 
 class Inventory extends Model
 {
@@ -27,5 +27,10 @@ class Inventory extends Model
     public function stocks()
     {
         return $this->hasMany(Stock::class);
+    }
+
+    public function sku()
+    {
+        return $this->hasOne(Sku::class);
     }
 }

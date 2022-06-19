@@ -4,8 +4,12 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\SKUController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WarehouseController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,3 +39,9 @@ Route::post('stock', [StockController::class, 'store']);
 
 //Authentication
 Route::post('/login', [AuthController::class, 'login']);
+
+
+//scheduling
+Route::put('/storeCycleCountingSettings/{warehouseId}', [WarehouseController::class, 'storeCycleCountingSettings']);
+Route::post('/sku', [SKUController::class, 'store']);
+Route::post('/schedule/{warehouseId}', [ScheduleController::class, 'store']);
