@@ -241,7 +241,11 @@
         height="200"
       ></Table>
       <template #footer>
-        <Button :disabled="disableCancelButton">Cancel</Button>
+        <Button
+          :disabled="disableCancelButton"
+          @click="confirmStartCycleCountingModal = false"
+          >Cancel</Button
+        >
         <Button
           type="primary"
           :loading="loading"
@@ -518,6 +522,26 @@ export default {
       this.selectInvModal = false;
     },
     startCycleCounting() {
+      this.startCycleCountingForm.cycle_count_class = [
+        {
+          class: "A",
+          number_of_skus: 0,
+          frequency: 0,
+          daily_count: 0,
+        },
+        {
+          class: "B",
+          number_of_skus: 0,
+          frequency: 0,
+          daily_count: 0,
+        },
+        {
+          class: "C",
+          number_of_skus: 0,
+          frequency: 0,
+          daily_count: 0,
+        },
+      ];
       this.classifySKU();
       this.calculateFrequency_DailyCount();
       console.log("after process: ", this.startCycleCountingForm);
