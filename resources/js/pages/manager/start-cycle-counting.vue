@@ -815,20 +815,17 @@ export default {
               staff_id: schedule.staff_id,
             };
           });
-          // var params = {
-          //   staff_ids: _.map(
-          //     this.startCycleCountingForm.staffs_assigned,
-          //     (staff) => {
-          //       return parseInt(_.split(staff, ":", 2)[0]);
-          //     }
-          //   ),
-          // };
           const createScheduleRes = await this.callApi(
             "POST",
             "/api/schedule/" + this.$store.getters.getUser.warehouse_id,
             params
           );
           console.log(createScheduleRes);
+          if (createScheduleRes.status == 200) {
+            this.success("Cycle counting has been started.");
+          } else {
+            this.smtgWentWrong(createScheduleRes.data.message);
+          }
         } else {
           this.smtgWentWrong();
         }
