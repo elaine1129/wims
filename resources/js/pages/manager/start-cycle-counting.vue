@@ -1,14 +1,18 @@
 <template>
   <PageComponent title="Start Cycle Counting">
     <Form
+      ref="startCycleCountingForm"
+      :rules="startCycleCountingFormRuleValidate"
       :model="startCycleCountingForm"
       :label-width="120"
       label-position="left"
+      style="min-width: 1200px"
     >
       <div class="form-label">Working day of warehouse:</div>
-      <FormItem :label-width="0">
-        <Row>
-          <Col span="6"
+
+      <Row>
+        <Col span="6">
+          <FormItem prop="workday_start" :label-width="0"
             ><Select
               v-model="startCycleCountingForm.workday_start"
               placeholder="Select Workday Start"
@@ -19,13 +23,15 @@
                 :value="item.value"
                 >{{ item.text }}</Option
               >
-            </Select>
-          </Col>
-          <Col span="2" style="text-align: center">to </Col>
-          <Col span="6">
+            </Select></FormItem
+          >
+        </Col>
+        <Col span="2" style="text-align: center">to </Col>
+        <Col span="6">
+          <FormItem prop="workday_end" :label-width="0">
             <Select
               v-model="startCycleCountingForm.workday_end"
-              placeholder="Select Workday Start"
+              placeholder="Select Workday End"
             >
               <Option
                 v-for="item in workdays"
@@ -33,73 +39,108 @@
                 :value="item.value"
                 >{{ item.text }}</Option
               >
-            </Select>
-          </Col>
-        </Row>
-      </FormItem>
+            </Select></FormItem
+          >
+        </Col>
+      </Row>
+
       <div class="form-label">Counting frequency:</div>
       <FormItem label="Class A: Every">
-        <Input
-          class="counting-frequency numberType"
-          type="number"
-          v-model="startCycleCountingForm.classA"
-          placeholder="Enter something..."
-        ></Input>
-        <Select
-          class="counting-frequency freqType"
-          v-model="startCycleCountingForm.classAType"
-          placeholder="Select Workday Start"
-        >
-          <Option
-            v-for="item in cycleCountingFreqType"
-            :key="item.value"
-            :value="item.value"
-            >{{ item.text }}</Option
-          >
-        </Select>
+        <Row>
+          <Col span="6">
+            <FormItem prop="classA">
+              <Input
+                class="counting-frequency numberType"
+                type="number"
+                v-model="startCycleCountingForm.classA"
+                placeholder="Enter something..."
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="6">
+            <FormItem :label-width="0" prop="classAType">
+              <Select
+                class="counting-frequency freqType"
+                v-model="startCycleCountingForm.classAType"
+                placeholder="Select Workday Start"
+              >
+                <Option
+                  v-for="item in cycleCountingFreqType"
+                  :key="item.value"
+                  :value="item.value"
+                  >{{ item.text }}</Option
+                >
+              </Select></FormItem
+            >
+          </Col>
+          <Col span="10"> </Col>
+        </Row>
       </FormItem>
       <FormItem label="Class B: Every">
-        <Input
-          class="counting-frequency numberType"
-          type="number"
-          v-model="startCycleCountingForm.classB"
-          placeholder="Enter something..."
-        ></Input>
-        <Select
-          class="counting-frequency freqType"
-          v-model="startCycleCountingForm.classBType"
-          placeholder="Select Workday Start"
-        >
-          <Option
-            v-for="item in cycleCountingFreqType"
-            :key="item.value"
-            :value="item.value"
-            >{{ item.text }}</Option
-          >
-        </Select>
+        <Row>
+          <Col span="6">
+            <FormItem prop="classB">
+              <Input
+                class="counting-frequency numberType"
+                type="number"
+                v-model="startCycleCountingForm.classB"
+                placeholder="Enter something..."
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="6">
+            <FormItem :label-width="0" prop="classBType">
+              <Select
+                class="counting-frequency freqType"
+                v-model="startCycleCountingForm.classBType"
+                placeholder="Select Workday Start"
+              >
+                <Option
+                  v-for="item in cycleCountingFreqType"
+                  :key="item.value"
+                  :value="item.value"
+                  >{{ item.text }}</Option
+                >
+              </Select></FormItem
+            >
+          </Col>
+          <Col span="10"> </Col>
+        </Row>
       </FormItem>
       <FormItem label="Class C: Every">
-        <Input
-          class="counting-frequency numberType"
-          type="number"
-          v-model="startCycleCountingForm.classC"
-          placeholder="Enter something..."
-        ></Input>
-        <Select
-          class="counting-frequency freqType"
-          v-model="startCycleCountingForm.classCType"
-          placeholder="Select Workday Start"
-        >
-          <Option
-            v-for="item in cycleCountingFreqType"
-            :key="item.value"
-            :value="item.value"
-            >{{ item.text }}</Option
-          >
-        </Select>
+        <Row>
+          <Col span="6">
+            <FormItem prop="classC">
+              <Input
+                class="counting-frequency numberType"
+                type="number"
+                v-model="startCycleCountingForm.classC"
+                placeholder="Enter something..."
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="6">
+            <FormItem :label-width="0" prop="classCType">
+              <Select
+                class="counting-frequency freqType"
+                v-model="startCycleCountingForm.classCType"
+                placeholder="Select Workday Start"
+              >
+                <Option
+                  v-for="item in cycleCountingFreqType"
+                  :key="item.value"
+                  :value="item.value"
+                  >{{ item.text }}</Option
+                >
+              </Select></FormItem
+            >
+          </Col>
+          <Col span="10"> </Col>
+        </Row>
       </FormItem>
+
       <div class="form-label">Assign Staff(s):</div>
-      <FormItem :label-width="0">
+      <FormItem :label-width="0" prop="staffs_assigned_str">
         <Input
           v-model="startCycleCountingForm.staffs_assigned_str"
           type="textarea"
@@ -107,10 +148,11 @@
           :autosize="{ minRows: 2, maxRows: 5 }"
           placeholder="Assign staff"
         ></Input>
-        <Button @click="getStaffs">Assign Staff</Button>
       </FormItem>
+      <Button @click="getStaffs">Assign Staff</Button>
+
       <div class="form-label">Select Inventories(s):</div>
-      <FormItem :label-width="0">
+      <FormItem :label-width="0" prop="inventories_str">
         <Input
           v-model="startCycleCountingForm.inventories_str"
           type="textarea"
@@ -121,9 +163,10 @@
         <Button @click="getInvs">Select inventories</Button>
       </FormItem>
       <div class="form-label">Start and End date:</div>
-      <FormItem :label-width="0">
-        <Row>
-          <Col span="5">
+
+      <Row>
+        <Col span="5">
+          <FormItem :label-width="0" prop="start_end_date">
             <DatePicker
               v-model="startCycleCountingForm.start_end_date"
               type="daterange"
@@ -131,12 +174,13 @@
               placement="bottom-end"
               placeholder="Start and End date"
             ></DatePicker>
-          </Col>
-        </Row>
-      </FormItem>
+          </FormItem>
+        </Col>
+      </Row>
+
       <div class="flex justify-center">
         <Button type="error">Cancel</Button>
-        <Button @click="startCycleCounting">Submit</Button>
+        <Button @click="handleSubmit('startCycleCountingForm')">Submit</Button>
       </div>
     </Form>
     <Modal
@@ -360,6 +404,103 @@ export default {
           },
         ],
       },
+      startCycleCountingFormRuleValidate: {
+        workday_start: [
+          {
+            required: true,
+            message: "The workday start cannot be empty",
+            trigger: "change",
+          },
+        ],
+        workday_end: [
+          {
+            required: true,
+            message: "The workday end cannot be empty",
+            trigger: "change",
+          },
+        ],
+        classA: [
+          {
+            required: true,
+            type: "number",
+            min: 1,
+            message: "The counting frequency must be greater than zero",
+            trigger: "blur",
+            transform(value) {
+              return Number(value);
+            },
+          },
+        ],
+        classB: [
+          {
+            required: true,
+            type: "number",
+            min: 1,
+            message: "The counting frequency must be greater than zero",
+            trigger: "blur",
+            transform(value) {
+              return Number(value);
+            },
+          },
+        ],
+        classC: [
+          {
+            required: true,
+            type: "number",
+            min: 1,
+            message: "The counting frequency must be greater than zero",
+            trigger: "blur",
+            transform(value) {
+              return Number(value);
+            },
+          },
+        ],
+        classAType: [
+          {
+            required: true,
+            message: "You must select a frequency type",
+            trigger: "change",
+          },
+        ],
+        classBType: [
+          {
+            required: true,
+            message: "You must select a frequency type",
+            trigger: "change",
+          },
+        ],
+        classCType: [
+          {
+            required: true,
+            message: "You must select a frequency type",
+            trigger: "change",
+          },
+        ],
+        staffs_assigned_str: [
+          {
+            required: true,
+            message:
+              "You must at least select one staff to start cycle counting",
+            trigger: "change",
+          },
+        ],
+        inventories_str: [
+          {
+            required: true,
+            message:
+              "You must at least select one inventory to start cycle counting",
+            trigger: "change",
+          },
+        ],
+        start_end_date: [
+          {
+            required: true,
+            type: "array",
+            message: "Please select the start and end date",
+            trigger: "change",
+          },
+        ],
+      },
       minDate: {
         disabledDate(date) {
           return date && date.valueOf() < Date.now() - 86400000;
@@ -394,6 +535,17 @@ export default {
     };
   },
   methods: {
+    handleSubmit(name) {
+      console.log("handleSubmit");
+      this.$refs[name].validate((valid) => {
+        console.log(valid);
+        if (valid) {
+          this.startCycleCounting();
+        } else {
+          this.warning("There's something wrong with the input!");
+        }
+      });
+    },
     assignStaff() {
       this.startCycleCountingForm.staffs_assigned_str = "";
 
