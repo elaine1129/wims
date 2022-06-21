@@ -206,8 +206,9 @@
     <Modal
       v-model="confirmStartCycleCountingModal"
       title="Are you sure to start the cycle counting with the following information?"
-      @on-ok="createCycleCountSchedule"
-      @on-cancel="confirmStartCycleCountingModal = false"
+      :loading="loading"
+      :closable="false"
+      :mask-closable="false"
     >
       <Row>
         <Col span="5">
@@ -239,6 +240,17 @@
         :summary-method="handleSummary"
         height="200"
       ></Table>
+      <template #footer>
+        <Button :disabled="disableCancelButton">Cancel</Button>
+        <Button
+          type="primary"
+          :loading="loading"
+          @click="createCycleCountSchedule"
+        >
+          <span v-if="!loading">Create</span>
+          <span v-else>Creating...</span>
+        </Button>
+      </template>
     </Modal>
   </PageComponent>
 </template>
@@ -253,6 +265,8 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      disableCancelButton: false,
       assignStaffModal: false,
       selectInvModal: false,
       confirmStartCycleCountingModal: false,
@@ -770,9 +784,10 @@ export default {
       }
     },
     async createCycleCountSchedule() {
-      this.confirmStartCycleCountingModal = false;
+      this.disableCancelButton = true;
+      this.loading = true;
       console.log("confirmed");
-
+      this.$Loading.start();
       const res = await this.callApi(
         "PUT",
         "/api/storeCycleCountingSettings/" +
@@ -822,14 +837,26 @@ export default {
           );
           console.log(createScheduleRes);
           if (createScheduleRes.status == 200) {
+            this.$Loading.finish();
             this.success("Cycle counting has been started.");
           } else {
+            this.$Loading.error();
             this.smtgWentWrong(createScheduleRes.data.message);
+            // this.confirmStartCycleCountingModal = false;
           }
         } else {
-          this.smtgWentWrong();
+          this.$Loading.error();
+          this.smtgWentWrong(createSkuRes.data.message);
+          // this.confirmStartCycleCountingModal = false;
         }
+      } else {
+        this.$Loading.error();
+        this.smtgWentWrong(res.data.message);
+        // this.confirmStartCycleCountingModal = false;
       }
+      this.confirmStartCycleCountingModal = false;
+      this.disableCancelButton = false;
+      this.loading = false;
     },
     handleSummary({ columns, data }) {
       const sums = {};

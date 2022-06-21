@@ -12,7 +12,6 @@ class ScheduleController extends Controller
 {
     public function store(Request $request, $warehouseId)
     {
-
         $dataArray = $request->all();
         foreach ($dataArray as &$data) {
             $inventory = Inventory::findOrFail($data['inventory_id']);
