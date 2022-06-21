@@ -375,7 +375,7 @@ export default {
           key: "frequency",
         },
         {
-          title: "Daily Count(per working day)",
+          title: "Daily Count",
           key: "daily_count",
         },
       ],
@@ -832,7 +832,7 @@ export default {
           });
           const createScheduleRes = await this.callApi(
             "POST",
-            "/api/schedule/" + this.$store.getters.getUser.warehouse_id,
+            "/api/schedule",
             params
           );
           console.log(createScheduleRes);

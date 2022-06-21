@@ -44,4 +44,4 @@ Route::post('/login', [AuthController::class, 'login']);
 //scheduling
 Route::put('/storeCycleCountingSettings/{warehouseId}', [WarehouseController::class, 'storeCycleCountingSettings']);
 Route::post('/sku', [SKUController::class, 'store']);
-Route::post('/schedule/{warehouseId}', [ScheduleController::class, 'store']);
+Route::post('/schedule', [ScheduleController::class, 'store']);

@@ -10,7 +10,7 @@ use App\Models\Sku;
 
 class ScheduleController extends Controller
 {
-    public function store(Request $request, $warehouseId)
+    public function store(Request $request)
     {
         $dataArray = $request->all();
         foreach ($dataArray as &$data) {
