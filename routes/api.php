@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 Route::get('inventories', [InventoryController::class, 'index']);
-
+Route::get('inventory/{id}', [InventoryController::class, 'show']);
 Route::get('/getStaffByWarehouse/{warehouseId}', [UserController::class, 'getStaffByWarehouse']);
 Route::get('/getInvByWarehouse/{warehouseId}', [InventoryController::class, 'getInvByWarehouse']);
 

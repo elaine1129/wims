@@ -246,31 +246,34 @@ export default {
         }
       }
     },
+
+    async getUpdatedInventory(e) {
+      const res = await this.callApi("GET", "/api/inventory/" + e.inventory.id);
+      console.log(res);
+      let invToReplace = _.findIndex(this.data.inventories, {
+        id: res.data.data.id,
+      });
+      this.data.inventories[invToReplace] = res.data.data;
+    },
   },
 
   async created() {
-    const res = await this.callApi("GET", "/api/inventories");
+    const res = await this.callApi(
+      "GET",
+      "/api/getInvByWarehouse/" + this.$store.getters.getUser.warehouse_id
+    );
     if (res.status == 200) {
       console.log(res.data.data);
 
       this.data.inventories = res.data.data;
       console.log("store", this.$store.getters.getUser);
-      // Echo.private(
-      //   "check-in-out-stock." + this.$store.getters.getUser.warehouse_id
-      // ).listen("StockCreated", (e) => {
-      //   console.log("Listen event");
-      //   let invToReplace = _.findIndex(this.data.inventories, {
-      //     id: e.inventory.id,
-      //   });
-      //   this.data.inventories[invToReplace] = e.inventory;
-      // });
     }
     $(document).ready(function () {
       $("#inventories").DataTable();
     });
   },
   mounted() {
-    let pusher = new Pusher("c89ac2e37c8ac332133e", {
+    let pusher = new Pusher("5838775c3e3a60a69748", {
       cluster: "ap1",
       encrypted: false,
     });
@@ -283,10 +286,7 @@ export default {
 
     channel.bind(event, (e) => {
       console.log("stock created", e);
-      let invToReplace = _.findIndex(this.data.inventories, {
-        id: e.inventory.id,
-      });
-      this.data.inventories[invToReplace] = e.inventory;
+      this.getUpdatedInventory(e);
     });
   },
 };

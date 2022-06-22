@@ -14,6 +14,12 @@ class InventoryController extends Controller
         return $inventories;
     }
 
+    public function show($id)
+    {
+        $inventory = Inventory::findOrFail($id);
+        return new InventoryResource($inventory);
+    }
+
     public function getInvByWarehouse($warehouseId)
     {
         return InventoryResource::collection(Inventory::where('warehouse_id', '=', $warehouseId)->get());

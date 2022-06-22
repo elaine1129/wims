@@ -39,13 +39,14 @@ class StockCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['check-in-out-stock.' . $this->inventory->warehouse->id];
+        return ['check-in-out-stock.' . $this->inventory->warehouse_id];
     }
 
     public function broadcastWith()
     {
         return [
-            'inventory' => new InventoryResource($this->inventory)
+            'inventory' => $this->inventory
+
         ];
     }
 }
