@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ScheduleResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\CycleCountSchedule;
 use App\Models\Inventory;
-use App\Models\Sku;
+use Illuminate\Database\Eloquent\Builder;
 
 class ScheduleController extends Controller
 {
@@ -22,5 +23,16 @@ class ScheduleController extends Controller
         unset($data);
 
         return CycleCountSchedule::insert($dataArray);
+    }
+
+    public function index($warehouseId)
+    {
+
+        $data = CycleCountSchedule::where(function ($query) use ($warehouseId) {
+            $query->whereHas('staff', function ($q) use ($warehouseId) {
+                $q->where('warehouse_id', $warehouseId);
+            });
+        })->get();
+        return ScheduleResource::collection($data);
     }
 }

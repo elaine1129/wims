@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Sku;
+use App\Models\User;
+
 
 class CycleCountSchedule extends Model
 {
@@ -14,6 +16,10 @@ class CycleCountSchedule extends Model
 
     public function sku()
     {
-        $this->belongsTo(Sku::class);
+        return $this->belongsTo(Sku::class);
+    }
+    public function staff()
+    {
+        return $this->hasOne(User::class, 'id', 'staff_id');
     }
 }
