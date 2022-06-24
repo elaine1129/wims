@@ -35,4 +35,9 @@ class ScheduleController extends Controller
         })->get();
         return ScheduleResource::collection($data);
     }
+
+    public function getSchedulesByStaff($staffId)
+    {
+        return ScheduleResource::collection(CycleCountSchedule::where('staff_id', $staffId)->get());
+    }
 }

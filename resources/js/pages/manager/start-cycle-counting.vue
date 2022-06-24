@@ -1121,6 +1121,7 @@ export default {
           };
 
           var all_skus_class = makeRepeated(skus_class, c.frequency);
+
           console.log("all", all_skus_class);
           var increment = parseFloat(c.daily_count);
           var accum = 0;
@@ -1133,11 +1134,13 @@ export default {
                   var startIndex = _.findIndex(all_skus_class, (sku) => {
                     return sku.schedule_date == "";
                   });
-                  all_skus_class[startIndex].schedule_date =
-                    this.convertDate(date);
-                  startIndex += 1;
+                  if (startIndex < all_skus_class.length) {
+                    all_skus_class[startIndex].schedule_date =
+                      this.convertDate(date);
+                    startIndex += 1;
+                  }
                 }
-              } else {
+              } else if (c.daily_count > 0) {
                 if (accum >= counter) {
                   var startIndex = _.findIndex(all_skus_class, (sku) => {
                     return sku.schedule_date == "";
@@ -1150,8 +1153,8 @@ export default {
               }
             }
           });
+          all_schedules.push(all_skus_class);
         }
-        all_schedules.push(all_skus_class);
       });
       all_schedules = _.flattenDeep(all_schedules);
       console.log("all schedules", all_schedules);

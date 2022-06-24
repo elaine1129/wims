@@ -324,6 +324,10 @@ const navigation = {
       name: "View Inventory",
       to: { name: "view-inventory" },
     },
+    {
+      name: "Cycle Counting",
+      to: { name: "cycle-counting" },
+    },
   ],
   manager: [
     {

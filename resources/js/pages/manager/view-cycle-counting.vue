@@ -1,6 +1,6 @@
 <template>
   <PageComponent title="View Cycle Counting">
-    <Tabs value="name1" type="card" @on-click="tabClicked">
+    <Tabs value="name1" type="card">
       <TabPane label="Class A" name="classA">
         <TableComponent
           name="classA"

@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from 'vue-router';
 import TestVueRouter from './components/pages/testvuerouter';
 import CheckInOutStock from './pages/staff/check-in-out-stock'
 import ViewInventory from './pages/staff/view-inventory';
+import CycleCounting from './pages/staff/cycle-counting';
 import ManageInventory from './pages/admin/manage-inventory';
 import Dashboard from './components/dashboard-test';
 import ManageCycleCounting from './pages/manager/manage-cycle-counting';
@@ -52,6 +53,11 @@ const routes = [
                 path: '/staff-view-inventory',
                 name: 'view-inventory',
                 component: ViewInventory
+            },
+            {
+                path: '/staff-cycle-counting',
+                name: 'cycle-counting',
+                component: CycleCounting
             },
             {
                 path: '/admin-manage-inventory',
