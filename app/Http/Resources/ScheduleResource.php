@@ -21,7 +21,7 @@ class ScheduleResource extends JsonResource
             'id' => $this->id,
             'sku_id' => $this->sku_id,
             'schedule' => $this->schedule,
-            'staff_id' => $this->staff_id,
+            'staff' => $this->staff,
             'sku' => new SKUResource($this->sku),
             'storage_bin' => Arr::where($this->sku->inventory->warehouse->storage_bins, function ($value, $key) {
                 return $value['inventory_id'] == $this->sku->inventory->id;
