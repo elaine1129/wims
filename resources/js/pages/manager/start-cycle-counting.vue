@@ -1017,17 +1017,17 @@ export default {
             this.success("Cycle counting has been started.");
           } else {
             this.$Loading.error();
-            this.smtgWentWrong(createScheduleRes.data.message);
+            this.error(createScheduleRes.data.message);
             // this.confirmStartCycleCountingModal = false;
           }
         } else {
           this.$Loading.error();
-          this.smtgWentWrong(createSkuRes.data.message);
+          this.error(createSkuRes.data.message);
           // this.confirmStartCycleCountingModal = false;
         }
       } else {
         this.$Loading.error();
-        this.smtgWentWrong(res.data.message);
+        this.error(res.data.message);
         // this.confirmStartCycleCountingModal = false;
       }
       this.confirmStartCycleCountingModal = false;

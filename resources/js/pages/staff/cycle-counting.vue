@@ -25,7 +25,7 @@
 
 <script>
 import PageComponent from "../../components/pages/default-page.vue";
-import TableComponent from "../manager/table.vue";
+import TableComponent from "./components/cycle-count-table.vue";
 
 export default {
   components: {
@@ -36,6 +36,8 @@ export default {
     return {
       data: {
         cycle_count_schedules: [],
+        pending_cycle_counts: [],
+        completed_cycle_counts: [],
       },
     };
   },
@@ -46,6 +48,18 @@ export default {
     );
     console.log(res);
     this.data.cycle_count_schedules = res.data.data;
+    const reportRes = await this.callApi("GET", "/api/cycle-counts");
+    console.log(reportRes);
+    if (reportRes.status == 200) {
+      this.pending_cycle_counts = _.filter(reportRes.data.data, {
+        status: "PENDING",
+      });
+      this.completed_cycle_counts = _.filter(reportRes.data.data, {
+        status: "COMPLETED",
+      });
+    }
+    console.log(this.pending_cycle_counts);
+
     $(document).ready(function () {
       $("#upcoming").DataTable({
         order: [[4, "asc"]],
