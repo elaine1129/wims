@@ -1,15 +1,34 @@
 <template>
   <PageComponent title="View Inventory">
-    <div class="border-4 border-dashed border-gray-200 rounded-lg h-96" />
+    <ViewInventoryTableComponent
+      name="inventories"
+      :data="data.inventories"
+    ></ViewInventoryTableComponent>
   </PageComponent>
 </template>
 
 <script>
 import PageComponent from "../../components/pages/default-page.vue";
+import ViewInventoryTableComponent from "./components/view-inventory-table.vue";
 export default {
   components: {
     PageComponent,
+    ViewInventoryTableComponent,
   },
-  setup() {},
+  data() {
+    return {
+      data: {
+        inventories: [],
+      },
+    };
+  },
+  async created() {
+    const res = await this.$axiosClient.get("/inventories");
+    console.log(res);
+    this.data.inventories = res.data.data;
+    $(document).ready(function () {
+      $("#inventories").DataTable();
+    });
+  },
 };
 </script>

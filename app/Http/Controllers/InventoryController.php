@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Resources\InventoryResource;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class InventoryController extends Controller
 {
     public function index()
     {
-        $inventories = InventoryResource::collection(Inventory::all());
-        return $inventories;
+        if (Gate::allows('isStaff') || Gate::allows('isManager')) {
+            return InventoryResource::collection(Inventory::where('warehouse_id', Auth::user()->warehouse_id)->get());
+        }
+        return abort(403);
     }
 
     public function show($id)

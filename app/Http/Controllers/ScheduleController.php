@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\CycleCountSchedule;
 use App\Models\Inventory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ScheduleController extends Controller
 {
@@ -25,19 +27,36 @@ class ScheduleController extends Controller
         return CycleCountSchedule::insert($dataArray);
     }
 
-    public function index($warehouseId)
+    public function index()
     {
+        // dd(auth()->user());
+        if (Gate::allows('isStaff')) {
+            return ScheduleResource::collection(CycleCountSchedule::where('staff_id', Auth::id())->get());
+        } else if (Gate::allows('isManager')) {
+            $data = CycleCountSchedule::where(function ($query) {
+                $query->whereHas('staff', function ($q) {
+                    $q->where('warehouse_id', Auth::user()->warehouse_id);
+                });
+            })->get();
+            return ScheduleResource::collection($data);
+        } else {
+            abort(403);
+        }
 
-        $data = CycleCountSchedule::where(function ($query) use ($warehouseId) {
-            $query->whereHas('staff', function ($q) use ($warehouseId) {
-                $q->where('warehouse_id', $warehouseId);
-            });
-        })->get();
-        return ScheduleResource::collection($data);
+        // if (Auth::user()->role == 'Staff') {
+        //     return ScheduleResource::collection(CycleCountSchedule::where('staff_id', Auth::id())->get());
+        // } else if (Auth::user()->role == 'Manager') {
+        //     $data = CycleCountSchedule::where(function ($query) {
+        //         $query->whereHas('staff', function ($q) {
+        //             $q->where('warehouse_id', Auth::user()->warehouse_id);
+        //         });
+        //     })->get();
+        //     return ScheduleResource::collection($data);
+        // }
     }
 
-    public function getSchedulesByStaff($staffId)
+    public function getSchedulesByStaff()
     {
-        return ScheduleResource::collection(CycleCountSchedule::where('staff_id', $staffId)->get());
+        return ScheduleResource::collection(CycleCountSchedule::where('staff_id', Auth::id())->get());
     }
 }

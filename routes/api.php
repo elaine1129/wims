@@ -51,6 +51,6 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('/sku', [SKUController::class, 'store']);
     Route::post('/schedule', [ScheduleController::class, 'store']);
 
-    Route::get('/schedules/{warehouseId}', [ScheduleController::class, 'index']);
+    Route::get('/schedules', [ScheduleController::class, 'index']);
     Route::get('/getSchedulesByStaff/{staffId}', [ScheduleController::class, 'getSchedulesByStaff']);
 });

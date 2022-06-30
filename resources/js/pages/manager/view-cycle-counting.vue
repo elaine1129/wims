@@ -26,6 +26,7 @@
 <script>
 import PageComponent from "../../components/pages/default-page.vue";
 import TableComponent from "./table.vue";
+import axiosClient from "../../axios";
 export default {
   components: {
     PageComponent,
@@ -45,10 +46,11 @@ export default {
   },
   methods: {},
   async created() {
-    const res = await this.callApi(
-      "GET",
-      "/api/schedules/" + this.$store.getters.getUser.warehouse_id
-    );
+    // const res = await this.callApi(
+    //   "GET",
+    //   "/api/schedules/" + this.$store.getters.getUser.warehouse_id
+    // );
+    const res = await axiosClient.get("/schedules");
     console.log(res.data.data);
     this.data.cycle_count_schedules.all_schedules = res.data.data;
     console.log(this.data.cycle_count_schedules.all_schedules);

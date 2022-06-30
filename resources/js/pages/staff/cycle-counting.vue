@@ -2,22 +2,22 @@
   <PageComponent title="Cycle Counting">
     <Tabs value="name1" type="card">
       <TabPane label="Upcoming" name="upcoming">
-        <TableComponent
+        <CycleCountUpcomingTableComponent
           name="upcoming"
           :data="data.cycle_count_schedules"
-        ></TableComponent>
+        ></CycleCountUpcomingTableComponent>
       </TabPane>
       <TabPane label="Pending Approval" name="pending">
-        <TableReportComponent
+        <CycleCountReportTableComponent
           name="pending"
           :data="data.pending_cycle_counts"
-        ></TableReportComponent>
+        ></CycleCountReportTableComponent>
       </TabPane>
       <TabPane label="Completed" name="completed">
-        <TableReportComponent
+        <CycleCountReportTableComponent
           name="completed"
           :data="data.completed_cycle_counts"
-        ></TableReportComponent>
+        ></CycleCountReportTableComponent>
       </TabPane>
     </Tabs>
   </PageComponent>
@@ -25,14 +25,14 @@
 
 <script>
 import PageComponent from "../../components/pages/default-page.vue";
-import TableComponent from "./components/cycle-count-table.vue";
-import TableReportComponent from "./components/cycle-count-report-table.vue";
-import axiosClient from "../../axios";
+import CycleCountUpcomingTableComponent from "./components/cycle-count-upcoming-table.vue";
+import CycleCountReportTableComponent from "./components/cycle-count-report-table.vue";
+// import axiosClient from "../../axios";
 export default {
   components: {
     PageComponent,
-    TableComponent,
-    TableReportComponent,
+    CycleCountUpcomingTableComponent,
+    CycleCountReportTableComponent,
   },
   data() {
     return {
@@ -44,14 +44,10 @@ export default {
     };
   },
   async created() {
-    const res = await this.callApi(
-      "GET",
-      "/api/getSchedulesByStaff/" + this.$store.getters.getUser.id
-    );
+    const res = await this.$axiosClient.get("/schedules");
     console.log(res);
     this.data.cycle_count_schedules = res.data.data;
-    // const reportRes = await this.callApi("GET", "/api/cycle-counts");
-    const reportRes = await axiosClient.get("/cycle-counts");
+    const reportRes = await this.$axiosClient.get("/cycle-counts");
 
     console.log(reportRes);
     if (reportRes.status == 200) {

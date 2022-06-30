@@ -6,6 +6,7 @@ use App\Models\CycleCounting;
 use App\Policies\CycleCountPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('isAdmin', function (User $user) {
+            return $user->role == 'Admin';
+        });
+        Gate::define('isManager', function (User $user) {
+            return $user->role == 'Manager';
+        });
+        Gate::define('isStaff', function (User $user) {
+            return $user->role == 'Staff';
+        });
     }
 }
