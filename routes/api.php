@@ -22,22 +22,15 @@ use App\Http\Controllers\CycleCountController;
 |
 */
 
-Route::middleware('guest')->group(function () {
-    // Route::get('/', function () {
-    //     return view('welcome');
-    // });
-    Route::post('/login', [AuthController::class, 'login']);
-});
-Route::middleware('auth:sanctum')->group(function () {
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::group(['middleware' => ['api']], function () {
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
     //Authentication
-
     Route::post('/logout', [AuthController::class, 'logout']);
-});
-
-Route::middleware('auth')->group(function () {
 
     //cycle-counting
     Route::get('/cycle-counts/{warehouseId}', [CycleCountController::class, 'index']);
@@ -52,9 +45,6 @@ Route::middleware('auth')->group(function () {
 
     // check in out stock
     Route::post('stock', [StockController::class, 'store']);
-
-
-
 
     //scheduling
     Route::put('/storeCycleCountingSettings/{warehouseId}', [WarehouseController::class, 'storeCycleCountingSettings']);

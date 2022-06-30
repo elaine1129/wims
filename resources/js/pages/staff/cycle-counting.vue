@@ -8,16 +8,16 @@
         ></TableComponent>
       </TabPane>
       <TabPane label="Pending Approval" name="pending">
-        <!-- <TableComponent
-          name="classB"
-          :data="data.cycle_count_schedules.schedules_classB"
-        ></TableComponent> -->
+        <TableReportComponent
+          name="pending"
+          :data="data.pending_cycle_counts"
+        ></TableReportComponent>
       </TabPane>
       <TabPane label="Completed" name="completed">
-        <!-- <TableComponent
-          name="classC"
-          :data="data.cycle_count_schedules.schedules_classC"
-        ></TableComponent> -->
+        <TableReportComponent
+          name="completed"
+          :data="data.completed_cycle_counts"
+        ></TableReportComponent>
       </TabPane>
     </Tabs>
   </PageComponent>
@@ -26,11 +26,13 @@
 <script>
 import PageComponent from "../../components/pages/default-page.vue";
 import TableComponent from "./components/cycle-count-table.vue";
-
+import TableReportComponent from "./components/cycle-count-report-table.vue";
+import axiosClient from "../../axios";
 export default {
   components: {
     PageComponent,
     TableComponent,
+    TableReportComponent,
   },
   data() {
     return {
@@ -48,22 +50,30 @@ export default {
     );
     console.log(res);
     this.data.cycle_count_schedules = res.data.data;
-    const reportRes = await this.callApi("GET", "/api/cycle-counts");
+    // const reportRes = await this.callApi("GET", "/api/cycle-counts");
+    const reportRes = await axiosClient.get("/cycle-counts");
+
     console.log(reportRes);
     if (reportRes.status == 200) {
-      this.pending_cycle_counts = _.filter(reportRes.data.data, {
+      this.data.pending_cycle_counts = _.filter(reportRes.data.data, {
         status: "PENDING",
       });
-      this.completed_cycle_counts = _.filter(reportRes.data.data, {
+      this.data.completed_cycle_counts = _.filter(reportRes.data.data, {
         status: "COMPLETED",
       });
+      console.log("pending", this.data.pending_cycle_counts);
     }
-    console.log(this.pending_cycle_counts);
 
     $(document).ready(function () {
       $("#upcoming").DataTable({
         order: [[4, "asc"]],
       });
+    });
+    $(document).ready(function () {
+      $("#pending").DataTable();
+    });
+    $(document).ready(function () {
+      $("#completed").DataTable();
     });
   },
 };

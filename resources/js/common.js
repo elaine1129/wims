@@ -1,6 +1,6 @@
 import _ from "lodash";
 import moment from "moment";
-
+import store from './store';
 export default {
     data() {
         return {
@@ -13,6 +13,7 @@ export default {
         async callApi(method, url, dataObj) {
             try {
                 return await axios({
+                    // headers: `Bearer ${store.state.user.token}`,
                     method: method,
                     url: url,
                     data: dataObj

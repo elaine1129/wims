@@ -4,58 +4,77 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Validator;
 
 class AuthController extends Controller
 {
+
+    /**
+     * Get a JWT via given credentials
+     * 
+     * @return \Illuminate\HTTP\JsonResponse
+     */
     public function login(Request $req)
     {
-        $credentials = $req->validate([
+        $validator = Validator::make($req->all(), [
             'username' => 'required | exists:users,username',
             'password' => 'required'
         ]);
-        $remember = $credentials['remember'] ?? false;
-        unset($credentials['remember']);
 
-        if (Auth::attempt($credentials, $remember)) {
-            // $req->session()->regenerate();
-            $user = Auth::user();
-            $token = $user->createToken('main')->plainTextToken;
-
-            return response([
-                'user' => $user,
-                'token' => $token
-            ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
-        return response([
-            'error' => 'The provided credentials are not correct'
-        ], 422);
-        // if (!Auth::attempt($credentials, $remember)) {
-        //     return response([
-        //         'error' => 'The provided credentials are not correct'
-        //     ], 422);
-        // }
-        // /** @var \App\Models\User $user **/
-        // if (Auth::attempt($credentials, $remember)) {
-        //     return redirect()->intended('/');
-        // }
-        // $user = Auth::user();
-        // $token = $user->createToken('main')->plainTextToken;
+        if (!$token = auth()->attempt($validator->validated())) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
 
-        // return response([
-        //     'user' => $user,
-        //     'token' => $token
-        // ]);
+        return $this->createNewToken($token);
     }
 
+    /**
+     * Log the user out (invalidate the token)
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout()
     {
-        // /** @var \App\Models\User $user */
-        // $user = Auth::user();
+        auth()->logout();
 
-        // $user->currentAccessToken()->delete();
-
-        // return response([
-        //     'success' => true
-        // ]);
+        return response()->json(['message' => 'User successfully signed out']);
+    }
+    /**
+     * Refresh a token
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh()
+    {
+        return $this->createNewToken(auth()->refresh());
+    }
+    /**
+     * Get the authenticated User
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function userProfile()
+    {
+        return response()->json(auth()->user());
+    }
+    /**
+     * Get the token array structure
+     * 
+     * @param string $token
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function createNewToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => auth()->user()
+        ]);
     }
 }

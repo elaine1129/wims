@@ -19,6 +19,7 @@ const store = createStore({
         login({ commit }, user) {
             return axiosClient.post('/login', user)
                 .then(({ data }) => {
+                    console.log("store", data);
                     commit('setUser', data);
                     return data;
                 })
@@ -39,9 +40,9 @@ const store = createStore({
             sessionStorage.removeItem("TOKEN");
         },
         setUser: (state, userData) => {
-            state.user.token = userData.token;
+            state.user.token = userData.access_token;
             state.user.data = userData.user;
-            sessionStorage.setItem("TOKEN", userData.token);
+            sessionStorage.setItem("TOKEN", userData.access_token);
         }
     },
     modules: {},
