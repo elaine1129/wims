@@ -8,7 +8,7 @@ import Dashboard from './components/dashboard-test';
 import ManageCycleCounting from './pages/manager/manage-cycle-counting';
 import ViewCycleCounting from './pages/manager/view-cycle-counting';
 import StartCycleCounting from './pages/manager/start-cycle-counting';
-
+import ManagerViewInventory from './pages/manager/view-inventory';
 import Login from './auth/login';
 import store from './store';
 
@@ -35,7 +35,7 @@ const routes = [
                 return { path: '/admin-manage-inventory' }
             }
             else {
-                return { path: '/manager-start-cycle-counting' }
+                return { path: '/manager-view-inventories' }
             }
 
         },
@@ -78,6 +78,11 @@ const routes = [
                 path: '/manager-view-cycle-counting',
                 name: 'manager-view-cycle-counting',
                 component: ViewCycleCounting
+            },
+            {
+                path: '/manager-view-inventories',
+                name: 'manager-view-inventories',
+                component: ManagerViewInventory
             }
         ]
     }

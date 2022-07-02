@@ -64,6 +64,8 @@
                 <span v-for="item in navigation.manager" :key="item.name">
                   <span v-if="item.name !== 'Manage Cycle Counting'">
                     <router-link
+                      :key="item.name"
+                      :to="item.to"
                       active-class="bg-gray-900 text-white"
                       :class="[
                         this.$route.name === item.to.name
@@ -331,6 +333,10 @@ const navigation = {
   ],
   manager: [
     {
+      name: "View Inventories",
+      to: { name: "manager-view-inventories" },
+    },
+    {
       name: "Manage Cycle Counting",
       to: { name: "manager-manage-cycle-counting" },
     },
@@ -364,25 +370,7 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
-    const routes = {
-      //admin
-      admin: [
-        {
-          name: "Manage Inventory",
-          to: { name: "admin-manage-inventory" },
-        },
-      ],
-      staff: [
-        {
-          name: "Check In/Out Stock",
-          to: { name: "staff-check-in-out-stock" },
-        },
-        {
-          name: "View Inventory",
-          to: { name: "view-inventory" },
-        },
-      ],
-    };
+
     function logout() {
       store.dispatch("logout").then(() => {
         console.log(store.state.user);
