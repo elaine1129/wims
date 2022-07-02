@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\CycleCountSchedule;
+use App\Models\Warehouse;
+use App\Models\Stock;
+
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
@@ -52,6 +55,14 @@ class User extends Authenticatable implements JWTSubject
     public function schedule()
     {
         return $this->belongsTo(CycleCountSchedule::class);
+    }
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class);
+    }
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class);
     }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT

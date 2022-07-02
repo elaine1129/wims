@@ -151,14 +151,14 @@ export default {
         quantity: 0,
         remarks: "",
         inventory_id: "",
-        staff_id: "",
+        // staff_id: "",
         mode: "checkin",
       },
       checkOutForm: {
         quantity: 0,
         remarks: "",
         inventory_id: -1,
-        staff_id: "",
+        // staff_id: "",
         mode: "checkout",
       },
     };
@@ -178,14 +178,15 @@ export default {
       if (this.checkInOrOutStatus == "checkin") {
         console.log("checkInStock");
         this.checkInForm.inventory_id = this.checkInOutModalInv.id;
-        this.checkInForm.staff_id = 1;
-        const res = await this.callApi("POST", "/api/stock", this.checkInForm);
+        // this.checkInForm.staff_id = this.$store.getters.getUser.id;
+        // const res = await this.callApi("POST", "/api/stock", this.checkInForm);
+        const res = await this.$axiosClient.post("/stock", this.checkInForm);
         if (res.status == 201) {
           this.checkInForm = {
             quantity: 0,
             remarks: "",
             inventory_id: "",
-            staff_id: "",
+            // staff_id: "",
           };
           this.checkInOutModal = false;
           this.success(
@@ -199,7 +200,7 @@ export default {
             quantity: 0,
             remarks: "",
             inventory_id: "",
-            staff_id: "",
+            // staff_id: "",
           };
           this.checkInOutModal = false;
           this.smtgWentWrong();
@@ -213,18 +214,20 @@ export default {
           //   this.checkOutForm.quantity = -Math.abs(this.checkOutForm.quantity);
           console.log("checkOutStock");
           this.checkOutForm.inventory_id = this.checkInOutModalInv.id;
-          this.checkOutForm.staff_id = 1;
-          const res = await this.callApi(
-            "POST",
-            "/api/stock",
-            this.checkOutForm
-          );
+          // this.checkOutForm.staff_id = 1;
+          // const res = await this.callApi(
+          //   "POST",
+          //   "/api/stock",
+          //   this.checkOutForm
+          // );
+          const res = await this.$axiosClient.post("/stock", this.checkOutForm);
+
           if (res.status == 201) {
             this.checkOutForm = {
               quantity: 0,
               remarks: "",
               inventory_id: "",
-              staff_id: "",
+              // staff_id: "",
             };
             this.checkInOutModal = false;
             this.success(
@@ -238,7 +241,7 @@ export default {
               quantity: 0,
               remarks: "",
               inventory_id: "",
-              staff_id: "",
+              // staff_id: "",
             };
             this.checkInOutModal = false;
             this.smtgWentWrong();

@@ -340,6 +340,10 @@ const navigation = {
       name: "Manage Cycle Counting",
       to: { name: "manager-manage-cycle-counting" },
     },
+    {
+      name: "View reports",
+      to: { name: "manager-view-reports" },
+    },
   ],
 };
 

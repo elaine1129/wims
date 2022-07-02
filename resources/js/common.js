@@ -56,6 +56,11 @@ export default {
         convertDate(date) {
             return moment(date).format('YYYY-MM-DD');
         },
+        groupDataByDate(data) {
+            return _.groupBy(data, function (d) {
+                return moment(d.created_at).format("YYYY-MM-DD");
+            });
+        }
 
     }
 }

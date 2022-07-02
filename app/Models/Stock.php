@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Inventory;
+use App\Models\User;
+
 
 class Stock extends Model
 {
@@ -14,6 +16,11 @@ class Stock extends Model
 
     public function inventory()
     {
-        return $this->belongsTo((Inventory::class));
+        return $this->belongsTo(Inventory::class);
+    }
+
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'staff_id', 'id');
     }
 }

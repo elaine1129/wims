@@ -53,4 +53,7 @@ Route::group(['middleware' => ['api']], function () {
 
     Route::get('/schedules', [ScheduleController::class, 'index']);
     Route::get('/getSchedulesByStaff/{staffId}', [ScheduleController::class, 'getSchedulesByStaff']);
+
+    //stock
+    Route::get('/stocks', [StockController::class, 'index']);
 });

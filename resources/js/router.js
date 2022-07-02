@@ -9,6 +9,8 @@ import ManageCycleCounting from './pages/manager/manage-cycle-counting';
 import ViewCycleCounting from './pages/manager/view-cycle-counting';
 import StartCycleCounting from './pages/manager/start-cycle-counting';
 import ManagerViewInventory from './pages/manager/view-inventory';
+import ManagerViewReports from './pages/manager/view-reports';
+
 import Login from './auth/login';
 import store from './store';
 
@@ -83,6 +85,11 @@ const routes = [
                 path: '/manager-view-inventories',
                 name: 'manager-view-inventories',
                 component: ManagerViewInventory
+            },
+            {
+                path: '/manager-view-reports',
+                name: 'manager-view-reports',
+                component: ManagerViewReports
             }
         ]
     }
