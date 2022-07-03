@@ -10,6 +10,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\CycleCountController;
+use App\Models\CycleCounting;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,10 +34,12 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     //cycle-counting
-    Route::get('/cycle-counts/{warehouseId}', [CycleCountController::class, 'index']);
-    Route::get('/cycle-counts', [CycleCountController::class, 'show']);
+    Route::get('/cycle-counts', [CycleCountController::class, 'index']);
+    // Route::get('/cycle-counts', [CycleCountController::class, 'show']);
 
     Route::post('/cycle-count', [CycleCountController::class, 'store']);
+    Route::post('/approve-cycle-count', [CycleCountController::class, 'approveCycleCount']);
+    Route::post('/reject-cycle-count', [CycleCountController::class, 'rejectCycleCount']);
 
     Route::get('inventories', [InventoryController::class, 'index']);
     Route::get('inventory/{id}', [InventoryController::class, 'show']);

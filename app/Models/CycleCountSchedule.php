@@ -11,8 +11,8 @@ use App\Models\CycleCounting;
 class CycleCountSchedule extends Model
 {
     use HasFactory;
-
-    protected $fillables = ['sku_id', 'schedule', 'staff_id'];
+    public $timestamps = false;
+    protected $fillable = ['sku_id', 'schedule', 'staff_id'];
 
     public function sku()
     {

@@ -79,7 +79,7 @@
 
                   <span v-else>
                     <Dropdown>
-                      <a href="javascript:void(0)">
+                      <a href="javascript:void(0)" class="text-gray-300">
                         {{ item.name }}
                         <Icon type="ios-arrow-down"></Icon>
                       </a>

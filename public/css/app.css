@@ -780,6 +780,9 @@ select {
 .flex-shrink-0 {
   flex-shrink: 0;
 }
+.basis-1\/2 {
+  flex-basis: 50%;
+}
 .origin-top-right {
   transform-origin: top right;
 }
@@ -810,6 +813,12 @@ select {
 .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.flex-row {
+  flex-direction: row;
+}
 .items-center {
   align-items: center;
 }
@@ -827,6 +836,13 @@ select {
 }
 .gap-3 {
   gap: 0.75rem;
+}
+.gap-2 {
+  gap: 0.5rem;
+}
+.gap-x-3 {
+  -moz-column-gap: 0.75rem;
+       column-gap: 0.75rem;
 }
 .space-y-8 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
