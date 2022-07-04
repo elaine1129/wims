@@ -341,7 +341,11 @@ const navigation = {
       to: { name: "manager-manage-cycle-counting" },
     },
     {
-      name: "View reports",
+      name: "View Staffs",
+      to: { name: "manager-view-staffs" },
+    },
+    {
+      name: "View Reports",
       to: { name: "manager-view-reports" },
     },
   ],

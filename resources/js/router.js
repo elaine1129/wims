@@ -10,7 +10,7 @@ import ViewCycleCounting from './pages/manager/view-cycle-counting';
 import StartCycleCounting from './pages/manager/start-cycle-counting';
 import ManagerViewInventory from './pages/manager/view-inventory';
 import ManagerViewReports from './pages/manager/view-reports';
-
+import ManagerViewStaffs from './pages/manager/view-staffs';
 import Login from './auth/login';
 import store from './store';
 
@@ -90,6 +90,11 @@ const routes = [
                 path: '/manager-view-reports',
                 name: 'manager-view-reports',
                 component: ManagerViewReports
+            },
+            {
+                path: '/manager-view-staffs',
+                name: 'manager-view-staffs',
+                component: ManagerViewStaffs
             }
         ]
     }

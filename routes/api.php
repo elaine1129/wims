@@ -59,4 +59,7 @@ Route::group(['middleware' => ['api']], function () {
 
     //stock
     Route::get('/stocks', [StockController::class, 'index']);
+
+    //warehouse
+    Route::get('/warehouse/{id}', [WarehouseController::class, 'show']);
 });

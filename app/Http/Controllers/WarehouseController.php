@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\WarehouseResource;
 use Illuminate\Http\Request;
 use App\Models\Warehouse;
 
@@ -22,5 +23,10 @@ class WarehouseController extends Controller
         $warehouse->cycle_counting_settings = json_encode($data_to_save);
         $warehouse->save();
         return $warehouse;
+    }
+
+    public function show($id)
+    {
+        return new WarehouseResource(Warehouse::findOrFail($id));
     }
 }
