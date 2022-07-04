@@ -659,6 +659,9 @@ select {
 .right-0 {
   right: 0px;
 }
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -1010,6 +1013,9 @@ select {
 }
 .font-bold {
   font-weight: 700;
+}
+.italic {
+  font-style: italic;
 }
 .leading-none {
   line-height: 1;
