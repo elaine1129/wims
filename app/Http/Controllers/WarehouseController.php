@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\WarehouseResource;
 use Illuminate\Http\Request;
 use App\Models\Warehouse;
+use PDO;
 
 class WarehouseController extends Controller
 {
@@ -28,5 +29,10 @@ class WarehouseController extends Controller
     public function show($id)
     {
         return new WarehouseResource(Warehouse::findOrFail($id));
+    }
+
+    public function index()
+    {
+        return WarehouseResource::collection(Warehouse::all());
     }
 }

@@ -105,3 +105,12 @@ div .py-4{
       margin-right: -10px;
       margin-left: -10px;
   }
+
+/** view details page header*/
+.headerRow .ivu-description-term {
+  min-width: 150px;
+}
+
+.user-details-label {
+  font-weight: bold;
+}

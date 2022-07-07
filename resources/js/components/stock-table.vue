@@ -3,10 +3,15 @@
     <thead>
       <tr>
         <th>Stock ID</th>
-        <th>Inventory ID</th>
-        <th>Inventory Name</th>
+        <th v-if="this.$store.getters.getUser.role != 'Admin'">Inventory ID</th>
+        <th v-if="this.$store.getters.getUser.role != 'Admin'">
+          Inventory Name
+        </th>
+
         <!-- <th>Original Count</th> -->
         <th>Quantity in/out</th>
+        <th>Date</th>
+
         <!-- <th>Total Count</th> -->
         <th>Staff Responsible</th>
         <th>Remarks</th>
@@ -15,9 +20,15 @@
     <tbody>
       <tr v-for="stock in data" :key="stock.id">
         <td>{{ stock.id }}</td>
-        <td>{{ stock.inventory.id }}</td>
-        <td>{{ stock.inventory.name }}</td>
+        <td v-if="this.$store.getters.getUser.role != 'Admin'">
+          {{ stock.inventory.id }}
+        </td>
+        <td v-if="this.$store.getters.getUser.role != 'Admin'">
+          {{ stock.inventory.name }}
+        </td>
         <td>{{ stock.quantity }}</td>
+        <td>{{ stock.created_at }}</td>
+
         <td>{{ stock.staff.name }}</td>
         <td>{{ stock.remarks }}</td>
       </tr>

@@ -12,7 +12,7 @@ use App\Models\Sku;
 class Inventory extends Model
 {
     use HasFactory;
-
+    protected $fillable = ["name", "warehouse_id", "cost_per_unit", "qty_on_hand", "category_id"];
 
     public function warehouse()
     {

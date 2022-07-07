@@ -20,3 +20,6 @@ Route::get('/', function () {
 Route::any('{slug}', function () {
     return view('welcome');
 });
+Route::fallback(function () {
+    return view('welcome');
+});

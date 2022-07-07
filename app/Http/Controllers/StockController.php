@@ -45,4 +45,9 @@ class StockController extends Controller
         event(new StockCreated($inventory));
         return Stock::create($req->all());
     }
+    public function getStocksByInventory($id)
+    {
+        $inventory = Inventory::findOrFail($id);
+        return StockResource::collection($inventory->stocks);
+    }
 }

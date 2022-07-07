@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventoryController;
@@ -43,11 +44,18 @@ Route::group(['middleware' => ['api']], function () {
 
     Route::get('inventories', [InventoryController::class, 'index']);
     Route::get('inventory/{id}', [InventoryController::class, 'show']);
+    Route::post('/inventory', [InventoryController::class, 'store']);
+    Route::post('/inventory/{id}', [InventoryController::class, 'update']);
+    Route::delete('/inventory/{id}', [InventoryController::class, 'delete']);
+
+
     Route::get('/getStaffByWarehouse/{warehouseId}', [UserController::class, 'getStaffByWarehouse']);
     Route::get('/getInvByWarehouse/{warehouseId}', [InventoryController::class, 'getInvByWarehouse']);
 
-    // check in out stock
+    // stock
+    Route::get('/stocks', [StockController::class, 'index']);
     Route::post('stock', [StockController::class, 'store']);
+    Route::get('/getStocksByInventory/{id}', [StockController::class, 'getStocksByInventory']);
 
     //scheduling
     Route::put('/storeCycleCountingSettings/{warehouseId}', [WarehouseController::class, 'storeCycleCountingSettings']);
@@ -57,9 +65,10 @@ Route::group(['middleware' => ['api']], function () {
     Route::get('/schedules', [ScheduleController::class, 'index']);
     Route::get('/getSchedulesByStaff/{staffId}', [ScheduleController::class, 'getSchedulesByStaff']);
 
-    //stock
-    Route::get('/stocks', [StockController::class, 'index']);
-
     //warehouse
+    Route::get('/warehouses', [WarehouseController::class, 'index']);
     Route::get('/warehouse/{id}', [WarehouseController::class, 'show']);
+
+    //category
+    Route::get('/categories', [CategoryController::class, 'index']);
 });

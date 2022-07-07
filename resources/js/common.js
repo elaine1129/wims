@@ -13,7 +13,7 @@ export default {
         async callApi(method, url, dataObj) {
             try {
                 return await axios({
-                    // headers: `Bearer ${store.state.user.token}`,
+                    headers: `Bearer ${store.state.user.token}`,
                     method: method,
                     url: url,
                     data: dataObj
@@ -35,23 +35,35 @@ export default {
                 desc: desc
             });
         },
+        // for input error (422)
         warning(desc, title = "Ooops!") {
             this.$Notice.warning({
                 title: title,
                 desc: desc
             });
         },
+        // for server error (500)
         error(desc, title = "Ooops") {
             this.$Notice.error({
                 title: title,
                 desc: desc
             });
         },
+        // anything other than 422 and 500
         smtgWentWrong(desc = 'Something went wrong! Please try again.', title = "Ooops") {
             this.$Notice.error({
                 title: title,
                 desc: desc
             });
+        },
+        handleApiError(error) {
+            if (error.response.status == 422) {
+                this.warning(Object.values(error.response.data.errors)[0]);
+            } else if (error.response.status == 500) {
+                this.error("Server Error");
+            } else {
+                this.smtgWentWrong();
+            }
         },
         convertDate(date) {
             return moment(date).format('YYYY-MM-DD');

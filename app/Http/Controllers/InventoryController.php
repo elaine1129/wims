@@ -15,6 +15,12 @@ class InventoryController extends Controller
         if (Gate::allows('isStaff') || Gate::allows('isManager')) {
             return InventoryResource::collection(Inventory::where('warehouse_id', Auth::user()->warehouse_id)->get());
         }
+        if (Gate::allows('isAdmin')) {
+            $inventories = Inventory::all();
+            $resouce = InventoryResource::collection($inventories);
+            // dd($resouce);
+            return $resouce;
+        }
         return abort(403);
     }
 
@@ -24,6 +30,33 @@ class InventoryController extends Controller
         return new InventoryResource($inventory);
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            "name" => 'required',
+            'warehouse_id' => 'required',
+            'cost_per_unit' => 'required|gt:0',
+            'qty_on_hand' => 'required|gt:0',
+            'category_id' => 'required'
+        ]);
+        return Inventory::create($request->all());
+    }
+
+    public function update(Request $request, $id)
+    {
+        $inventory = Inventory::findOrFail($id);
+        $request->validate([
+            "name" => 'required',
+            'cost_per_unit' => 'required|gt:0',
+            'category_id' => 'required'
+        ]);
+        return $inventory->update($request->all());
+    }
+
+    public function delete(Request $request, $id)
+    {
+        return Inventory::destroy($id);
+    }
     public function getInvByWarehouse($warehouseId)
     {
         return InventoryResource::collection(Inventory::where('warehouse_id', '=', $warehouseId)->get());
