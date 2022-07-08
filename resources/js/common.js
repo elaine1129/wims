@@ -6,7 +6,8 @@ export default {
         return {
             freq_types: ["day", "week", "month", "year"],
             multiplications: [1, 7, 30, 365],
-            working_days: ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+            working_days: ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"],
+            roles: ["Staff", "Admin", "Manager"]
         }
     },
     methods: {

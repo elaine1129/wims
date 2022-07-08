@@ -4,6 +4,8 @@ import CheckInOutStock from './pages/staff/check-in-out-stock'
 import ViewInventory from './pages/staff/view-inventory';
 import CycleCounting from './pages/staff/cycle-counting';
 import ManageInventory from './pages/admin/manage-inventory';
+import ViewUserDetails from './components/pages/view-user-details';
+import ManageUser from './pages/admin/manage-user';
 import Dashboard from './components/dashboard-test';
 import ManageCycleCounting from './pages/manager/manage-cycle-counting';
 import ViewCycleCounting from './pages/manager/view-cycle-counting';
@@ -72,6 +74,16 @@ const routes = [
                 path: '/view-inventory-details/:id',
                 name: 'view-inventory-details',
                 component: ViewInventoryDetails
+            },
+            {
+                path: '/admin-manage-user',
+                name: 'admin-manage-user',
+                component: ManageUser
+            },
+            {
+                path: '/view-user-details/:id',
+                name: 'view-user-details',
+                component: ViewUserDetails
             },
             {
                 path: '/manager-manage-cycle-counting',

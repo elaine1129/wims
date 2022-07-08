@@ -53,7 +53,7 @@ class InventoryController extends Controller
         return $inventory->update($request->all());
     }
 
-    public function delete(Request $request, $id)
+    public function destroy(Request $request, $id)
     {
         return Inventory::destroy($id);
     }

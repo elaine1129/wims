@@ -98,7 +98,7 @@ export default {
         category_id: this.editInventoryForm.category.id,
       };
       await this.$axiosClient
-        .post("/inventory/" + this.editInventoryForm.id, params)
+        .put("/inventory/" + this.editInventoryForm.id, params)
         .then((response) => {
           this.editInventoryForm = {
             id: "",

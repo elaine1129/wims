@@ -316,6 +316,10 @@ const navigation = {
       name: "Manage Inventory",
       to: { name: "admin-manage-inventory" },
     },
+    {
+      name: "Manage User",
+      to: { name: "admin-manage-user" },
+    },
   ],
   staff: [
     {

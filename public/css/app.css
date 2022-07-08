@@ -732,11 +732,11 @@ select {
 .w-10 {
   width: 2.5rem;
 }
-.w-1\/2 {
-  width: 50%;
-}
 .w-24 {
   width: 6rem;
+}
+.w-1\/2 {
+  width: 50%;
 }
 .min-w-full {
   min-width: 100%;
@@ -794,9 +794,6 @@ select {
 }
 .justify-between {
   justify-content: space-between;
-}
-.justify-items-center {
-  justify-items: center;
 }
 .gap-3 {
   gap: 0.75rem;

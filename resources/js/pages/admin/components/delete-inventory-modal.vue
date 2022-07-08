@@ -48,7 +48,12 @@ export default {
         .then((response) => {
           this.success("Inventory successfully deleted!");
           this.modal = false;
-          router.go(-1);
+          console.log("route", this.$route);
+          if (this.$route.name == "admin-manage-inventory") {
+            this.$emit("deleted", this.selectedInventory.id);
+          } else {
+            router.go(-1);
+          }
         })
         .catch((error) => {
           this.handleApiError(error);

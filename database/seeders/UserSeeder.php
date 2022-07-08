@@ -16,8 +16,9 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             DB::table('users')->insert([
+                // 'id' => $i,
                 'name' => Str::random(10),
                 'username' => Str::random(10),
                 'password' => Hash::make('password'),

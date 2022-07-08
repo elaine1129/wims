@@ -28,9 +28,17 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['api']], function () {
 
+    //users
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/user/{id}', [UserController::class, 'show']);
+    Route::post('/user', [UserController::class, 'store']);
+    Route::put('/user/{id}', [UserController::class, 'update']);
+    Route::delete('/user/{id}', [UserController::class, 'destroy']);
+
+
     //Authentication
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -45,8 +53,8 @@ Route::group(['middleware' => ['api']], function () {
     Route::get('inventories', [InventoryController::class, 'index']);
     Route::get('inventory/{id}', [InventoryController::class, 'show']);
     Route::post('/inventory', [InventoryController::class, 'store']);
-    Route::post('/inventory/{id}', [InventoryController::class, 'update']);
-    Route::delete('/inventory/{id}', [InventoryController::class, 'delete']);
+    Route::put('/inventory/{id}', [InventoryController::class, 'update']);
+    Route::delete('/inventory/{id}', [InventoryController::class, 'destroy']);
 
 
     Route::get('/getStaffByWarehouse/{warehouseId}', [UserController::class, 'getStaffByWarehouse']);

@@ -57,6 +57,7 @@
   ></EditInventoryModalComponent>
   <DeleteInventoryModalComponent
     ref="deleteInventoryModalComponent"
+    @deleted="deletedInChild"
   ></DeleteInventoryModalComponent>
 </template>
 
@@ -68,6 +69,16 @@ export default {
   props: {
     data: Array,
     name: String,
+  },
+  computed: {
+    myData: {
+      get() {
+        return this.data;
+      },
+      set(v) {
+        this.$emit("setData", v);
+      },
+    },
   },
   components: {
     EditInventoryModalComponent,
@@ -95,6 +106,9 @@ export default {
     },
     showInventoryDetailPage(inventory) {
       router.push(`/view-inventory-details/${inventory.id}`);
+    },
+    deletedInChild(id) {
+      this.myData = _.remove(this.data, { id: id });
     },
   },
 };
