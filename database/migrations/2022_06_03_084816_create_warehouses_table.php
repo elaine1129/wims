@@ -17,8 +17,8 @@ class CreateWarehousesTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('location');
-            $table->integer('manager_id');
-            $table->text('cycle_counting_settings');
+            $table->integer('manager_id')->nullable();
+            $table->text('cycle_counting_settings')->nullable();
             $table->text('storage_bins');
             $table->timestamps();
         });

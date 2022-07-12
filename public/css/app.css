@@ -969,6 +969,9 @@ select {
 .font-bold {
   font-weight: 700;
 }
+.capitalize {
+  text-transform: capitalize;
+}
 .italic {
   font-style: italic;
 }

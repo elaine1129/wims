@@ -15,6 +15,8 @@ class Warehouse extends Model
         'storage_bins' => 'array',
     ];
 
+    protected $fillable = ["name", "location", "storage_bins"];
+
     public function inventories()
     {
         return $this->hasMany(Inventory::class);

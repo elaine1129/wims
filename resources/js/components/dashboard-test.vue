@@ -317,8 +317,16 @@ const navigation = {
       to: { name: "admin-manage-inventory" },
     },
     {
+      name: "Manage Warehouse",
+      to: { name: "admin-manage-warehouse" },
+    },
+    {
       name: "Manage User",
       to: { name: "admin-manage-user" },
+    },
+    {
+      name: "View reports",
+      to: { name: "admin-view-reports" },
     },
   ],
   staff: [

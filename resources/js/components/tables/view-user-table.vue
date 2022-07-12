@@ -7,12 +7,26 @@
         <th>Email</th>
         <th>Contact No.</th>
         <th v-if="this.$store.getters.getUser.role == 'Admin'">Role</th>
-        <th v-if="this.$store.getters.getUser.role == 'Admin'">Warehouse</th>
+        <th
+          v-if="
+            this.$store.getters.getUser.role == 'Admin' &&
+            this.$route.name != 'view-warehouse-details'
+          "
+        >
+          Warehouse
+        </th>
 
         <th>Employed in</th>
         <th>Created at</th>
         <th>Updated at</th>
-        <th v-if="this.$store.getters.getUser.role == 'Admin'">Actions</th>
+        <th
+          v-if="
+            this.$store.getters.getUser.role == 'Admin' &&
+            this.$route.name != 'view-warehouse-details'
+          "
+        >
+          Actions
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -32,14 +46,24 @@
         <td v-if="this.$store.getters.getUser.role == 'Admin'">
           {{ user.role }}
         </td>
-        <td v-if="this.$store.getters.getUser.role == 'Admin'">
+        <td
+          v-if="
+            this.$store.getters.getUser.role == 'Admin' &&
+            this.$route.name != 'view-warehouse-details'
+          "
+        >
           {{ user.warehouse.name }}
         </td>
 
         <td>{{ user.employed_in }}</td>
         <td>{{ user.created_at ? user.created_at : "-" }}</td>
         <td>{{ user.updated_at ? user.updated_at : "-" }}</td>
-        <td v-if="this.$store.getters.getUser.role == 'Admin'">
+        <td
+          v-if="
+            this.$store.getters.getUser.role == 'Admin' &&
+            this.$route.name != 'view-warehouse-details'
+          "
+        >
           <div class="flex items-center gap-x-3">
             <Button
               type="success"

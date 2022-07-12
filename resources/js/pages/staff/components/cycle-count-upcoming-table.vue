@@ -149,16 +149,18 @@ export default {
         inv_rec_accuracy: inv_rec_accuracy.toFixed(3),
         status: "PENDING",
       };
-      const res = await this.callApi("POST", "/api/cycle-count", params);
-      if (res.status == 201) {
-        this.success("The cycle counting has been recorded.");
-        this.countSKUModal = false;
-        this.countSKUForm = {
-          actual_count: 0,
-        };
-      } else {
-        this.error(res.data.message);
-      }
+      await this.$axiosClient
+        .post("/cycle-count", params)
+        .then((response) => {
+          this.success("The cycle counting has been recorded.");
+          this.countSKUModal = false;
+          this.countSKUForm = {
+            actual_count: 0,
+          };
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
     },
     closeCountSKUModal(name) {
       this.countSKUModal = false;

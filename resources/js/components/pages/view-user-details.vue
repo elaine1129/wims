@@ -78,7 +78,10 @@
         }}
       </div>
     </div>
-    <div class="flex justify-center space-x-4">
+    <div
+      class="flex justify-center space-x-4"
+      v-if="this.$store.getters.getUser.role == 'Admin'"
+    >
       <Button
         type="success"
         size="large"

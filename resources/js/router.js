@@ -6,6 +6,8 @@ import CycleCounting from './pages/staff/cycle-counting';
 import ManageInventory from './pages/admin/manage-inventory';
 import ViewUserDetails from './components/pages/view-user-details';
 import ManageUser from './pages/admin/manage-user';
+import ManageWarehouse from './pages/admin/manage-warehouse';
+import ViewWarehouseDetails from './pages/admin/view-warehouse-details';
 import Dashboard from './components/dashboard-test';
 import ManageCycleCounting from './pages/manager/manage-cycle-counting';
 import ViewCycleCounting from './pages/manager/view-cycle-counting';
@@ -84,6 +86,21 @@ const routes = [
                 path: '/view-user-details/:id',
                 name: 'view-user-details',
                 component: ViewUserDetails
+            },
+            {
+                path: '/admin-manage-warehouse',
+                name: 'admin-manage-warehouse',
+                component: ManageWarehouse
+            },
+            {
+                path: '/admin-view-reports',
+                name: 'admin-view-reports',
+                component: ManagerViewReports
+            },
+            {
+                path: '/view-warehouse-details/:id',
+                name: 'view-warehouse-details',
+                component: ViewWarehouseDetails
             },
             {
                 path: '/manager-manage-cycle-counting',

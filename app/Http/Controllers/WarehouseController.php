@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\WarehouseResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Warehouse;
 use PDO;
@@ -34,5 +35,29 @@ class WarehouseController extends Controller
     public function index()
     {
         return WarehouseResource::collection(Warehouse::all());
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            "name" => "required",
+            "location" => "required"
+        ]);
+        return Warehouse::create($request->all());
+    }
+
+    public function update(Request $request, $id)
+    {
+        $warehouse = Warehouse::findOrFail($id);
+        $request->validate([
+            "location" => "required",
+            "manager_id" => "required",
+        ]);
+        $user = User::findOrFail($request["manager_id"]);
+        $user["role"] = "Manager";
+        $user->save();
+        $warehouse["manager_id"] = $request["manager_id"]; //manager id is not mass-assign since warehouse can be created without a manager
+        $warehouse->save();
+        return $warehouse->update($request->all());
     }
 }

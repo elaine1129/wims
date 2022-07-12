@@ -564,16 +564,16 @@ export default {
       });
     },
     async getStaffs() {
-      const res = await this.callApi(
-        "GET",
-        `/api/getStaffByWarehouse/${this.$store.getters.getUser.warehouse_id}`
-      );
-      if (res.status == 200) {
-        this.staffs = res.data;
-        this.assignStaffModal = true;
-      } else {
-        this.smtgWentWrong();
-      }
+      await this.$axiosClient
+        .get("/getStaffByWarehouse/" + this.$store.getters.getUser.warehouse_id)
+        .then((response) => {
+          this.staffs = response.data.data;
+          console.log(this.staffs);
+          this.assignStaffModal = true;
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
     },
     staffHandleCheckAll() {
       if (this.staff_indeterminate) {
@@ -625,16 +625,15 @@ export default {
       console.log(this.startCycleCountingForm.inventories_str);
     },
     async getInvs() {
-      const res = await this.callApi(
-        "GET",
-        `/api/getInvByWarehouse/${this.$store.getters.getUser.warehouse_id}`
-      );
-      if (res.status == 200) {
-        this.inventories = res.data.data;
-        this.selectInvModal = true;
-      } else {
-        this.smtgWentWrong();
-      }
+      await this.$axiosClient
+        .get("/getInvByWarehouse/" + this.$store.getters.getUser.warehouse_id)
+        .then((response) => {
+          this.inventories = response.data.data;
+          this.selectInvModal = true;
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
     },
     invHandleCheckAll() {
       if (this.inv_indeterminate) {
@@ -964,75 +963,77 @@ export default {
       this.loading = true;
       console.log("confirmed");
       this.$Loading.start();
-      const res = await this.callApi(
-        "PUT",
-        "/api/storeCycleCountingSettings/" +
-          this.$store.getters.getUser.warehouse_id,
-        this.startCycleCountingForm
-      );
-      console.log(res);
-      if (res.status == 200) {
-        var skus = _.map(this.startCycleCountingForm.sku_list, (sku) => {
-          return {
-            class: sku.class,
-            inventory_id: sku.inventory.id,
-          };
-        });
-        const createSkuRes = await this.callApi("POST", "/api/sku", skus);
-        console.log(createSkuRes);
-        if (createSkuRes.status == 200) {
-          var staff_ids = _.map(
-            this.startCycleCountingForm.staffs_assigned,
-            (staff) => {
-              return parseInt(_.split(staff, ":", 2)[0]);
-            }
-          );
-
-          var schedules = this.generateSchedule();
-          var counter = 0;
-          _.forEach(schedules, (schedule) => {
-            if (counter < staff_ids.length) {
-              schedule.staff_id = staff_ids[counter];
-              counter += 1;
-            } else {
-              schedule.staff_id = staff_ids[0];
-              counter = 1;
-            }
-          });
-          var params = _.map(schedules, (schedule) => {
-            return {
-              inventory_id: schedule.inventory.id,
-              schedule: schedule.schedule_date,
-              staff_id: schedule.staff_id,
-            };
-          });
-          const createScheduleRes = await this.callApi(
-            "POST",
-            "/api/schedule",
-            params
-          );
-          console.log(createScheduleRes);
-          if (createScheduleRes.status == 200) {
-            this.$Loading.finish();
-            this.success("Cycle counting has been started.");
-          } else {
-            this.$Loading.error();
-            this.error(createScheduleRes.data.message);
-            // this.confirmStartCycleCountingModal = false;
-          }
-        } else {
+      await this.$axiosClient
+        .put(
+          "/storeCycleCountingSettings/" +
+            this.$store.getters.getUser.warehouse_id,
+          this.startCycleCountingForm
+        )
+        .then((response) => {
+          this.createSKU();
+        })
+        .catch((error) => {
           this.$Loading.error();
-          this.error(createSkuRes.data.message);
-          // this.confirmStartCycleCountingModal = false;
-        }
-      } else {
-        this.$Loading.error();
-        this.error(res.data.message);
-        // this.confirmStartCycleCountingModal = false;
-      }
+          this.handleApiError(error);
+        });
       this.confirmStartCycleCountingModal = false;
       this.disableCancelButton = false;
       this.loading = false;
+    },
+    async createSKU() {
+      var skus = _.map(this.startCycleCountingForm.sku_list, (sku) => {
+        return {
+          class: sku.class,
+          inventory_id: sku.inventory.id,
+        };
+      });
+      await this.$axiosClient
+        .post("/sku", skus)
+        .then((response) => {
+          this.storeSchedules();
+        })
+        .catch((error) => {
+          this.$Loading.error();
+          this.handleApiError(error);
+        });
+    },
+
+    async storeSchedules() {
+      var staff_ids = _.map(
+        this.startCycleCountingForm.staffs_assigned,
+        (staff) => {
+          return parseInt(_.split(staff, ":", 2)[0]);
+        }
+      );
+
+      var schedules = this.generateSchedule();
+      var counter = 0;
+      _.forEach(schedules, (schedule) => {
+        if (counter < staff_ids.length) {
+          schedule.staff_id = staff_ids[counter];
+          counter += 1;
+        } else {
+          schedule.staff_id = staff_ids[0];
+          counter = 1;
+        }
+      });
+      var params = _.map(schedules, (schedule) => {
+        return {
+          inventory_id: schedule.inventory.id,
+          schedule: schedule.schedule_date,
+          staff_id: schedule.staff_id,
+        };
+      });
+      await this.$axiosClient
+        .post("/schedule", params)
+        .then((response) => {
+          this.$Loading.finish();
+          this.success("Cycle counting has been started.");
+        })
+        .catch((error) => {
+          this.$Loading.error();
+          this.handleApiError(error);
+        });
     },
     handleSummary({ columns, data }) {
       const sums = {};

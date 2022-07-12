@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class WarehouseResource extends JsonResource
@@ -15,9 +16,19 @@ class WarehouseResource extends JsonResource
      */
     public function toArray($request)
     {
-        return array_merge(parent::toArray($request), [
-            'manager' => User::findOrFail($this->manager_id),
+        $arrayData =  array_merge(parent::toArray($request), [
+            // 'manager' => User::findOrFail($this->manager_id),
             'staffs' => $this->staffs
         ]);
+
+        if ($this->manager_id) {
+            $arrayData['manager'] =
+                User::findOrFail($this->manager_id);
+        } else {
+            $arrayData['manager'] =
+                null;
+        }
+
+        return $arrayData;
     }
 }

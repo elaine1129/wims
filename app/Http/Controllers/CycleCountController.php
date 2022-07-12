@@ -46,6 +46,8 @@ class CycleCountController extends Controller
                     });
                 });
             })->get();
+        } else {
+            $data = CycleCounting::all();
         }
         return CycleCountResource::collection($data);
     }

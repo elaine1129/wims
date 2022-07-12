@@ -38,7 +38,6 @@ Route::group(['middleware' => ['api']], function () {
     Route::put('/user/{id}', [UserController::class, 'update']);
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
-
     //Authentication
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -76,6 +75,10 @@ Route::group(['middleware' => ['api']], function () {
     //warehouse
     Route::get('/warehouses', [WarehouseController::class, 'index']);
     Route::get('/warehouse/{id}', [WarehouseController::class, 'show']);
+    Route::post('/warehouse', [WarehouseController::class, 'store']);
+    Route::put('/warehouse/{id}', [WarehouseController::class, 'update']);
+
+
 
     //category
     Route::get('/categories', [CategoryController::class, 'index']);

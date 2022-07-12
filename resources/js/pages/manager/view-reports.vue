@@ -76,7 +76,10 @@
           </template>
         </Modal>
       </TabPane>
-      <TabPane label="Cycle Counting Approval Report">
+      <TabPane
+        v-if="this.$store.getters.getUser.role == 'Manager'"
+        label="Cycle Counting Approval Report"
+      >
         <table id="approval-report" class="display" style="width: 100%">
           <thead>
             <tr>
@@ -173,7 +176,7 @@
           </Alert>
         </Modal>
       </TabPane>
-      <TabPane label="cycle-count-summary-report">
+      <TabPane label="Cycle Count Summary Report">
         <SummaryReportTableComponent
           name="summary-report"
           :data="data.cycle_countings_completed"
@@ -212,16 +215,44 @@ export default {
     };
   },
   async created() {
-    const res = await this.$axiosClient.get("/stocks");
-    console.log(res);
-    const res_grouped = this.groupDataByDate(res.data.data);
-    console.log(res_grouped);
+    var res;
+    await this.$axiosClient.get("/stocks").then((response) => {
+      if (this.$store.getters.getUser.role == "Admin") {
+        console.log(response);
+        res = _.cloneDeep(response.data);
 
-    this.data.daily_reports_grouped = res_grouped;
-    this.data.daily_reports_unique = _.uniqBy(res.data.data, (stock) => {
-      return this.convertDate(stock.created_at);
+        for (const item in res) {
+          res[item] = this.groupDataByDate(res[item]);
+        }
+        console.log("res grouprd", res);
+        this.data.daily_reports_grouped = res;
+        var temp = _.cloneDeep(response.data);
+        for (const item in temp) {
+          this.data.daily_reports_unique.push(
+            _.uniqBy(temp[item], (stock) => {
+              //get one data from each date group to display
+              return this.convertDate(stock.created_at);
+            })
+          );
+        }
+        this.data.daily_reports_unique = _.flatten(
+          this.data.daily_reports_unique
+        );
+        console.log("unique", this.data.daily_reports_unique);
+      } else {
+        res = response.data.data;
+        const res_grouped = this.groupDataByDate(res); //group the data by date
+        console.log("res grouprd", res_grouped);
+
+        this.data.daily_reports_grouped = res_grouped;
+        this.data.daily_reports_unique = _.uniqBy(res, (stock) => {
+          //get one data from each date group to display
+          return this.convertDate(stock.created_at);
+        });
+        console.log("unique", this.data.daily_reports_unique);
+      }
     });
-    console.log(this.data.daily_reports_unique);
+
     const cycleCountingsRes = await this.$axiosClient.get("/cycle-counts");
     console.log(cycleCountingsRes);
     this.data.cycle_countings_pending = _.filter(cycleCountingsRes.data.data, {
@@ -247,11 +278,21 @@ export default {
   },
   methods: {
     viewDailyReport(report) {
-      this.data.selectedDailyReport = _.get(
-        this.data.daily_reports_grouped,
-        this.convertDate(report.created_at)
-      );
-      console.log(this.data.selectedDailyReport);
+      if (this.$store.getters.getUser.role == "Admin") {
+        this.data.selectedDailyReport = _.get(
+          this.data.daily_reports_grouped[report.warehouse_id],
+          this.convertDate(report.created_at)
+        );
+        console.log(this.data.selectedDailyReport);
+      } else {
+        console.log(this.data.daily_reports_grouped);
+        this.data.selectedDailyReport = _.get(
+          this.data.daily_reports_grouped,
+          this.convertDate(report.created_at)
+        );
+        console.log(this.data.selectedDailyReport);
+      }
+
       this.stockTableID =
         "stock_" +
         this.data.selectedDailyReport[0].warehouse.id +
