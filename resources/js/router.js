@@ -13,7 +13,7 @@ import ManageCycleCounting from './pages/manager/manage-cycle-counting';
 import ViewCycleCounting from './pages/manager/view-cycle-counting';
 import StartCycleCounting from './pages/manager/start-cycle-counting';
 import ManagerViewInventory from './pages/manager/view-inventory';
-import ManagerViewReports from './pages/manager/view-reports';
+import ViewReports from './components/pages/view-reports';
 import ManagerViewStaffs from './pages/manager/view-staffs';
 import ViewInventoryDetails from './components/pages/view-inventory-details';
 
@@ -95,7 +95,7 @@ const routes = [
             {
                 path: '/admin-view-reports',
                 name: 'admin-view-reports',
-                component: ManagerViewReports
+                component: ViewReports
             },
             {
                 path: '/view-warehouse-details/:id',
@@ -125,7 +125,7 @@ const routes = [
             {
                 path: '/manager-view-reports',
                 name: 'manager-view-reports',
-                component: ManagerViewReports
+                component: ViewReports
             },
             {
                 path: '/manager-view-staffs',

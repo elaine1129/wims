@@ -188,8 +188,8 @@
 
 <script>
 import PageComponent from "../../components/pages/default-page.vue";
-import StockTableComponent from "../../components/stock-table.vue";
-import SummaryReportTableComponent from "../../components/summary-report-table.vue";
+import StockTableComponent from "../tables/stock-table.vue";
+import SummaryReportTableComponent from "../tables/summary-report-table.vue";
 import moment from "moment";
 export default {
   components: {

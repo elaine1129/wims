@@ -56,7 +56,7 @@
 
 <script>
 import PageComponent from "../../components/pages/default-page.vue";
-import ViewInventoryTableComponent from "../../components/pages/view-inventory-table.vue";
+import ViewInventoryTableComponent from "../../components/tables/view-inventory-table.vue";
 
 export default {
   components: {

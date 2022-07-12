@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import StockTableComponent from "../stock-table.vue";
+import StockTableComponent from "../tables/stock-table.vue";
 import EditInventoryModalComponent from "../../pages/admin/components/edit-inventory-modal.vue";
 import DeleteInventoryModalComponent from "../../pages/admin/components/delete-inventory-modal.vue";
 export default {
