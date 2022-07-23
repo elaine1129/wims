@@ -321,6 +321,10 @@ const navigation = {
       to: { name: "admin-manage-warehouse" },
     },
     {
+      name: "Manage Category",
+      to: { name: "admin-manage-category" },
+    },
+    {
       name: "Manage User",
       to: { name: "admin-manage-user" },
     },

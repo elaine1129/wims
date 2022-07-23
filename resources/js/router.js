@@ -4,6 +4,7 @@ import CheckInOutStock from './pages/staff/check-in-out-stock'
 import ViewInventory from './pages/staff/view-inventory';
 import CycleCounting from './pages/staff/cycle-counting';
 import ManageInventory from './pages/admin/manage-inventory';
+import ManageCategory from './pages/admin/manage-category';
 import ViewUserDetails from './components/pages/view-user-details';
 import ManageUser from './pages/admin/manage-user';
 import ManageWarehouse from './pages/admin/manage-warehouse';
@@ -91,6 +92,11 @@ const routes = [
                 path: '/admin-manage-warehouse',
                 name: 'admin-manage-warehouse',
                 component: ManageWarehouse
+            },
+            {
+                path: '/admin-manage-category',
+                name: 'admin-manage-category',
+                component: ManageCategory
             },
             {
                 path: '/admin-view-reports',

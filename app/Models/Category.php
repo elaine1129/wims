@@ -9,7 +9,7 @@ use App\Models\Inventory;
 class Category extends Model
 {
     use HasFactory;
-
+    protected $fillable = ["name"];
     public function inventories()
     {
         return $this->hasMany(Inventory::class);

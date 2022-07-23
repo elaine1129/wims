@@ -40,7 +40,7 @@
               <Button
                 type="success"
                 class="basis-1/2"
-                @click="showEditInventoryModal(warehouse)"
+                @click="showEditWarehouseModal(warehouse)"
                 >Edit</Button
               >
               <Button type="error" class="basis-1/2" disabled>Delete</Button>
@@ -281,7 +281,7 @@ export default {
       }
       return JSON.stringify(storage_bins);
     },
-    showEditInventoryModal(warehouse) {
+    showEditWarehouseModal(warehouse) {
       this.selectedWarehouse = warehouse;
       this.$refs.editWarehouseModalComponent.setProps(
         true,
