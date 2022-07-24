@@ -19,7 +19,7 @@ class CreateWarehousesTable extends Migration
             $table->text('location');
             $table->integer('manager_id')->nullable();
             $table->text('cycle_counting_settings')->nullable();
-            $table->text('storage_bins');
+            $table->text('storage_bins'); //to do: set length to 10000 else cant withhold the data
             $table->timestamps();
         });
     }

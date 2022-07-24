@@ -84,6 +84,11 @@ export default {
     setProps(modal, selectedInventory) {
       this.modal = modal;
       this.editInventoryForm = selectedInventory;
+      if (!this.editInventoryForm.category) {
+        this.editInventoryForm.category = {
+          id: "",
+        };
+      }
       console.log(selectedInventory);
     },
     closeEditInventoryModal() {

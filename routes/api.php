@@ -85,4 +85,7 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('/category', [CategoryController::class, 'store']);
     Route::put('/category/{id}', [CategoryController::class, 'update']);
     Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
+
+    //storage bin
+    Route::post('/assign-category-to-bin/{id}', [WarehouseController::class, 'assignCategoryToBin']);
 });

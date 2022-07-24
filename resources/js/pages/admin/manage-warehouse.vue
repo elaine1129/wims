@@ -279,7 +279,7 @@ export default {
           this.data.categories[this.data.categories.length - 1].id;
         iteration++;
       }
-      return JSON.stringify(storage_bins);
+      return storage_bins;
     },
     showEditWarehouseModal(warehouse) {
       this.selectedWarehouse = warehouse;

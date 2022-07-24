@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 
 use App\Models\User;
 use App\Http\Resources\UserResource;
+use App\Models\Category;
+use App\Models\Inventory;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class WarehouseResource extends JsonResource
