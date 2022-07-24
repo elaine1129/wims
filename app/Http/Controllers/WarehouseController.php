@@ -78,6 +78,10 @@ class WarehouseController extends Controller
 
     public function assignCategoryToBin(Request $request, $id)
     {
+        $request->validate([
+            "category_id" => "required",
+            "storage_bins" => "required|min:1"
+        ]);
         $warehouse = Warehouse::findOrFail($id);
         $new_bins = $warehouse->storage_bins;
 

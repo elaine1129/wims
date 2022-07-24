@@ -57,12 +57,7 @@
     <EditWarehouseModalTableComponent
       ref="editWarehouseModalComponent"
     ></EditWarehouseModalTableComponent>
-    <Modal
-      v-model="multiAssignBin"
-      title="Multi Assign Bin"
-      @on-ok="multiAssignCategoryToBin"
-      @on-cancel="closeMultiAssignBinModal"
-    >
+    <Modal v-model="multiAssignBin" title="Multi Assign Bin">
       <Form :model="assignBinForm" :label-width="80">
         <FormItem label="Category">
           <Select v-model="assignBinForm.category" style="width: 200px">
@@ -102,17 +97,9 @@
           </CheckboxGroup>
         </FormItem>
       </Form>
-    </Modal>
-
-    <Modal v-model="confirmMultiAssignModal" title="Are you sure?">
-      <h2>
-        Are you sure to multiassign the selected bins to the category "{{
-          this.assignBinForm.category.name
-        }}"?
-      </h2>
       <template #footer>
-        <Button @click="confirmMultiAssignModal = false">Cancel</Button>
-        <Button type="default" @click="multiAssign">Assign</Button>
+        <Button @click="closeMultiAssignBinModal">Cancel</Button>
+        <Button type="primary" @click="multiAssign">Assign</Button>
       </template>
     </Modal>
   </PageComponent>
@@ -134,8 +121,6 @@ export default {
   data() {
     return {
       data: {
-        // staffs: [],
-        // userData: null,
         warehouse: null,
         staffs: [],
         storage_bins: [],
@@ -156,8 +141,6 @@ export default {
     };
   },
   async created() {
-    // this.data.userData = this.$store.getters.getUser;
-    // console.log(this.data.userData);
     await this.$axiosClient
       .get("/warehouse/" + this.$route.params.id)
       .then((response) => {
@@ -169,9 +152,6 @@ export default {
       .catch((error) => {
         this.handleApiError(error);
       });
-    // console.log("warehosue", res);
-    // this.data.staffs = _.filter(res.data.data.staffs, { role: "Staff" });
-    // console.log(this.data.staffs);
     $(document).ready(function () {
       $("#staffs").DataTable();
     });
@@ -197,10 +177,6 @@ export default {
           this.handleApiError(error);
         });
       this.multiAssignBin = true;
-    },
-    multiAssignCategoryToBin() {
-      console.log(this.assignBinForm);
-      this.confirmMultiAssignModal = true;
     },
     closeMultiAssignBinModal() {
       this.multiAssignBin = false;
@@ -246,6 +222,15 @@ export default {
         .post("/assign-category-to-bin/" + this.data.warehouse.id, param)
         .then((response) => {
           console.log(response);
+          this.success("Multiple assignments successful!");
+          this.multiAssignBin = false;
+          this.assignBinForm = {
+            category: {
+              id: "",
+              name: "",
+            },
+            storage_bins: [],
+          };
         })
         .catch((error) => {
           this.handleApiError(error);
