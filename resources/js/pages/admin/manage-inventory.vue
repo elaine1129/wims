@@ -1,12 +1,19 @@
 <template>
   <PageComponent title="Manage Inventory">
-    <Button
-      type="primary"
-      icon="ios-add-circle-outline"
-      style="margin-bottom: 20px"
-      @click="showAddInventoryModal"
-      >Add</Button
-    >
+    <div class="flex justify-between">
+      <div>
+        <Button
+          type="primary"
+          icon="ios-add-circle-outline"
+          style="margin-bottom: 20px"
+          @click="showAddInventoryModal"
+          >Add</Button
+        >
+      </div>
+      <div id="filter-warehouse"></div>
+      <div></div>
+    </div>
+
     <ViewInventoryTableComponent
       name="inventories"
       :data="data.inventories"
@@ -86,7 +93,30 @@ export default {
     console.log(res);
     this.data.inventories = res.data.data;
     $(document).ready(function () {
-      $("#inventories").DataTable();
+      $("#inventories").DataTable({
+        initComplete: function () {
+          this.api()
+            .columns([2])
+            .every(function () {
+              var column = this;
+              var select = $('<select><option value=""></option></select>')
+                .appendTo("#filter-warehouse")
+                .on("change", function () {
+                  var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                  column.search(val ? "^" + val + "$" : "", true, false).draw();
+                });
+
+              column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d, j) {
+                  select.append('<option value="' + d + '">' + d + "</option>");
+                });
+            });
+        },
+      });
     });
   },
   methods: {
