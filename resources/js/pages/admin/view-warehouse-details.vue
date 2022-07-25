@@ -10,13 +10,20 @@
         ></ViewUserTableComponent>
       </TabPane>
       <TabPane label="Storage Bins">
-        <Button
-          type="primary"
-          icon="ios-add-circle-outline"
-          style="margin-bottom: 20px"
-          @click="showMultiAssignBinModal"
-          >Multi Assign Bin</Button
-        >
+        <div class="flex justify-between">
+          <div>
+            <Button
+              type="primary"
+              icon="ios-add-circle-outline"
+              style="margin-bottom: 20px"
+              @click="showMultiAssignBinModal"
+              >Multi Assign Bin</Button
+            >
+          </div>
+          <div id="filter-category"></div>
+          <div></div>
+        </div>
+
         <table id="storage-bins" class="display" style="width: 100%">
           <thead>
             <tr>
@@ -40,13 +47,6 @@
               </td>
             </tr>
           </tbody>
-          <tfoot>
-            <tr>
-              <th></th>
-              <th></th>
-              <th>Category ID</th>
-            </tr>
-          </tfoot>
         </table>
       </TabPane>
     </Tabs>
@@ -210,7 +210,7 @@ export default {
             .every(function () {
               var column = this;
               var select = $('<select><option value=""></option></select>')
-                .appendTo($(column.footer()).empty())
+                .appendTo("#filter-category")
                 .on("change", function () {
                   var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
