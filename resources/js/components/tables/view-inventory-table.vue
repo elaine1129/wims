@@ -7,7 +7,7 @@
         <th v-if="this.$store.getters.getUser.role == 'Admin'">Warehouse</th>
         <th>Cost Per Unit</th>
         <th>Quantity On Hand</th>
-        <!-- <th>Storage Bin Number</th> -->
+        <th>Storage Bin Number</th>
         <th>Created By</th>
         <th>Updated By</th>
         <th v-if="this.$store.getters.getUser.role == 'Admin'">Actions</th>
@@ -30,7 +30,13 @@
         </td>
         <td>{{ inventory.cost_per_unit }}</td>
         <td>{{ inventory.qty_on_hand }}</td>
-        <!-- <td>{{ inventory.storage_bin[0].bin_number }}</td> -->
+        <td>
+          {{
+            inventory.storage_bin.length > 0
+              ? inventory.storage_bin[0].bin_number
+              : "-"
+          }}
+        </td>
         <td>{{ inventory.created_at ? inventory.created_at : "-" }}</td>
         <td>{{ inventory.updated_at ? inventory.updated_at : "-" }}</td>
         <td v-if="this.$store.getters.getUser.role == 'Admin'">
