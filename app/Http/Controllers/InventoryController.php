@@ -55,7 +55,7 @@ class InventoryController extends Controller
             });
             if (count((array)$available_bins) <= 0) {
                 return response()->json([
-                    'errors' => ['There are no available bin for this category anymore, Please create a bin for this category first.']
+                    'errors' => ['There are no available bin for this category anymore, Please empty a bin for this category first.']
                 ], 422);
             } else {
                 $inventory = Inventory::create($request->all());
