@@ -24,6 +24,12 @@ class InventoryController extends Controller
         return abort(403);
     }
 
+    public function unassignedCategoryInventories()
+    {
+        $inventories = Inventory::where('category_id', null)->get();
+        return InventoryResource::collection($inventories);
+    }
+
     public function show($id)
     {
         $inventory = Inventory::findOrFail($id);

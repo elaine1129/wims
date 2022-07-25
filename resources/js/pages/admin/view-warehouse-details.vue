@@ -24,6 +24,7 @@
               <th>Bin Number</th>
               <th>Category ID</th>
               <th>Inventory ID</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -32,6 +33,11 @@
               <td>{{ bin.bin_number }}</td>
               <td>{{ bin.category ? bin.category.name : "-" }}</td>
               <td>{{ bin.inventory ? bin.inventory.name : "-" }}</td>
+              <td>
+                <Button type="primary" @click="showEditInventoryModal(bin)"
+                  >Edit Inventory</Button
+                >
+              </td>
             </tr>
           </tbody>
         </table>
@@ -57,8 +63,30 @@
     <EditWarehouseModalTableComponent
       ref="editWarehouseModalComponent"
     ></EditWarehouseModalTableComponent>
-    <Modal v-model="multiAssignBin" title="Multi Assign Bin">
+    <Modal v-model="editInventoryModal" title="Edit inventory">
       <Form :model="assignBinForm" :label-width="80">
+        <FormItem label="Inventory">
+          <Select
+            v-model="selectedBin.inventory"
+            clearable
+            style="width: 200px"
+          >
+            <Option
+              v-for="inventory in data.unassigned_inventories"
+              :value="inventory"
+              :key="inventory.id"
+              >{{ inventory.name }}</Option
+            >
+          </Select>
+        </FormItem>
+      </Form>
+      <template #footer>
+        <Button @click="closeEditInventoryModal">Cancel</Button>
+        <Button type="primary" @click="editInventory">Edit Inventory</Button>
+      </template>
+    </Modal>
+    <Modal v-model="multiAssignBin" title="Multi Assign Bin">
+      <Form :model="editInventoryForm" :label-width="80">
         <FormItem label="Category">
           <Select v-model="assignBinForm.category" style="width: 200px">
             <Option
@@ -125,6 +153,7 @@ export default {
         staffs: [],
         storage_bins: [],
         categories: [],
+        unassigned_inventories: [],
       },
       selectedStaff: null,
       multiAssignBin: false,
@@ -138,6 +167,17 @@ export default {
         storage_bins: [],
       },
       confirmMultiAssignModal: false,
+      editInventoryModal: false,
+      selectedBin: {
+        inventory: {
+          id: "",
+        },
+        bin_id: "",
+        bin_number: "",
+        category: {
+          id: "",
+        },
+      },
     };
   },
   async created() {
@@ -231,6 +271,61 @@ export default {
             },
             storage_bins: [],
           };
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
+    },
+    async showEditInventoryModal(bin) {
+      await this.$axiosClient
+        .get("/inventories-unassigned-category")
+        .then((response) => {
+          this.data.unassigned_inventories = response.data.data;
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
+      this.editInventoryModal = true;
+      this.selectedBin = _.cloneDeep(bin);
+      if (this.selectedBin.inventory == null) {
+        this.selectedBin.inventory = {
+          id: "",
+        };
+      } else {
+        this.data.unassigned_inventories.push(this.selectedBin.inventory);
+      }
+      console.log(bin);
+    },
+    closeEditInventoryModal() {
+      this.editInventoryModal = false;
+      this.selectedBin = {
+        inventory: {
+          id: "",
+        },
+        bin_id: "",
+        bin_number: "",
+        category: {
+          id: "",
+        },
+      };
+    },
+    async editInventory() {
+      console.log(this.selectedBin);
+      let param = {
+        bin_id: this.selectedBin.bin_id,
+        category_id: this.selectedBin.category.id,
+        inventory_id: this.selectedBin.inventory
+          ? this.selectedBin.inventory.id
+          : null,
+      };
+      await this.$axiosClient
+        .post("/storage-bin-edit-inventory/" + this.data.warehouse.id, param)
+        .then((response) => {
+          console.log(response);
+          this.success(
+            `The inventory for stoage bin ${this.selectedBin.bin_number} has been successfully updated!`
+          );
+          this.closeEditInventoryModal();
         })
         .catch((error) => {
           this.handleApiError(error);

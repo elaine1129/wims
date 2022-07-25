@@ -49,11 +49,13 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('/approve-cycle-count', [CycleCountController::class, 'approveCycleCount']);
     Route::post('/reject-cycle-count', [CycleCountController::class, 'rejectCycleCount']);
 
+    //inventory
     Route::get('inventories', [InventoryController::class, 'index']);
     Route::get('inventory/{id}', [InventoryController::class, 'show']);
     Route::post('/inventory', [InventoryController::class, 'store']);
     Route::put('/inventory/{id}', [InventoryController::class, 'update']);
     Route::delete('/inventory/{id}', [InventoryController::class, 'destroy']);
+    Route::get('/inventories-unassigned-category', [InventoryController::class, 'unassignedCategoryInventories']);
 
 
     Route::get('/getStaffByWarehouse/{warehouseId}', [UserController::class, 'getStaffByWarehouse']);
@@ -77,8 +79,7 @@ Route::group(['middleware' => ['api']], function () {
     Route::get('/warehouse/{id}', [WarehouseController::class, 'show']);
     Route::post('/warehouse', [WarehouseController::class, 'store']);
     Route::put('/warehouse/{id}', [WarehouseController::class, 'update']);
-
-
+    Route::post('/storage-bin-edit-inventory/{id}', [WarehouseController::class, 'editStorageBinInventory']);
 
     //category
     Route::get('/categories', [CategoryController::class, 'index']);

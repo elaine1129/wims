@@ -102,4 +102,28 @@ class WarehouseController extends Controller
         $warehouse->save();
         return $warehouse;
     }
+
+    public function editStorageBinInventory(Request $request, $id)
+    {
+        $warehouse = Warehouse::findOrFail($id);
+        $new_bins = $warehouse->storage_bins;
+        $temp = array_column($new_bins, 'bin_id');
+        $found_key = array_search($request->bin_id, $temp);
+        if ($new_bins[$found_key]["inventory_id"] != -1 && $new_bins[$found_key]["inventory_id"] != null) {
+            $inventory = Inventory::findOrFail($new_bins[$found_key]["inventory_id"]);
+            $inventory["category_id"] = null;
+            $inventory->save();
+        }
+        if ($request->inventory_id == null) {
+            $new_bins[$found_key]["inventory_id"] = -1;
+        } else {
+            $inventory = Inventory::findOrFail($request->inventory_id);
+            $inventory["category_id"] = $request->category_id;
+            $inventory->save();
+            $new_bins[$found_key]["inventory_id"] = $request->inventory_id;
+        }
+        $warehouse->storage_bins = $new_bins;
+        $warehouse->save();
+        return $warehouse;
+    }
 }
