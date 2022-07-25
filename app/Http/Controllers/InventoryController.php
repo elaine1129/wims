@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\InventoryResource;
 use App\Models\Inventory;
+use App\Models\Warehouse;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
@@ -43,9 +45,31 @@ class InventoryController extends Controller
             'warehouse_id' => 'required',
             'cost_per_unit' => 'required|gt:0',
             'qty_on_hand' => 'required|gt:0',
-            'category_id' => 'required'
+            // 'category_id' => 'required'
         ]);
-        return Inventory::create($request->all());
+        $available_bins = array();
+        if ($request->category_id != null) {
+            $warehouse = Warehouse::findOrFail($request->warehouse_id);
+            (array)$available_bins = Arr::where((array)$warehouse->storage_bins, function ($value, $key) use ($request) {
+                return ($value['category_id'] == $request->category_id) && ($value["inventory_id"] == -1);
+            });
+            if (count((array)$available_bins) <= 0) {
+                return response()->json([
+                    'errors' => ['There are no available bin for this category anymore, Please create a bin for this category first.']
+                ], 422);
+            } else {
+                $inventory = Inventory::create($request->all());
+                $new_bins = $warehouse->storage_bins;
+                $temp = array_column($new_bins, 'bin_number');
+                $found_key = array_search(array_values($available_bins)[0]["bin_number"], $temp);
+                $new_bins[$found_key]["inventory_id"] = $inventory->id;
+                $warehouse->storage_bins = $new_bins;
+                $warehouse->save();
+                return $new_bins[$found_key];
+            }
+        } else {
+            return Inventory::create($request->all());
+        }
     }
 
     public function update(Request $request, $id)

@@ -133,7 +133,9 @@ export default {
             cost_per_unit: 0.0,
             category: null,
           };
-          this.success("Inventory Created!");
+          this.success(
+            `Inventory Created! Bin number: ${response.data.bin_number}`
+          );
           this.addInventoryModal = false;
         })
         .catch((error) => {
