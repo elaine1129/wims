@@ -6,8 +6,12 @@ use App\Http\Resources\CycleCountResource;
 use App\Models\CycleCounting;
 use App\Models\CycleCountSchedule;
 use App\Models\Inventory;
+use App\Models\Sku;
 use App\Models\User;
+use App\Models\Warehouse;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -73,6 +77,17 @@ class CycleCountController extends Controller
     public function store(Request $request)
     {
 
+        $schedule = CycleCountSchedule::findOrFail($request->schedule_id);
+        $schedule->status = "CLOSED";
+        $schedule->save();
+        $schedule =  CycleCountSchedule::where("sku_id", $schedule["sku_id"])->where("status", "OPEN")->first();
+        if ($schedule != null) {
+            $request["approve_before"] = date('Y-m-d', strtotime($schedule["schedule"] . '- 1 days'));
+        } else {
+            $warehouse = Warehouse::findOrFail(Auth::user()->warehouse_id);
+            $settings = json_decode($warehouse->cycle_counting_settings, true);
+            $request["approve_before"] = date('Y-m-d', strtotime($settings["start_end_date"][1] . '- 1 days'));
+        }
         return CycleCounting::create($request->all());
     }
 

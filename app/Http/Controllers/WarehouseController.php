@@ -22,6 +22,7 @@ class WarehouseController extends Controller
             'warehouse_id' => $warehouseId,
             'staff_ids' => $request->staffs_assigned,
             'inventory_ids' => $request->inventories,
+            'start_end_date' => $request->start_end_date
         ];
 
         $warehouse = Warehouse::findOrFail($warehouseId);

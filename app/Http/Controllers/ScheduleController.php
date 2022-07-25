@@ -20,6 +20,7 @@ class ScheduleController extends Controller
             $inventory = Inventory::findOrFail($data['inventory_id']);
             $sku_id = $inventory->sku->id;
             $data["sku_id"] = $sku_id;
+            $data["status"] = "OPEN";
             unset($data["inventory_id"]);
         }
         unset($data);
@@ -31,7 +32,7 @@ class ScheduleController extends Controller
     {
         // dd(auth()->user());
         if (Gate::allows('isStaff')) {
-            return ScheduleResource::collection(CycleCountSchedule::where('staff_id', Auth::id())->get());
+            return ScheduleResource::collection(CycleCountSchedule::where('staff_id', Auth::id())->where('status', 'OPEN')->get());
         } else if (Gate::allows('isManager')) {
             $data = CycleCountSchedule::where(function ($query) {
                 $query->whereHas('staff', function ($q) {

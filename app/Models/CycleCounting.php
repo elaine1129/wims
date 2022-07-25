@@ -10,7 +10,7 @@ class CycleCounting extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['schedule_id', "actual_count", "recorded_count", "variance", "inv_rec_accuracy", "status"];
+    protected $fillable = ['schedule_id', "actual_count", "recorded_count", "variance", "inv_rec_accuracy", "status", "staff_id", "approve_before"];
 
     public function schedule()
     {

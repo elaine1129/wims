@@ -261,16 +261,18 @@ export default {
   },
 
   async created() {
-    const res = await this.callApi(
-      "GET",
-      "/api/getInvByWarehouse/" + this.$store.getters.getUser.warehouse_id
-    );
-    if (res.status == 200) {
-      console.log(res.data.data);
+    await this.$axiosClient
+      .get("/getInvByWarehouse/" + this.$store.getters.getUser.warehouse_id)
+      .then((response) => {
+        console.log(response.data.data);
 
-      this.data.inventories = res.data.data;
-      console.log("store", this.$store.getters.getUser);
-    }
+        this.data.inventories = response.data.data;
+        console.log("store", this.$store.getters.getUser);
+      })
+      .catch((error) => {
+        this.handleApiError(error);
+      });
+
     $(document).ready(function () {
       $("#inventories").DataTable();
     });

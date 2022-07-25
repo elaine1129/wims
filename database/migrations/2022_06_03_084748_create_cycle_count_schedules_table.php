@@ -18,6 +18,7 @@ class CreateCycleCountSchedulesTable extends Migration
             $table->integer('sku_id');
             $table->string('schedule');
             $table->integer('staff_id');
+            $table->enum('status', ['OPEN', 'CLOSED']);
         });
     }
 
