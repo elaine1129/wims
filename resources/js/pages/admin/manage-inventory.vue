@@ -52,6 +52,13 @@
             >
           </Select>
         </FormItem>
+        <FormItem label="Priority">
+          <Select v-model="addInventoryForm.priority">
+            <Option v-for="index in 5" :key="index" :value="index">{{
+              index
+            }}</Option>
+          </Select>
+        </FormItem>
       </Form>
       <template #footer>
         <Button @click="closeAddInventoryModal">Cancel</Button>
@@ -85,6 +92,7 @@ export default {
         qty_on_hand: 0,
         cost_per_unit: 0.0,
         category_id: null,
+        priority: 1,
       },
     };
   },
@@ -132,6 +140,7 @@ export default {
             qty_on_hand: 0,
             cost_per_unit: 0.0,
             category: null,
+            priority: 1,
           };
           this.success(
             `Inventory Created! Bin number: ${response.data.bin_number}`
@@ -150,6 +159,7 @@ export default {
         qty_on_hand: 0,
         cost_per_unit: 0.0,
         category: null,
+        priority: 1,
       };
       this.addInventoryModal = false;
     },

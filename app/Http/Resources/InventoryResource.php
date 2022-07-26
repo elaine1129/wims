@@ -25,6 +25,7 @@ class InventoryResource extends JsonResource
                 return $value['inventory_id'] == $this->id;
             }),
             'category' => $this->category,
+            'priority' => $this->priority,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by
         ];

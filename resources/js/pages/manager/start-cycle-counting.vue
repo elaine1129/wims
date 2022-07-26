@@ -584,8 +584,10 @@ export default {
       console.log(this.startCycleCountingForm);
       //GET THE MAX AND MIN STOCK VALUE
       _.forEach(this.inventories, (inventory) => {
-        inventory.stock_value = inventory.cost_per_unit * inventory.qty_on_hand;
+        inventory.stock_value =
+          inventory.cost_per_unit * inventory.qty_on_hand * inventory.priority;
       });
+      console.log(this.inventories);
       let max = _.maxBy(this.inventories, "stock_value");
       let min = _.minBy(this.inventories, "stock_value");
       let skulist = [];

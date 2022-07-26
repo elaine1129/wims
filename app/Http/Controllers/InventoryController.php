@@ -46,6 +46,7 @@ class InventoryController extends Controller
             'cost_per_unit' => 'required|gt:0',
             'qty_on_hand' => 'required|gt:0',
             // 'category_id' => 'required'
+            'priority' => 'required'
         ]);
         $available_bins = array();
         if ($request->category_id != null) {
@@ -78,7 +79,8 @@ class InventoryController extends Controller
         $request->validate([
             "name" => 'required',
             'cost_per_unit' => 'required|gt:0',
-            'category_id' => 'required'
+            'category_id' => 'required',
+            'priority' => 'required'
         ]);
         return $inventory->update($request->all());
     }

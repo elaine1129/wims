@@ -20,6 +20,7 @@ class CreateInventoriesTable extends Migration
             $table->double('cost_per_unit');
             $table->integer('qty_on_hand');
             $table->integer('category_id')->nullable();
+            $table->tinyInteger('priority');
             $table->timestamps();
         });
     }

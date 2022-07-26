@@ -37,6 +37,13 @@
           >
         </Select>
       </FormItem>
+      <FormItem label="Priority">
+        <Select v-model="editInventoryForm.priority">
+          <Option v-for="index in 5" :key="index" :value="index">{{
+            index
+          }}</Option>
+        </Select>
+      </FormItem>
     </Form>
 
     <template #footer>
@@ -66,6 +73,7 @@ export default {
         category: {
           id: "",
         },
+        priority: 1,
       },
     };
   },
@@ -101,6 +109,7 @@ export default {
         cost_per_unit: this.editInventoryForm.cost_per_unit,
         // storage_bin: "",
         category_id: this.editInventoryForm.category.id,
+        priority: this.editInventoryForm.priority,
       };
       await this.$axiosClient
         .put("/inventory/" + this.editInventoryForm.id, params)
@@ -117,6 +126,7 @@ export default {
             category: {
               id: "",
             },
+            priority: 1,
           };
           this.success("Inventory successfully updated");
           this.closeEditInventoryModal();
