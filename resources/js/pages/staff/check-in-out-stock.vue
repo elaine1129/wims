@@ -30,8 +30,14 @@
             <td>{{ inventory.name }}</td>
             <td>{{ inventory.cost_per_unit }}</td>
             <td>{{ inventory.qty_on_hand }}</td>
-            <td>{{ inventory.storage_bin[0].bin_number }}</td>
-            <td>{{ inventory.category.name }}</td>
+            <td>
+              {{
+                inventory.storage_bin[0]
+                  ? inventory.storage_bin[0].bin_number
+                  : "-"
+              }}
+            </td>
+            <td>{{ inventory.category ? inventory.category.name : "-" }}</td>
             <td>{{ inventory.created_by }}</td>
             <td>{{ inventory.updated_by }}</td>
             <td>
@@ -251,12 +257,17 @@ export default {
     },
 
     async getUpdatedInventory(e) {
-      const res = await this.callApi("GET", "/api/inventory/" + e.inventory.id);
-      console.log(res);
-      let invToReplace = _.findIndex(this.data.inventories, {
-        id: res.data.data.id,
-      });
-      this.data.inventories[invToReplace] = res.data.data;
+      await this.$axiosClient
+        .get("/inventory/" + e.inventory.id)
+        .then((response) => {
+          let invToReplace = _.findIndex(this.data.inventories, {
+            id: response.data.data.id,
+          });
+          this.data.inventories[invToReplace] = response.data.data;
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
     },
   },
 

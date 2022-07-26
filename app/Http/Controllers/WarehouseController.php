@@ -110,6 +110,7 @@ class WarehouseController extends Controller
         $new_bins = $warehouse->storage_bins;
         $temp = array_column($new_bins, 'bin_id');
         $found_key = array_search($request->bin_id, $temp);
+        //REMOVE ORIGINAL INVENTORY IN THE BIN
         if ($new_bins[$found_key]["inventory_id"] != -1 && $new_bins[$found_key]["inventory_id"] != null) {
             $inventory = Inventory::findOrFail($new_bins[$found_key]["inventory_id"]);
             $inventory["category_id"] = null;

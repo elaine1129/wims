@@ -4,6 +4,12 @@
       Are you sure to delete inventory {{ selectedInventory.id }} from
       {{ selectedInventory.warehouse.name }} ?
     </h2>
+    <Alert type="warning" show-icon>
+      This action is irreversible.
+      <template #desc>
+        All data related to this inventory will be deleted as well.
+      </template>
+    </Alert>
     <template #footer>
       <Button @click="closeDeleteInventoryModal">Cancel</Button>
       <Button type="error" @click="deleteInventory">Delete</Button>
