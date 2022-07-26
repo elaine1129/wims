@@ -80,7 +80,7 @@ class CycleCountController extends Controller
         $schedule = CycleCountSchedule::findOrFail($request->schedule_id);
         $schedule->status = "CLOSED";
         $schedule->save();
-        $schedule =  CycleCountSchedule::where("sku_id", $schedule["sku_id"])->where("status", "OPEN")->first();
+        $schedule =  CycleCountSchedule::where("sku_id", $schedule["sku_id"])->where("status", "OPEN")->orderBy('schedule', 'asc')->first();
         if ($schedule != null) {
             $request["approve_before"] = date('Y-m-d', strtotime($schedule["schedule"] . '- 1 days'));
         } else {

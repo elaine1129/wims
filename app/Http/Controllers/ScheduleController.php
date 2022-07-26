@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ScheduleResource;
+use App\Models\CycleCounting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\CycleCountSchedule;
@@ -15,6 +16,20 @@ class ScheduleController extends Controller
 {
     public function store(Request $request)
     {
+        //delete all reports and schedules
+        CycleCounting::where(function ($query) {
+            $query->whereHas('schedule', function ($q) {
+                $q->whereHas('staff', function ($r) {
+                    $r->where('warehouse_id', Auth::user()->warehouse_id);
+                });
+            });
+        })->delete();
+        CycleCountSchedule::where(function ($query) {
+            $query->whereHas('staff', function ($q) {
+                $q->where('warehouse_id', Auth::user()->warehouse_id);
+            });
+        })->delete();
+
         $dataArray = $request->all();
         foreach ($dataArray as &$data) {
             $inventory = Inventory::findOrFail($data['inventory_id']);

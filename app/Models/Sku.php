@@ -11,6 +11,7 @@ class Sku extends Model
 {
     use HasFactory;
     protected $fillables = ['class', 'inventory_id'];
+    public $timestamps = false;
 
     public function inventory()
     {

@@ -977,9 +977,10 @@ export default {
         _.map(this.workdays, "value"),
         this.startCycleCountingForm.workday_end
       ); //5
-      var working_days = this.getArrayOfWorkingDays(start_index, end_index);
+      var working_days = this.getArrayOfWorkingDays(start_index, end_index); //[1,2,3,4,5]
       _.forEach(this.startCycleCountingForm.cycle_count_class, (c) => {
         if (c.number_of_skus > 0) {
+          //GET THE SKUS FOR CURRENT CC CLASS
           var skus_class = _.map(
             _.filter(this.startCycleCountingForm.sku_list, (sku) => {
               return sku.class == c.class;
@@ -1002,35 +1003,41 @@ export default {
             return _.flattenDeep(final);
           };
 
-          var all_skus_class = makeRepeated(skus_class, c.frequency);
+          var all_skus_class = makeRepeated(skus_class, c.frequency); //GET THE ARRAY OF SKUS (WITHOUT SCHEDULE DATE YET)
 
           console.log("all", all_skus_class);
           var increment = parseFloat(c.daily_count);
           var accum = 0;
           var counter = 0;
           _.forEach(dates, (date) => {
+            //loop each date in date array (list of dates between start and end date)
             accum += increment;
             if (working_days.includes(date.getDay())) {
+              //if the date is working day
               if (c.daily_count >= 1) {
+                //if more than 1 then will have several sku in one day
                 for (var i = 0; i < c.daily_count; i++) {
                   var startIndex = _.findIndex(all_skus_class, (sku) => {
                     return sku.schedule_date == "";
                   });
-                  if (startIndex < all_skus_class.length) {
+                  if (startIndex < all_skus_class.length && startIndex >= 0) {
                     all_skus_class[startIndex].schedule_date =
                       this.convertDate(date);
                     startIndex += 1;
                   }
                 }
               } else if (c.daily_count > 0) {
+                //if less than one then only max one sku in one day
                 if (accum >= counter) {
                   var startIndex = _.findIndex(all_skus_class, (sku) => {
                     return sku.schedule_date == "";
                   });
-                  all_skus_class[startIndex].schedule_date =
-                    this.convertDate(date);
 
-                  counter += 1;
+                  if (startIndex < all_skus_class.length && startIndex >= 0) {
+                    all_skus_class[startIndex].schedule_date =
+                      this.convertDate(date);
+                    counter += 1;
+                  }
                 }
               }
             }
