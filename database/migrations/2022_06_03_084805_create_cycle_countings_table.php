@@ -20,7 +20,8 @@ class CreateCycleCountingsTable extends Migration
             $table->bigInteger('recorded_count');
             $table->bigInteger('variance');
             $table->double('inv_rec_accuracy');
-            $table->enum('status', ['PENDING', 'COMPLETED']);
+            $table->enum('status', ['PENDING', 'COMPLETED', 'REJECTED']);
+            $table->string('approve_before');
             $table->timestamps();
         });
     }

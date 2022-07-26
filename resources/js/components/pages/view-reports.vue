@@ -91,6 +91,7 @@
               <th>Recorded Count</th>
               <th>Actual Count</th>
               <th>Date Counted</th>
+              <th>Approve Before</th>
               <th>Variance</th>
               <th>Action</th>
             </tr>
@@ -110,6 +111,7 @@
               <td>{{ cycle_counting.recorded_count }}</td>
               <td>{{ cycle_counting.actual_count }}</td>
               <td>{{ convertDate(cycle_counting.created_at) }}</td>
+              <td>{{ convertDate(cycle_counting.approve_before) }}</td>
               <td>{{ cycle_counting.variance }}</td>
               <td>
                 <div class="flex items-center gap-x-3">

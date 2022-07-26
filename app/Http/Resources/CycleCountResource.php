@@ -24,7 +24,7 @@ class CycleCountResource extends JsonResource
             'inv_rec_accuracy' => $this->inv_rec_accuracy,
             'status' => $this->status,
             'created_at' => $this->created_at,
-
+            'approve_before' => $this->approve_before
         ];
     }
 }
