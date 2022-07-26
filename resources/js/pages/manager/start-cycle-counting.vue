@@ -183,6 +183,8 @@
         <Button @click="handleSubmit('startCycleCountingForm')">Submit</Button>
       </div>
     </Form>
+
+    <!-- ASSIGN STAFF MODAL-->
     <Modal
       v-model="assignStaffModal"
       title="Assign Staff"
@@ -215,6 +217,7 @@
         </Checkbox>
       </CheckboxGroup>
     </Modal>
+    <!-- SELECT INVENTORY MODAL-->
     <Modal
       v-model="selectInvModal"
       title="Select Inventory"
@@ -293,7 +296,7 @@
         <Button
           type="primary"
           :loading="loading"
-          @click="createCycleCountSchedule"
+          @click="confirmStartCycleCounting"
         >
           <span v-if="!loading">Create</span>
           <span v-else>Creating...</span>
@@ -535,17 +538,268 @@ export default {
     };
   },
   methods: {
+    //WHEN SUBMIT THE FORM --> NEED CHECK VALID INPUT
     handleSubmit(name) {
       console.log("handleSubmit");
       this.$refs[name].validate((valid) => {
         console.log(valid);
         if (valid) {
+          //IF VALID INPUT
           this.startCycleCounting();
         } else {
           this.warning("There's something wrong with the input!");
         }
       });
     },
+    //PROCESS ALL START CYCLE COUNTING DATA
+    startCycleCounting() {
+      //INITIATE THE CYCLE COUNT CLASS
+      this.startCycleCountingForm.cycle_count_class = [
+        {
+          class: "A",
+          number_of_skus: 0,
+          frequency: 0,
+          daily_count: 0,
+        },
+        {
+          class: "B",
+          number_of_skus: 0,
+          frequency: 0,
+          daily_count: 0,
+        },
+        {
+          class: "C",
+          number_of_skus: 0,
+          frequency: 0,
+          daily_count: 0,
+        },
+      ];
+      this.classifySKU(); //CLASSIFY THE SELECTED INVENTORY(SKU) TO A/B/C
+      this.calculateFrequency_DailyCount();
+      console.log("after process: ", this.startCycleCountingForm);
+      this.confirmStartCycleCountingModal = true;
+    },
+    classifySKU() {
+      console.log("classifySKU");
+      console.log(this.startCycleCountingForm);
+      //GET THE MAX AND MIN STOCK VALUE
+      _.forEach(this.inventories, (inventory) => {
+        inventory.stock_value = inventory.cost_per_unit * inventory.qty_on_hand;
+      });
+      let max = _.maxBy(this.inventories, "stock_value");
+      let min = _.minBy(this.inventories, "stock_value");
+      let skulist = [];
+      //LOOP THE SELECTED INVENTORY TO GET THE STOCK VALUE AND CALCULATE TRANSFORMED VALUE
+      _.forEach(this.startCycleCountingForm.inventories, (inventory) => {
+        let sku = {};
+        let id = _.parseInt(_.split(inventory, ":", 1)[0]);
+        let tempInv = _.find(this.inventories, (inventory) => {
+          return inventory.id == id;
+        });
+        sku.inventory = tempInv;
+        sku.stock_value = tempInv.stock_value;
+        sku.transformed_stock_value = _.round(
+          (sku.stock_value - min.stock_value) /
+            (max.stock_value - min.stock_value),
+          2
+        );
+        //CLASSIFY TO CYCLE COUNT CLASS
+        if (sku.transformed_stock_value <= 0.8) {
+          sku.class = "A";
+        } else if (sku.transformed_stock_value <= 0.95) {
+          sku.class = "B";
+        } else {
+          sku.class = "C";
+        }
+        skulist.push(sku);
+      });
+      this.startCycleCountingForm.sku_list = skulist;
+      console.log(this.startCycleCountingForm.sku_list);
+    },
+    calculateFrequency_DailyCount() {
+      //CONVERT START AND END DATE TO CORRECT STRING FORMAT
+      this.startCycleCountingForm.start_date = this.convertDate(
+        this.startCycleCountingForm.start_end_date[0]
+      );
+      this.startCycleCountingForm.end_date = this.convertDate(
+        this.startCycleCountingForm.start_end_date[1]
+      );
+      //CALCULATE FREQUENCY AND DAILY COUNT FOR EACH CYCLE COUNT CLASS
+
+      _.forEach(this.startCycleCountingForm.cycle_count_class, (c) => {
+        //LOOP CYCLE COUNT CLASS (A,B,C)
+        _.forEach(this.startCycleCountingForm.sku_list, (sku) => {
+          //LOOP SKULIST
+          if (c.class == sku.class) {
+            c.number_of_skus += 1; //COUNT NUMBER OF SKU FOR EACH CLASS
+          }
+        });
+        //EVERY 3 (CLASS) DAYS (CLASSTYPE)
+        if (c.class == "A") {
+          c.frequency = this.countFrequency(
+            this.startCycleCountingForm.classA,
+            this.startCycleCountingForm.classAType
+          );
+          c.daily_count = this.getDailyCount(
+            c.number_of_skus,
+            this.startCycleCountingForm.classA,
+            this.startCycleCountingForm.classAType
+          );
+        } else if (c.class == "B") {
+          c.frequency = this.countFrequency(
+            this.startCycleCountingForm.classB,
+            this.startCycleCountingForm.classBType
+          );
+          c.daily_count = this.getDailyCount(
+            c.number_of_skus,
+            this.startCycleCountingForm.classB,
+            this.startCycleCountingForm.classBType
+          );
+        } else {
+          c.frequency = this.countFrequency(
+            this.startCycleCountingForm.classC,
+            this.startCycleCountingForm.classCType
+          );
+          c.daily_count = this.getDailyCount(
+            c.number_of_skus,
+            this.startCycleCountingForm.classC,
+            this.startCycleCountingForm.classCType
+          );
+        }
+      });
+    },
+    countFrequency(count_freq, type) {
+      //days = array of working days you are looking: 0= sunday,.. 6 = saturday
+      var start_index = _.indexOf(
+        _.map(this.workdays, "value"),
+        this.startCycleCountingForm.workday_start
+      ); //1
+      var end_index = _.indexOf(
+        _.map(this.workdays, "value"),
+        this.startCycleCountingForm.workday_end
+      ); //5
+      var days = this.getArrayOfWorkingDays(start_index, end_index); //GET WORKING DAY INDEX IN ARRAY [1,2,3,4,5] (MONDAY-FRIDAY)
+      var start_day_index =
+        this.startCycleCountingForm.start_end_date[0].getDay();
+      if (type == "day") {
+        //FOR DAY, JUST DIVIDE TOTAL WORKING DAYS WITH COUNT FREQUENCY
+        return days.reduce(this.sumWorkingDay, 0) / count_freq;
+      } else if (type == "week") {
+        //FOR WEEK, DIVIDE LENGTH OF DAYS [1,2,3,4,5] AS THE LENGTH = 1 WEEK OF WORKINGDAYS
+        return days.reduce(this.sumWorkingDay, 0) / days.length / count_freq;
+      } else if (type == "month") {
+        //GET HOW MANY DAY FROM THE FIRST DATE TO WORKING DAY START --> SO THAT CAN KNOW WHICH IS THE FIRST DATE TO START COUNT
+        var days_from_range = this.getDaysFromRange(days, start_day_index);
+        //GET FIRST DATE TO COUNT
+        var first_date = moment(
+          this.startCycleCountingForm.start_end_date[0]
+        ).add(days_from_range, "days")._d;
+        //calculate the month between the end date and the first working day = monthly
+        var months;
+        //GET TOTAL MONTHS BETWEEN TWO YEAR OF THE DATE
+        //EG. 27/7/2022 - 27/12/2023 = 12 MONTHS
+        months =
+          (this.startCycleCountingForm.start_end_date[1].getFullYear() -
+            first_date.getFullYear()) *
+          12;
+        //GET THE EXACT MONTHS BETWEEN TWO DATES
+        //EG = FIRST DATE = 1/8/2022
+        months -= first_date.getMonth(); // DEDUCT THE MONTHS BEFORE FIRST DATE  EG. 12 - 8 (IF START DATE IS 27/7/2022)
+        months += this.startCycleCountingForm.start_end_date[1].getMonth(); //EG.4+12 = 16MONTHS (27/7/2022 - 27/12/2023)
+        if (
+          this.startCycleCountingForm.start_end_date[1].getDate() >=
+          first_date.getDate()
+        ) {
+          //make sure to consider partial month by adding 1
+          months += 1;
+        }
+        months /= count_freq;
+        return months <= 0 ? 1 : months;
+      } else {
+        //FOR YEAR
+        //get the number of days between the starting of date range to the first working day
+        var days_from_range = this.getDaysFromRange(days, start_day_index);
+        //add the days to obtain the first working day to start the calculation of year
+        var first_date = moment(
+          this.startCycleCountingForm.start_end_date[0]
+        ).add(days_from_range, "days")._d;
+        var diff =
+          (this.startCycleCountingForm.start_end_date[1].getTime() -
+            first_date.getTime()) /
+          1000;
+        diff /= 60 * 60 * 24;
+        //consider the partial year by adding one
+        if (
+          this.startCycleCountingForm.start_end_date[1].getDate() >=
+            first_date.getDate() &&
+          this.startCycleCountingForm.start_end_date[1].getMonth() >=
+            first_date.getMonth()
+        ) {
+          return (Math.abs(Math.round(diff / 365.25)) + 1) / count_freq;
+        }
+        return Math.abs(Math.round(diff / 365.25)) / count_freq;
+      }
+    },
+    getDaysFromRange(days, start_day_index) {
+      return days.includes(start_day_index)
+        ? 0
+        : start_day_index < days[0]
+        ? days[0] - start_day_index
+        : 7 - (start_day_index - days[0]);
+    },
+    sumWorkingDay(a, b) {
+      var ndays = //TOTAL DAYS BETWEEN START AND END DATE
+        1 +
+        Math.round(
+          (this.startCycleCountingForm.start_end_date[1] -
+            this.startCycleCountingForm.start_end_date[0]) /
+            (24 * 3600 * 1000)
+        ); //31
+      return (
+        a +
+        Math.floor(
+          (ndays +
+            ((this.startCycleCountingForm.start_end_date[0].getDay() + 6 - b) %
+              7)) /
+            7
+        )
+      );
+    },
+    getArrayOfWorkingDays(start_index, end_index) {
+      var days = [];
+
+      for (let i = start_index; i <= end_index; i++) {
+        days.push(i); //1,2,3,4,5
+      }
+      return days;
+    },
+    getDailyCount(number_of_skus, freq, classType) {
+      var multiplications = [1, 7, 30, 365];
+      var types = ["day", "week", "month", "year"];
+      var dailyCount =
+        number_of_skus /
+        (multiplications[
+          _.findIndex(types, (type) => {
+            return type == classType;
+          })
+        ] *
+          freq);
+      console.log("dailyCount ", dailyCount);
+      return dailyCount;
+    },
+    getDatesInRange(startDate, endDate) {
+      const date = new Date(startDate.getTime());
+
+      const dates = [];
+
+      while (date <= endDate) {
+        dates.push(new Date(date));
+        date.setDate(date.getDate() + 1);
+      }
+
+      return dates;
+    },
+    //STAFF AND INVENOTRY ASSIGNMENT FROM THE FORM
     assignStaff() {
       this.startCycleCountingForm.staffs_assigned_str = "";
 
@@ -672,369 +926,7 @@ export default {
     closeSelectInvModal() {
       this.selectInvModal = false;
     },
-    startCycleCounting() {
-      this.startCycleCountingForm.cycle_count_class = [
-        {
-          class: "A",
-          number_of_skus: 0,
-          frequency: 0,
-          daily_count: 0,
-        },
-        {
-          class: "B",
-          number_of_skus: 0,
-          frequency: 0,
-          daily_count: 0,
-        },
-        {
-          class: "C",
-          number_of_skus: 0,
-          frequency: 0,
-          daily_count: 0,
-        },
-      ];
-      this.classifySKU();
-      this.calculateFrequency_DailyCount();
-      console.log("after process: ", this.startCycleCountingForm);
-      this.confirmStartCycleCountingModal = true;
-    },
-    getDailyCount(number_of_skus, freq, classType) {
-      // let total_working_days = this.calculateTotalWorkingDays(
-      //   this.startCycleCountingForm.start_end_date[0],
-      //   this.startCycleCountingForm.start_end_date[1]
-      // );
-      var multiplications = [1, 7, 30, 365];
-      var types = ["day", "week", "month", "year"];
-      var dailyCount =
-        number_of_skus /
-        (multiplications[
-          _.findIndex(types, (type) => {
-            return type == classType;
-          })
-        ] *
-          freq);
-      console.log("dailyCount ", dailyCount);
-      return dailyCount;
-    },
-    calculateTotalWorkingDays() {
-      var start_index = _.indexOf(
-        _.map(this.workdays, "value"),
-        this.startCycleCountingForm.workday_start
-      ); //1
-      var end_index = _.indexOf(
-        _.map(this.workdays, "value"),
-        this.startCycleCountingForm.workday_end
-      ); //5
-      var days = this.getArrayOfWorkingDays(start_index, end_index);
-
-      return days.reduce(this.sumWorkingDay, 0);
-    },
-    sumWorkingDay(a, b) {
-      var ndays =
-        1 +
-        Math.round(
-          (this.startCycleCountingForm.start_end_date[1] -
-            this.startCycleCountingForm.start_end_date[0]) /
-            (24 * 3600 * 1000)
-        ); //31
-      return (
-        a +
-        Math.floor(
-          (ndays +
-            ((this.startCycleCountingForm.start_end_date[0].getDay() + 6 - b) %
-              7)) /
-            7
-        )
-      );
-    },
-    classifySKU() {
-      console.log(this.startCycleCountingForm);
-
-      let stock_values = [];
-      _.forEach(this.inventories, (inventory) => {
-        stock_values.push(inventory.cost_per_unit * inventory.qty_on_hand);
-      });
-      let max = _.max(stock_values);
-      let min = _.min(stock_values);
-      let skulist = [];
-      _.forEach(this.startCycleCountingForm.inventories, (inventory) => {
-        let sku = {};
-        let id = _.parseInt(_.split(inventory, ":", 1)[0]);
-        let tempInv = _.find(this.inventories, (inventory) => {
-          return inventory.id == id;
-        });
-        sku.inventory = tempInv;
-        sku.stock_value = tempInv.cost_per_unit * tempInv.qty_on_hand;
-        sku.transformed_stock_value = _.round(
-          (sku.stock_value - min) / (max - min),
-          2
-        );
-        if (sku.transformed_stock_value <= 0.8) {
-          sku.class = "A";
-        } else if (sku.transformed_stock_value <= 0.95) {
-          sku.class = "B";
-        } else {
-          sku.class = "C";
-        }
-        skulist.push(sku);
-      });
-      this.startCycleCountingForm.sku_list = skulist;
-    },
-    calculateFrequency_DailyCount() {
-      this.startCycleCountingForm.start_date = this.convertDate(
-        this.startCycleCountingForm.start_end_date[0]
-      );
-      this.startCycleCountingForm.end_date = this.convertDate(
-        this.startCycleCountingForm.start_end_date[1]
-      );
-      _.forEach(this.startCycleCountingForm.cycle_count_class, (c) => {
-        _.forEach(this.startCycleCountingForm.sku_list, (sku) => {
-          if (c.class == sku.class) {
-            c.number_of_skus += 1;
-          }
-        });
-        if (c.class == "A") {
-          c.frequency = this.countFrequency(
-            this.startCycleCountingForm.classA,
-            this.startCycleCountingForm.classAType
-          );
-          c.daily_count = this.getDailyCount(
-            c.number_of_skus,
-            this.startCycleCountingForm.classA,
-            this.startCycleCountingForm.classAType
-          );
-        } else if (c.class == "B") {
-          c.frequency = this.countFrequency(
-            this.startCycleCountingForm.classB,
-            this.startCycleCountingForm.classBType
-          );
-          c.daily_count = this.getDailyCount(
-            c.number_of_skus,
-            this.startCycleCountingForm.classB,
-            this.startCycleCountingForm.classBType
-          );
-        } else {
-          c.frequency = this.countFrequency(
-            this.startCycleCountingForm.classC,
-            this.startCycleCountingForm.classCType
-          );
-          c.daily_count = this.getDailyCount(
-            c.number_of_skus,
-            this.startCycleCountingForm.classC,
-            this.startCycleCountingForm.classCType
-          );
-        }
-      });
-    },
-    getArrayOfWorkingDays(start_index, end_index) {
-      var days = [];
-
-      for (let i = start_index; i <= end_index; i++) {
-        days.push(i); //1,2,3,4,5
-      }
-      return days;
-    },
-    countFrequency(count_freq, type) {
-      //days = array of working days you are looking: 0= sunday,.. 6 = saturday
-      var start_index = _.indexOf(
-        _.map(this.workdays, "value"),
-        this.startCycleCountingForm.workday_start
-      ); //1
-      var end_index = _.indexOf(
-        _.map(this.workdays, "value"),
-        this.startCycleCountingForm.workday_end
-      ); //5
-      var days = this.getArrayOfWorkingDays(start_index, end_index);
-
-      if (type == "day") {
-        return this.calculateTotalWorkingDays() / count_freq;
-      } else if (type == "week") {
-        //find the first day of the date range according to working days
-        var first_day = (() => {
-          if (
-            days.includes(
-              this.startCycleCountingForm.start_end_date[0].getDay()
-            )
-          ) {
-            return this.startCycleCountingForm.start_end_date[0].getDay();
-          } else {
-            if (
-              this.startCycleCountingForm.start_end_date[0].getDay() < days[0]
-            ) {
-              return _.find(days, (day) => {
-                return (
-                  day > this.startCycleCountingForm.start_end_date[0].getDay()
-                );
-              });
-            } else {
-              return _.find(days, (day) => {
-                return (
-                  day < this.startCycleCountingForm.start_end_date[0].getDay()
-                );
-              });
-            }
-          }
-        })();
-
-        return this.sumWorkingDay(0, first_day) / count_freq;
-      } else if (type == "month") {
-        var days = this.getArrayOfWorkingDays(start_index, end_index);
-        //calculate the number of days betweem start of the date range from the first working day
-        var start_day_index =
-          this.startCycleCountingForm.start_end_date[0].getDay();
-        var days_from_range = (() => {
-          if (
-            days.includes(
-              this.startCycleCountingForm.start_end_date[0].getDay()
-            )
-          ) {
-            return 0;
-          } else {
-            if (
-              this.startCycleCountingForm.start_end_date[0].getDay() < days[0]
-            ) {
-              //1<2
-              return days[0] - start_day_index;
-            } else {
-              7 - (start_day_index - days[0]);
-            }
-          }
-        })();
-        //add the number of days to get the first working day in the date range
-        var first_date = moment(
-          this.startCycleCountingForm.start_end_date[0]
-        ).add(days_from_range, "days")._d;
-        //calculate the month between the end date and the first working day = monthly
-        var months;
-        months =
-          (this.startCycleCountingForm.start_end_date[1].getFullYear() -
-            first_date.getFullYear()) *
-          12;
-        months -= first_date.getMonth();
-        months += this.startCycleCountingForm.start_end_date[1].getMonth();
-        if (
-          this.startCycleCountingForm.start_end_date[1].getDate() >=
-          first_date.getDate()
-        ) {
-          //make sure to consider partial month by adding 1
-          months += 1;
-        }
-        months /= count_freq;
-        return months <= 0 ? 1 : months;
-      } else {
-        var days = this.getArrayOfWorkingDays(start_index, end_index);
-        var start_day_index =
-          this.startCycleCountingForm.start_end_date[0].getDay();
-        //get the number of days between the starting of date range to the first working day
-        var days_from_range = _.forEach(days, (day) => {
-          if (start_day_index == day) {
-            return 0;
-          } else {
-            if (start_day_index < days[0]) {
-              return days[0] - start_day_index;
-            } else {
-              7 - (start_day_index - days[0]);
-            }
-          }
-        });
-        //add the days to obtain the first working day to start the calculation of year
-        var first_date = moment(
-          this.startCycleCountingForm.start_end_date[0]
-        ).add(days_from_range, "days")._d;
-        var diff =
-          (this.startCycleCountingForm.start_end_date[1].getTime() -
-            first_date.getTime()) /
-          1000;
-        diff /= 60 * 60 * 24;
-        //consider the partial year by adding one
-        if (
-          this.startCycleCountingForm.start_end_date[1].getDate() >=
-            first_date.getDate() &&
-          this.startCycleCountingForm.start_end_date[1].getMonth() >=
-            first_date.getMonth()
-        ) {
-          return (Math.abs(Math.round(diff / 365.25)) + 1) / count_freq;
-        }
-        return Math.abs(Math.round(diff / 365.25)) / count_freq;
-      }
-    },
-    async createCycleCountSchedule() {
-      this.disableCancelButton = true;
-      this.loading = true;
-      console.log("confirmed");
-      this.$Loading.start();
-      await this.$axiosClient
-        .put(
-          "/storeCycleCountingSettings/" +
-            this.$store.getters.getUser.warehouse_id,
-          this.startCycleCountingForm
-        )
-        .then((response) => {
-          this.createSKU();
-        })
-        .catch((error) => {
-          this.$Loading.error();
-          this.handleApiError(error);
-        });
-      this.confirmStartCycleCountingModal = false;
-      this.disableCancelButton = false;
-      this.loading = false;
-    },
-    async createSKU() {
-      var skus = _.map(this.startCycleCountingForm.sku_list, (sku) => {
-        return {
-          class: sku.class,
-          inventory_id: sku.inventory.id,
-        };
-      });
-      await this.$axiosClient
-        .post("/sku", skus)
-        .then((response) => {
-          this.storeSchedules();
-        })
-        .catch((error) => {
-          this.$Loading.error();
-          this.handleApiError(error);
-        });
-    },
-
-    async storeSchedules() {
-      var staff_ids = _.map(
-        this.startCycleCountingForm.staffs_assigned,
-        (staff) => {
-          return parseInt(_.split(staff, ":", 2)[0]);
-        }
-      );
-
-      var schedules = this.generateSchedule();
-      var counter = 0;
-      _.forEach(schedules, (schedule) => {
-        if (counter < staff_ids.length) {
-          schedule.staff_id = staff_ids[counter];
-          counter += 1;
-        } else {
-          schedule.staff_id = staff_ids[0];
-          counter = 1;
-        }
-      });
-      var params = _.map(schedules, (schedule) => {
-        return {
-          inventory_id: schedule.inventory.id,
-          schedule: schedule.schedule_date,
-          staff_id: schedule.staff_id,
-        };
-      });
-      await this.$axiosClient
-        .post("/schedule", params)
-        .then((response) => {
-          this.$Loading.finish();
-          this.success("Cycle counting has been started.");
-        })
-        .catch((error) => {
-          this.$Loading.error();
-          this.handleApiError(error);
-        });
-    },
+    //TABLE SUMMARY FUNCTION
     handleSummary({ columns, data }) {
       const sums = {};
       columns.forEach((column, index) => {
@@ -1070,18 +962,7 @@ export default {
 
       return sums;
     },
-    getDatesInRange(startDate, endDate) {
-      const date = new Date(startDate.getTime());
-
-      const dates = [];
-
-      while (date <= endDate) {
-        dates.push(new Date(date));
-        date.setDate(date.getDate() + 1);
-      }
-
-      return dates;
-    },
+    //GENERATE SCHEDULES FOR DATABASE INSERTION (AFTER CONFIRM THE CONFRIM START POPUP)
     generateSchedule() {
       var all_schedules = [];
       var dates = this.getDatesInRange(
@@ -1160,6 +1041,87 @@ export default {
       all_schedules = _.flattenDeep(all_schedules);
       console.log("all schedules", all_schedules);
       return all_schedules;
+    },
+    //ASYNC FUNCTIONS TO CALL API (SAVE CC SETTINGS, SAVE SKUS AND SAVE SCHEDULES)
+    async confirmStartCycleCounting() {
+      this.disableCancelButton = true;
+      this.loading = true;
+      console.log("confirmed");
+      this.$Loading.start();
+      //CREATE SKU
+      var skus = _.map(this.startCycleCountingForm.sku_list, (sku) => {
+        return {
+          class: sku.class,
+          inventory_id: sku.inventory.id,
+        };
+      });
+
+      //GENERATE SCHEDULE
+      var staff_ids = _.map(
+        this.startCycleCountingForm.staffs_assigned,
+        (staff) => {
+          return parseInt(_.split(staff, ":", 2)[0]);
+        }
+      );
+
+      var schedules = this.generateSchedule();
+      var counter = 0;
+      _.forEach(schedules, (schedule) => {
+        if (counter < staff_ids.length) {
+          schedule.staff_id = staff_ids[counter];
+          counter += 1;
+        } else {
+          schedule.staff_id = staff_ids[0];
+          counter = 1;
+        }
+      });
+      var params = _.map(schedules, (schedule) => {
+        return {
+          inventory_id: schedule.inventory.id,
+          schedule: schedule.schedule_date,
+          staff_id: schedule.staff_id,
+        };
+      });
+
+      //STORE CYCLE COUNTING SETTINGS
+      await this.$axiosClient
+        .put(
+          "/storeCycleCountingSettings/" +
+            this.$store.getters.getUser.warehouse_id,
+          this.startCycleCountingForm
+        )
+        .then((response) => {
+          this.createSKU(skus); //STORE CYCLE COUNTING SETTINGS
+          this.storeSchedules(params); //STORE SCHEDULES
+        })
+        .catch((error) => {
+          this.$Loading.error();
+          this.handleApiError(error);
+        });
+      this.confirmStartCycleCountingModal = false;
+      this.disableCancelButton = false;
+      this.loading = false;
+    },
+    async createSKU(skus) {
+      await this.$axiosClient
+        .post("/sku", skus)
+        .then((response) => {})
+        .catch((error) => {
+          this.$Loading.error();
+          this.handleApiError(error);
+        });
+    },
+    async storeSchedules(params) {
+      await this.$axiosClient
+        .post("/schedule", params)
+        .then((response) => {
+          this.$Loading.finish();
+          this.success("Cycle counting has been started.");
+        })
+        .catch((error) => {
+          this.$Loading.error();
+          this.handleApiError(error);
+        });
     },
   },
   created() {},
