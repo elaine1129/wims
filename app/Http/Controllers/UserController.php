@@ -47,7 +47,7 @@ class UserController extends Controller
             "address" => "required",
             "username" => "required | unique:App\Models\User,username"
         ]);
-        $request["password"] = $request->contact_no;
+        $request["password"] = Hash::make($request->contact_no);
         return User::create($request->all());
     }
     public function update(Request $request, $id)
@@ -67,11 +67,11 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         if ($user->schedule) {
             return response()->json([
-                'errors' => ['The user is holding some cycle count schedule, Please ask manager to reassign the schedules to another staff first. ']
+                'errors' => ['The user id' . $id . ' is holding some cycle count schedule, Please ask manager to reassign the schedules to another staff first. ']
             ], 501);
         }
 
-        $user["status"] = "INACTIVE";
+        $user["status"] = "INACTIVE"; //set inactive so that the data for all reports, stocks still remains for viewing
         $user->save();
         return;
         // return User::destroy($id);

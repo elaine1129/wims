@@ -43,7 +43,12 @@
                 @click="showEditWarehouseModal(warehouse)"
                 >Edit</Button
               >
-              <Button type="error" class="basis-1/2" disabled>Delete</Button>
+              <Button
+                type="error"
+                class="basis-1/2"
+                @click="showDeleteWarehouseModal(warehouse)"
+                >Delete</Button
+              >
             </div>
           </td>
         </tr>
@@ -96,16 +101,21 @@
     <EditWarehouseModalTableComponent
       ref="editWarehouseModalComponent"
     ></EditWarehouseModalTableComponent>
+    <DeleteWarehouseModalComponent
+      ref="deleteWarehouseModalComponent"
+    ></DeleteWarehouseModalComponent>
   </PageComponent>
 </template>
 
 <script>
 import PageComponent from "../../components/pages/default-page.vue";
 import EditWarehouseModalTableComponent from "../admin/components/modals/edit-warehouse-modal.vue";
+import DeleteWarehouseModalComponent from "../admin/components/modals/delete-warehouse-modal.vue";
 export default {
   components: {
     PageComponent,
     EditWarehouseModalTableComponent,
+    DeleteWarehouseModalComponent,
   },
   data() {
     return {
@@ -284,6 +294,13 @@ export default {
     showEditWarehouseModal(warehouse) {
       this.selectedWarehouse = warehouse;
       this.$refs.editWarehouseModalComponent.setProps(
+        true,
+        this.selectedWarehouse
+      );
+    },
+    showDeleteWarehouseModal(warehouse) {
+      this.selectedWarehouse = warehouse;
+      this.$refs.deleteWarehouseModalComponent.setProps(
         true,
         this.selectedWarehouse
       );

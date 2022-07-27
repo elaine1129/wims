@@ -83,6 +83,8 @@ Route::group(['middleware' => ['api']], function () {
     Route::get('/warehouse/{id}', [WarehouseController::class, 'show']);
     Route::post('/warehouse', [WarehouseController::class, 'store']);
     Route::put('/warehouse/{id}', [WarehouseController::class, 'update']);
+    Route::delete('/warehouse/{id}', [WarehouseController::class, 'destroy']);
+
     Route::post('/storage-bin-edit-inventory/{id}', [WarehouseController::class, 'editStorageBinInventory']);
 
     //category

@@ -52,7 +52,7 @@ class InventoryController extends Controller
         if ($request->category_id != null) {
             $warehouse = Warehouse::findOrFail($request->warehouse_id);
             (array)$available_bins = Arr::where((array)$warehouse->storage_bins, function ($value, $key) use ($request) {
-                return ($value['category_id'] == $request->category_id) && ($value["inventory_id"] == -1);
+                return ($value['category_id'] == $request->category_id) && ($value["inventory_id"] == -1 || $value["inventory_id"] == null);
             });
             if (count((array)$available_bins) <= 0) {
                 return response()->json([

@@ -77,6 +77,11 @@ class WarehouseController extends Controller
         return $warehouse->update($request->all());
     }
 
+    public function destroy($id)
+    {
+        return Warehouse::destroy($id);
+    }
+
     public function assignCategoryToBin(Request $request, $id)
     {
         $request->validate([
