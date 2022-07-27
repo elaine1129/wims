@@ -33,6 +33,9 @@ Route::group(['middleware' => ['api']], function () {
         return $request->user();
     });
     Route::get('/users', [UserController::class, 'index']);
+    // Route::get('/active-users', [UserController::class, 'getOnlyActiveUsers']);
+    Route::get('/active-staffs', [UserController::class, 'getOnlyActiveStaffs']);
+
     Route::get('/user/{id}', [UserController::class, 'show']);
     Route::post('/user', [UserController::class, 'store']);
     Route::put('/user/{id}', [UserController::class, 'update']);
@@ -73,6 +76,7 @@ Route::group(['middleware' => ['api']], function () {
 
     Route::get('/schedules', [ScheduleController::class, 'index']);
     Route::get('/getSchedulesByStaff/{staffId}', [ScheduleController::class, 'getSchedulesByStaff']);
+    Route::post('/reassignStaff', [ScheduleController::class, 'reassignStaff']);
 
     //warehouse
     Route::get('/warehouses', [WarehouseController::class, 'index']);

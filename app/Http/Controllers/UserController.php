@@ -21,6 +21,14 @@ class UserController extends Controller
             return User::where('warehouse_id', Auth::user()->warehouse_id)->get();
         }
     }
+    public function getOnlyActiveStaffs()
+    {
+        if (Gate::allows('isAdmin')) {
+            return UserResource::collection(User::where(["status" => "ACTIVE", "role" => "Staff"])->get());
+        } else {
+            return User::where('warehouse_id', Auth::user()->warehouse_id)->where(["status" => "ACTIVE", "role" => "Staff"])->get();
+        }
+    }
     public function show($id)
     {
         $user = User::findOrFail($id);
@@ -56,7 +64,17 @@ class UserController extends Controller
     }
     public function destroy($id)
     {
-        return User::destroy($id);
+        $user = User::findOrFail($id);
+        if ($user->schedule) {
+            return response()->json([
+                'errors' => ['The user is holding some cycle count schedule, Please ask manager to reassign the schedules to another staff first. ']
+            ], 501);
+        }
+
+        $user["status"] = "INACTIVE";
+        $user->save();
+        return;
+        // return User::destroy($id);
     }
     public function getStaffByWarehouse($warehouseId)
     {

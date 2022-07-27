@@ -1,7 +1,7 @@
 <template>
-  <Modal v-model="modal" title="Delete inventory">
+  <Modal v-model="modal" title="Delete user">
     <h2>
-      Are you sure to delete inventory {{ selectedUser.id }} from
+      Are you sure to delete user {{ selectedUser.id }} from
       {{ selectedUser.warehouse.name }} ?
     </h2>
     <template #footer>
@@ -55,6 +55,10 @@ export default {
           }
         })
         .catch((error) => {
+          console.log();
+          if (error.response.status == 501) {
+            this.error(error.response.data.errors[0]);
+          }
           this.handleApiError(error);
         });
     },

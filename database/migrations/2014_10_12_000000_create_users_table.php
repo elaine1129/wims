@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('employed_in');
             $table->bigInteger('warehouse_id');
             $table->boolean('is_first_time_login')->default(true);
+            $table->enum('status', ["ACTIVE", "INACTIVE"])->default("ACTIVE");
             $table->rememberToken();
             $table->timestamps();
         });

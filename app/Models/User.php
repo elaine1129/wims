@@ -61,7 +61,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function schedule()
     {
-        return $this->belongsTo(CycleCountSchedule::class);
+        return $this->belongsTo(CycleCountSchedule::class, 'id', 'staff_id');
     }
     public function warehouse()
     {

@@ -17,6 +17,7 @@
         </th>
 
         <th>Employed in</th>
+        <th>Status</th>
         <th>Created at</th>
         <th>Updated at</th>
         <th
@@ -56,6 +57,7 @@
         </td>
 
         <td>{{ user.employed_in }}</td>
+        <td>{{ user.status }}</td>
         <td>{{ user.created_at ? user.created_at : "-" }}</td>
         <td>{{ user.updated_at ? user.updated_at : "-" }}</td>
         <td
@@ -121,7 +123,7 @@ export default {
       this.$refs.deleteUserModalComponent.setProps(true, this.selectedUser);
     },
     deletedInChild(id) {
-      this.myData = _.remove(this.data, { id: id });
+      // this.myData = _.remove(this.data, { id: id });
     },
   },
 };

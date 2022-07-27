@@ -13,6 +13,7 @@ class Warehouse extends Model
     use HasFactory;
     protected $casts = [
         'storage_bins' => 'array',
+        'cycle_counting_settings' => 'object'
     ];
 
     protected $fillable = ["name", "location", "storage_bins"];
