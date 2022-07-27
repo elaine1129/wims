@@ -143,7 +143,11 @@ export default {
             priority: 1,
           };
           this.success(
-            `Inventory Created! Bin number: ${response.data.bin_number}`
+            `Inventory Created! Bin number: ${
+              response.data.bin_number
+                ? response.data.bin_number
+                : "nil. Assign a category to put into bin"
+            }`
           );
           this.addInventoryModal = false;
         })

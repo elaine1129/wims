@@ -65,6 +65,7 @@ export default {
         id: "",
         name: "",
         warehouse: {
+          id: "",
           name: "",
         },
         qty_on_hand: 0,
@@ -110,14 +111,28 @@ export default {
         // storage_bin: "",
         category_id: this.editInventoryForm.category.id,
         priority: this.editInventoryForm.priority,
+        warehouse_id: this.editInventoryForm.warehouse.id,
       };
       await this.$axiosClient
         .put("/inventory/" + this.editInventoryForm.id, params)
         .then((response) => {
+          console.log(response);
+          if (params.category_id) {
+            this.success(
+              `Inventory successfully updated.${
+                response.data.bin_number
+                  ? " Bin number: " + response.data.bin_number
+                  : ""
+              }`
+            );
+          } else {
+            this.success(`Inventory successfully updated`);
+          }
           this.editInventoryForm = {
             id: "",
             name: "",
             warehouse: {
+              id: "",
               name: "",
             },
             qty_on_hand: 0,
@@ -128,7 +143,7 @@ export default {
             },
             priority: 1,
           };
-          this.success("Inventory successfully updated");
+
           this.closeEditInventoryModal();
         })
         .catch((error) => {

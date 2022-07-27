@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -75,13 +76,32 @@ class CategoryController extends Controller
         return $category->update($request->all());
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
+        $category = Category::findOrFail($id);
+        $warehouses = Warehouse::all();
+        foreach ($warehouses as $warehouse) {
+            if ($warehouse->storage_bins) {
+                $new_bins = (array)$warehouse->storage_bins;
+                foreach ((array)$warehouse->storage_bins as $bin) {
+
+                    $temp = array_column($new_bins, 'category_id');
+                    $found_key = array_search($id, $temp);
+                    // return var_dump($new_bins[$found_key]);
+                    $new_bins[$found_key]["category_id"] = null;
+                    if ($new_bins[$found_key]["inventory_id"] != -1 && $new_bins[$found_key]["inventory_id"] != null) {
+                        $new_bins[$found_key]["inventory_id"] = -1;
+                    }
+                }
+                $warehouse->storage_bins = $new_bins;
+                $warehouse->save();
+            }
+        }
+        if ($category->inventories) {
+            foreach ($category->inventories as $inventory) {
+                $inventory->update(["category_id" => null]);
+            }
+        }
         return Category::destroy($id);
     }
 }

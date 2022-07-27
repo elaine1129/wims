@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Inventory;
 
+
+
 class Category extends Model
 {
     use HasFactory;
     protected $fillable = ["name"];
     public function inventories()
     {
-        return $this->hasMany(Inventory::class);
+        return $this->hasMany(Inventory::class, "id", "inventory_id");
     }
 }

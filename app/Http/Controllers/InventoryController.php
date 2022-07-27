@@ -79,9 +79,30 @@ class InventoryController extends Controller
         $request->validate([
             "name" => 'required',
             'cost_per_unit' => 'required|gt:0',
-            'category_id' => 'required',
+            // 'category_id' => 'required',
             'priority' => 'required'
         ]);
+        if (($request->category_id != null) && ($request->category_id != $inventory->category_id)) {
+            $warehouse = Warehouse::findOrFail($request->warehouse_id);
+
+            (array)$available_bins = Arr::where((array)$warehouse->storage_bins, function ($value, $key) use ($request) {
+                return ($value['category_id'] == $request->category_id) && ($value["inventory_id"] == -1 || $value["inventory_id"] == null);
+            });
+            if (count((array)$available_bins) <= 0) {
+                return response()->json([
+                    'errors' => ['There are no available bin for this category anymore, Please empty a bin for this category first.']
+                ], 422);
+            } else {
+                $inventory->update($request->all());
+                $new_bins = $warehouse->storage_bins;
+                $temp = array_column($new_bins, 'bin_number');
+                $found_key = array_search(array_values($available_bins)[0]["bin_number"], $temp);
+                $new_bins[$found_key]["inventory_id"] = $inventory->id;
+                $warehouse->storage_bins = $new_bins;
+                $warehouse->save();
+                return $new_bins[$found_key];
+            }
+        }
         return $inventory->update($request->all());
     }
 

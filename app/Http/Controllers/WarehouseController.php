@@ -36,7 +36,12 @@ class WarehouseController extends Controller
         $warehouse = new WarehouseResource(Warehouse::findOrFail($id));
         $new_bins = array();
         foreach ((array) $warehouse["storage_bins"] as $bin) {
-            $bin['category'] = Category::findOrFail($bin['category_id']);
+            if (($bin['category_id'] != null) && ($bin['category_id']) != -1) {
+                $bin['category'] = Category::findOrFail($bin['category_id']);
+            } else {
+                $bin['category'] = null;
+            }
+
             if (($bin['inventory_id'] != -1) && ($bin['inventory_id'] != null)) {
                 $bin['inventory'] = Inventory::findOrFail($bin['inventory_id']);
             } else {
