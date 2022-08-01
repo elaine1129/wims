@@ -84,7 +84,19 @@ class InventoryController extends Controller
         ]);
         if (($request->category_id != null) && ($request->category_id != $inventory->category_id)) {
             $warehouse = Warehouse::findOrFail($request->warehouse_id);
+            $new_bins = $warehouse->storage_bins;
 
+            $stored_bin = Arr::where((array)$inventory->warehouse->storage_bins, function ($value, $key) use ($inventory) {
+                return $value['inventory_id'] == $inventory->id;
+            });
+            if (count((array)$stored_bin) > 0) {
+                //remove the inventory from the old bin
+                $bin_id = (array_values($stored_bin))[0]["bin_id"];
+                $temp = array_column($new_bins, 'bin_id');
+                $found_key = array_search($bin_id, $temp);
+
+                $new_bins[$found_key]["inventory_id"] = -1;
+            }
             (array)$available_bins = Arr::where((array)$warehouse->storage_bins, function ($value, $key) use ($request) {
                 return ($value['category_id'] == $request->category_id) && ($value["inventory_id"] == -1 || $value["inventory_id"] == null);
             });
@@ -94,7 +106,8 @@ class InventoryController extends Controller
                 ], 422);
             } else {
                 $inventory->update($request->all());
-                $new_bins = $warehouse->storage_bins;
+                //assign inventory to bin
+
                 $temp = array_column($new_bins, 'bin_number');
                 $found_key = array_search(array_values($available_bins)[0]["bin_number"], $temp);
                 $new_bins[$found_key]["inventory_id"] = $inventory->id;
