@@ -12,7 +12,7 @@
           warehouse ? warehouse.location : "-"
         }}</Description>
         <Description term="Warehouse Manager " class="headerRow">{{
-          warehouse ? warehouse.manager.name : "-"
+          warehouse ? (warehouse.manager ? warehouse.manager.name : "-") : "-"
         }}</Description>
         <Description term="Created by " class="headerRow">{{
           warehouse ? (warehouse.created_at ? warehouse.created_at : "-") : "-"
