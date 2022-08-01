@@ -687,8 +687,22 @@ export default {
         //FOR DAY, JUST DIVIDE TOTAL WORKING DAYS WITH COUNT FREQUENCY
         return days.reduce(this.sumWorkingDay, 0) / count_freq;
       } else if (type == "week") {
-        //FOR WEEK, DIVIDE LENGTH OF DAYS [1,2,3,4,5] AS THE LENGTH = 1 WEEK OF WORKINGDAYS
-        return days.reduce(this.sumWorkingDay, 0) / days.length / count_freq;
+        //GET HOW MANY DAY FROM THE FIRST DATE TO WORKING DAY START --> SO THAT CAN KNOW WHICH IS THE FIRST DATE TO START COUNT
+        var days_from_range = this.getDaysFromRange(days, start_day_index);
+        //GET FIRST DATE TO COUNT
+        var first_date = moment(
+          this.startCycleCountingForm.start_end_date[0]
+        ).add(days_from_range, "days")._d;
+        var weeks;
+        //GET TOTAL MONTHS BETWEEN TWO YEAR OF THE DATE
+        //EG. 27/7/2022 - 27/12/2023 = 12 MONTHS
+        weeks = Math.ceil(
+          Math.abs(this.startCycleCountingForm.start_end_date[1] - first_date) /
+            (1000 * 60 * 60 * 24 * 7)
+        );
+
+        return weeks / count_freq;
+        // return ndays / 7 / count_freq;
       } else if (type == "month") {
         //GET HOW MANY DAY FROM THE FIRST DATE TO WORKING DAY START --> SO THAT CAN KNOW WHICH IS THE FIRST DATE TO START COUNT
         var days_from_range = this.getDaysFromRange(days, start_day_index);
