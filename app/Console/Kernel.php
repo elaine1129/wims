@@ -8,6 +8,9 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+    protected $commands = [
+        Commands\DailyUpdate::class
+    ];
     /**
      * Define the application's command schedule.
      *
@@ -17,9 +20,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->call(function () {
-            DB::table('cycle_countings')->whereRaw('approve_before > now()')->update(['status' => 'COMPLETED']);
-        })->daily();
+        // $schedule->call(function () {
+        //     DB::table('cycle_countings')->whereRaw('approve_before > now()')->update(['status' => 'COMPLETED']);
+        // })->daily();
+        $schedule->command('daily:update')->daily();
     }
 
     /**
