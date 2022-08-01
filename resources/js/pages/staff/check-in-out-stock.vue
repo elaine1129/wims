@@ -186,6 +186,7 @@ export default {
         this.checkInForm.inventory_id = this.checkInOutModalInv.id;
         // this.checkInForm.staff_id = this.$store.getters.getUser.id;
         // const res = await this.callApi("POST", "/api/stock", this.checkInForm);
+        console.time("newStock");
         const res = await this.$axiosClient.post("/stock", this.checkInForm);
         if (res.status == 201) {
           this.checkInForm = {
@@ -226,6 +227,7 @@ export default {
           //   "/api/stock",
           //   this.checkOutForm
           // );
+          console.time("newStock");
           const res = await this.$axiosClient.post("/stock", this.checkOutForm);
 
           if (res.status == 201) {
@@ -303,6 +305,7 @@ export default {
     channel.bind(event, (e) => {
       console.log("stock created", e);
       this.getUpdatedInventory(e);
+      console.timeEnd("newStock");
     });
   },
 };
