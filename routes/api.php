@@ -40,7 +40,7 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('/user', [UserController::class, 'store']);
     Route::put('/user/{id}', [UserController::class, 'update']);
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
-
+    Route::post('/reset-password', [UserController::class, 'resetPassword']);
     //Authentication
     Route::post('/logout', [AuthController::class, 'logout']);
 

@@ -43,6 +43,9 @@ const store = createStore({
             state.user.token = userData.access_token;
             state.user.data = userData.user;
             sessionStorage.setItem("TOKEN", userData.access_token);
+        },
+        setFirstTimeLogin: (state, userData) => {
+            state.user.data = userData;
         }
     },
     modules: {},

@@ -214,15 +214,16 @@ export default {
           router.push("/");
         })
         .catch((err) => {
-          console.log(err.response);
-          if (err.response.data.errors) {
-            this.error(
-              Object.values(err.response.data.errors)[0],
-              err.response.data.message
-            );
-          } else {
-            this.error(err.response.data.error);
-          }
+          console.log("error", err);
+          this.error(err.error);
+          // if (err.response.data.errors) {
+          //   this.error(
+          //     Object.values(err.response.data.errors)[0],
+          //     err.response.data.message
+          //   );
+          // } else {
+          //   this.error(err.response.data.error);
+          // }
         });
     },
   },

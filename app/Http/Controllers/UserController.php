@@ -106,4 +106,19 @@ class UserController extends Controller
             UserResource::collection(User::where('role', 'staff')
                 ->where('warehouse_id', '=', $warehouseId)->get());
     }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            "new_password" => "required",
+            "confirm_password" => "required | same:new_password"
+        ]);
+
+        $user = User::findOrFail(Auth::id());
+        $user["password"] = Hash::make($request->new_password);
+        $user["is_first_time_login"] = 0;
+        $user->save();
+
+        return $user;
+    }
 }

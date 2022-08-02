@@ -18,6 +18,7 @@ class AuthController extends Controller
      */
     public function login(Request $req)
     {
+
         $validator = Validator::make($req->all(), [
             'username' => 'required | exists:users,username',
             'password' => 'required'
@@ -25,6 +26,10 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
+        }
+        $user = User::where('username', $req->username)->first();
+        if ($user == null || $user->status !== "ACTIVE") {
+            return response()->json(['error' => 'Your account is not active'], 401);
         }
         if (!$token = auth()->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
