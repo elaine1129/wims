@@ -16,7 +16,11 @@
         <td>{{ schedule.sku.id }}</td>
         <td>{{ schedule.sku.inventory.id }}</td>
         <td>{{ schedule.sku.inventory.name }}</td>
-        <td>{{ schedule.storage_bin[0].bin_number }}</td>
+        <td>
+          {{
+            schedule.storage_bin[0] ? schedule.storage_bin[0].bin_number : "-"
+          }}
+        </td>
         <td>{{ schedule.schedule ? schedule.schedule : "-" }}</td>
         <td>
           {{

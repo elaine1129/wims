@@ -22,7 +22,8 @@ class WarehouseController extends Controller
             'warehouse_id' => $warehouseId,
             'staff_ids' => $request->staffs_assigned,
             'inventory_ids' => $request->inventories,
-            'start_end_date' => $request->start_end_date
+            'start_end_date' => $request->start_end_date,
+
         ];
 
         $warehouse = Warehouse::findOrFail($warehouseId);
@@ -50,6 +51,7 @@ class WarehouseController extends Controller
             array_push($new_bins, $bin);
         }
         $warehouse["storage_bins"] = $new_bins;
+        $warehouse["cycle_counting_settings"] = json_decode($warehouse->cycle_counting_settings);
         return $warehouse;
     }
 

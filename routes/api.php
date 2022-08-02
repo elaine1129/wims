@@ -72,6 +72,8 @@ Route::group(['middleware' => ['api']], function () {
     //scheduling
     Route::put('/storeCycleCountingSettings/{warehouseId}', [WarehouseController::class, 'storeCycleCountingSettings']);
     Route::post('/sku', [SKUController::class, 'store']);
+    Route::get('/skus', [SKUController::class, 'index']);
+
     Route::post('/schedule', [ScheduleController::class, 'store']);
 
     Route::get('/schedules', [ScheduleController::class, 'index']);

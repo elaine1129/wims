@@ -392,18 +392,24 @@ export default {
             number_of_skus: 0,
             frequency: 0,
             daily_count: 0,
+            type: "",
+            type_freq: 0,
           },
           {
             class: "B",
             number_of_skus: 0,
             frequency: 0,
             daily_count: 0,
+            type: "",
+            type_freq: 0,
           },
           {
             class: "C",
             number_of_skus: 0,
             frequency: 0,
             daily_count: 0,
+            type: "",
+            type_freq: 0,
           },
         ],
       },
@@ -647,6 +653,8 @@ export default {
             this.startCycleCountingForm.classA,
             this.startCycleCountingForm.classAType
           );
+          c.type = this.startCycleCountingForm.classAType;
+          c.type_freq = this.startCycleCountingForm.classA;
         } else if (c.class == "B") {
           c.frequency = this.countFrequency(
             this.startCycleCountingForm.classB,
@@ -657,6 +665,8 @@ export default {
             this.startCycleCountingForm.classB,
             this.startCycleCountingForm.classBType
           );
+          c.type = this.startCycleCountingForm.classBType;
+          c.type_freq = this.startCycleCountingForm.classB;
         } else {
           c.frequency = this.countFrequency(
             this.startCycleCountingForm.classC,
@@ -667,6 +677,8 @@ export default {
             this.startCycleCountingForm.classC,
             this.startCycleCountingForm.classCType
           );
+          c.type = this.startCycleCountingForm.classCType;
+          c.type_freq = this.startCycleCountingForm.classC;
         }
       });
     },
@@ -801,7 +813,7 @@ export default {
         ] *
           freq);
       console.log("dailyCount ", dailyCount);
-      return dailyCount;
+      return dailyCount.toFixed(2);
     },
     getDatesInRange(startDate, endDate) {
       const date = new Date(startDate.getTime());
@@ -954,7 +966,14 @@ export default {
           };
           return;
         }
-        const values = data.map((item) => Number(item[key]));
+        const values = data.map((item) => {
+          if (item["number_of_skus"] === 0) {
+            // dont include into sum if the number of skus for that class is 0
+            return 0;
+          } else {
+            return Number(item[key]);
+          }
+        });
         if (!values.every((value) => isNaN(value))) {
           const v = values.reduce((prev, curr) => {
             const value = Number(curr);
@@ -1012,9 +1031,22 @@ export default {
           console.log("one", skus_class);
 
           const makeRepeated = (arr, times) => {
+            var oriTimes = times;
+            if (times >= 1) {
+              // to round frequency to whole value eg. 3.75 to 3 so that no excess inventory
+              times = Math.floor(times);
+            } else {
+              times = 1;
+            }
             var final = [];
             for (var i = 0; i < times; i++) {
               final.push(_.cloneDeep(arr));
+            }
+            var temp = _.cloneDeep(arr);
+            if (oriTimes - times > 0) {
+              final.push(
+                temp.slice(0, Math.floor(temp.length * (oriTimes - times)))
+              );
             }
             return _.flattenDeep(final);
           };
@@ -1027,15 +1059,14 @@ export default {
           var counter = 0;
           _.forEach(dates, (date) => {
             //loop each date in date array (list of dates between start and end date)
-            accum += increment;
             if (working_days.includes(date.getDay())) {
               //if the date is working day
               if (c.daily_count >= 1) {
                 //if more than 1 then will have several sku in one day
+                var startIndex = _.findIndex(all_skus_class, (sku) => {
+                  return sku.schedule_date == "";
+                });
                 for (var i = 0; i < c.daily_count; i++) {
-                  var startIndex = _.findIndex(all_skus_class, (sku) => {
-                    return sku.schedule_date == "";
-                  });
                   if (startIndex < all_skus_class.length && startIndex >= 0) {
                     all_skus_class[startIndex].schedule_date =
                       this.convertDate(date);
@@ -1057,6 +1088,7 @@ export default {
                 }
               }
             }
+            accum += increment;
           });
           all_schedules.push(all_skus_class);
         }
