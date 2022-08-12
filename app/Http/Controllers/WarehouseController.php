@@ -51,7 +51,7 @@ class WarehouseController extends Controller
             array_push($new_bins, $bin);
         }
         $warehouse["storage_bins"] = $new_bins;
-        $warehouse["cycle_counting_settings"] = json_decode($warehouse->cycle_counting_settings);
+        $warehouse["cycle_counting_settings"] = json_decode(json_encode($warehouse->cycle_counting_settings));
         return $warehouse;
     }
 

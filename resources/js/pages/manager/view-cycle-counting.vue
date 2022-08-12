@@ -292,7 +292,7 @@ export default {
       });
       console.log(this.data.schedule_staff);
       await this.$axiosClient.get("/active-staffs").then((response) => {
-        this.data.active_users = response.data;
+        this.data.active_users = response.data.data;
         console.log(this.data.active_users);
       });
       this.reassignScheduleModal = true;

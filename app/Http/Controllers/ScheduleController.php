@@ -84,15 +84,24 @@ class ScheduleController extends Controller
         CycleCountSchedule::whereIn('id', $request->schedules)->update(["staff_id" => $request->new_staff]);
         $new_staff = User::findOrFail($request->new_staff);
         $newelement = $new_staff["id"] . ":" . $new_staff["name"];
-
-        $new_staffs =
-            $warehouse->cycle_counting_settings->staff_ids;
+        // $new_staffs =
+        //     $warehouse->cycle_counting_settings["staff_ids"];
         $ori_settings = $warehouse->cycle_counting_settings;
-        array_push($new_staffs, $newelement);
-        $ori_settings->staff_ids = $new_staffs;
-        $warehouse->cycle_counting_settings = $ori_settings;
+        $new_staffs = $ori_settings->staff_ids;
+        $found = false;
+        foreach ($new_staffs as $staff) {
+            if (explode(":", $staff)[0] == $request->new_staff) {
+                $found = true;
+            }
+        }
+        if (!$found) {
+            // return $new_staffs;
+            array_push($new_staffs, $newelement);
+            $ori_settings->staff_ids = $new_staffs;
+            $warehouse->cycle_counting_settings = $ori_settings;
+            $warehouse->save();
+        }
 
-        $warehouse->save();
         return;
     }
 }
