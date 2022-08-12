@@ -20,7 +20,7 @@ class UserController extends Controller
         if (Gate::allows('isAdmin')) {
             return UserResource::collection(User::all());
         } else {
-            return User::where('warehouse_id', Auth::user()->warehouse_id)->get();
+            return UserResource::collection(User::where('warehouse_id', Auth::user()->warehouse_id)->get());
         }
     }
     public function getOnlyActiveStaffs()
@@ -28,7 +28,7 @@ class UserController extends Controller
         if (Gate::allows('isAdmin')) {
             return UserResource::collection(User::where(["status" => "ACTIVE", "role" => "Staff"])->get());
         } else {
-            return User::where('warehouse_id', Auth::user()->warehouse_id)->where(["status" => "ACTIVE", "role" => "Staff"])->get();
+            return UserResource::collection(User::where('warehouse_id', Auth::user()->warehouse_id)->where(["status" => "ACTIVE", "role" => "Staff"])->get());
         }
     }
     public function show($id)
@@ -98,13 +98,6 @@ class UserController extends Controller
         $user->save();
         return;
         // return User::destroy($id);
-    }
-    public function getStaffByWarehouse($warehouseId)
-    {
-
-        return
-            UserResource::collection(User::where('role', 'staff')
-                ->where('warehouse_id', '=', $warehouseId)->get());
     }
 
     public function resetPassword(Request $request)

@@ -6,10 +6,14 @@
       </h1>
     </div>
   </header>
+
   <main>
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <!-- Replace with your content -->
       <div class="px-4 py-6 sm:px-0">
+        <ResetPasswordModalComponent
+          ref="resetPasswordModal"
+        ></ResetPasswordModalComponent>
         <slot></slot>
       </div>
       <!-- /End replace -->
@@ -17,10 +21,22 @@
   </main>
 </template>
 
-<script setup>
-const props = defineProps({
-  title: String,
-});
+<script>
+import ResetPasswordModalComponent from "../../components/change-password-modal.vue";
+export default {
+  components: {
+    ResetPasswordModalComponent,
+  },
+  props: {
+    title: String,
+  },
+  created() {},
+  mounted() {
+    if (this.$store.getters.getUser.is_first_time_login == 1) {
+      this.$refs.resetPasswordModal.setProps(true);
+    }
+  },
+};
 </script>
 
 <style>

@@ -74,11 +74,6 @@ class ScheduleController extends Controller
         // }
     }
 
-    public function getSchedulesByStaff()
-    {
-        return ScheduleResource::collection(CycleCountSchedule::where('staff_id', Auth::id())->get());
-    }
-
     public function reassignStaff(Request $request)
     {
         $request->validate([

@@ -69,6 +69,9 @@ export default {
           name: "",
         };
       }
+      this.editWarehouseForm.staffs = _.filter(this.editWarehouseForm.staffs, {
+        status: "ACTIVE",
+      });
       console.log(selectedWarehouse);
       this.modal = modal;
     },

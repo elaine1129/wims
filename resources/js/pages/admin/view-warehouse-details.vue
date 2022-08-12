@@ -74,13 +74,13 @@
       <Form :model="assignBinForm" :label-width="80">
         <FormItem label="Inventory">
           <Select
-            v-model="selectedBin.inventory"
+            v-model="selectedBin.inventory_id"
             clearable
             style="width: 200px"
           >
             <Option
               v-for="inventory in data.unassigned_inventories"
-              :value="inventory"
+              :value="inventory.id"
               :key="inventory.id"
               >{{ inventory.name }}</Option
             >
@@ -176,9 +176,7 @@ export default {
       confirmMultiAssignModal: false,
       editInventoryModal: false,
       selectedBin: {
-        inventory: {
-          id: "",
-        },
+        inventory_id: "",
         bin_id: "",
         bin_number: "",
         category: {
@@ -344,8 +342,8 @@ export default {
       let param = {
         bin_id: this.selectedBin.bin_id,
         category_id: this.selectedBin.category.id,
-        inventory_id: this.selectedBin.inventory
-          ? this.selectedBin.inventory.id
+        inventory_id: this.selectedBin.inventory_id
+          ? this.selectedBin.inventory_id
           : null,
       };
       await this.$axiosClient

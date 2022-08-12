@@ -9,9 +9,6 @@
   <!-- Replace with your content -->
   <!-- <div class="px-4 py-6 sm:px-0"> -->
   <PageComponent title="Check In/ Out Stock">
-    <ResetPasswordModalComponent
-      ref="resetPasswordModal"
-    ></ResetPasswordModalComponent>
     <div class="_box_shadow _border_radious _mar_b30 _p20">
       <table id="inventories" class="display" style="width: 100%">
         <thead>
@@ -140,13 +137,11 @@ import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import PageComponent from "../../components/pages/default-page.vue";
-import ResetPasswordModalComponent from "./components/change-password-modal.vue";
 // import { mapState, useStore } from "vuex";
 // const store = useStore();
 export default {
   components: {
     PageComponent,
-    ResetPasswordModalComponent,
   },
   data() {
     return {
@@ -280,7 +275,7 @@ export default {
 
   async created() {
     await this.$axiosClient
-      .get("/getInvByWarehouse/" + this.$store.getters.getUser.warehouse_id)
+      .get("/inventories")
       .then((response) => {
         console.log(response.data.data);
 
@@ -294,9 +289,6 @@ export default {
     $(document).ready(function () {
       $("#inventories").DataTable();
     });
-    if (this.$store.getters.getUser.is_first_time_login == 1) {
-      this.$refs.resetPasswordModal.setProps(true);
-    }
   },
   mounted() {
     let pusher = new Pusher("5838775c3e3a60a69748", {

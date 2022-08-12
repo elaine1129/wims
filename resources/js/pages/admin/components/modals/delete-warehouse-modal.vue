@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal" title="Delete inventory">
+  <Modal v-model="modal" title="Delete warehouse">
     <h2>Are you sure to delete warehouse {{ selectedWarehouse.name }}</h2>
     <Alert type="warning" show-icon>
       This action is irreversible.

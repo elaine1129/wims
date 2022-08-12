@@ -847,7 +847,7 @@ export default {
     },
     async getStaffs() {
       await this.$axiosClient
-        .get("/getStaffByWarehouse/" + this.$store.getters.getUser.warehouse_id)
+        .get("/active-staffs")
         .then((response) => {
           this.staffs = response.data.data;
           console.log(this.staffs);
@@ -908,7 +908,7 @@ export default {
     },
     async getInvs() {
       await this.$axiosClient
-        .get("/getInvByWarehouse/" + this.$store.getters.getUser.warehouse_id)
+        .get("/inventories")
         .then((response) => {
           this.inventories = response.data.data;
           this.selectInvModal = true;

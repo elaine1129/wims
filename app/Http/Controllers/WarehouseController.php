@@ -74,13 +74,16 @@ class WarehouseController extends Controller
         $warehouse = Warehouse::findOrFail($id);
         $request->validate([
             "location" => "required",
-            "manager_id" => "required",
+            // "manager_id" => "required",
         ]);
-        $user = User::findOrFail($request["manager_id"]);
-        $user["role"] = "Manager";
-        $user->save();
-        $warehouse["manager_id"] = $request["manager_id"]; //manager id is not mass-assign since warehouse can be created without a manager
-        $warehouse->save();
+        if ($request->manager_id) {
+            $user = User::findOrFail($request["manager_id"]);
+            $user["role"] = "Manager";
+            $user->save();
+            $warehouse["manager_id"] = $request["manager_id"]; //manager id is not mass-assign since warehouse can be created without a manager
+            $warehouse->save();
+        }
+
         return $warehouse->update($request->all());
     }
 

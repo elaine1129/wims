@@ -123,10 +123,7 @@ class InventoryController extends Controller
     {
         return Inventory::destroy($id);
     }
-    public function getInvByWarehouse($warehouseId)
-    {
-        return InventoryResource::collection(Inventory::where('warehouse_id', '=', $warehouseId)->get());
-    }
+
 
     // public function appendStorageBin($inventories)
     // {
