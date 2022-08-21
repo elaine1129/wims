@@ -1,5 +1,5 @@
 <template>
-  <PageHeader :hidden-breadcrumb="true" title="Warehouse Info">
+  <PageHeader :hidden-breadcrumb="true" title="Inventory Info">
     <template #content>
       <DescriptionList :col="2">
         <Description term="ID " class="headerRow">{{
@@ -12,7 +12,9 @@
           data.selectedInventory.name
         }}</Description>
         <Description term="Storage bin " class="headerRow">{{
-          data.selectedInventory.name
+          data.selectedInventory.storage_bin
+            ? data.selectedInventory.storage_bin[0].bin_number
+            : "-"
         }}</Description>
         <Description term="Warehouse " class="headerRow">{{
           data.selectedInventory.warehouse
