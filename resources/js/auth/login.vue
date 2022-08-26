@@ -37,11 +37,6 @@
   >
     <div class="max-w-md w-full space-y-8">
       <div>
-        <img
-          class="mx-auto h-12 w-auto"
-          src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-          alt="Workflow"
-        />
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign in to your account
         </h2>
@@ -111,7 +106,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-between">
+        <!-- <div class="flex items-center justify-between">
           <div class="flex items-center">
             <input
               id="remember-me"
@@ -130,17 +125,17 @@
             <label for="remember-me" class="ml-2 block text-sm text-gray-900">
               Remember me
             </label>
-          </div>
+          </div> -->
 
-          <div class="text-sm">
+        <!-- <div class="text-sm">
             <a
               href="#"
               class="font-medium text-indigo-600 hover:text-indigo-500"
             >
               Forgot your password?
             </a>
-          </div>
-        </div>
+          </div> -->
+        <!-- </div> -->
 
         <div>
           <button
