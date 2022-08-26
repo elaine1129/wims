@@ -684,9 +684,6 @@ select {
 .h-full {
   height: 100%;
 }
-.h-12 {
-  height: 3rem;
-}
 .h-4 {
   height: 1rem;
 }
@@ -713,9 +710,6 @@ select {
 }
 .w-full {
   width: 100%;
-}
-.w-auto {
-  width: auto;
 }
 .w-4 {
   width: 1rem;
