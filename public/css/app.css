@@ -747,6 +747,9 @@ select {
 .max-w-xs {
   max-width: 20rem;
 }
+.max-w-full {
+  max-width: 100%;
+}
 .flex-shrink-0 {
   flex-shrink: 0;
 }
