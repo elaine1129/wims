@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal" title="Edit Warehouse">
+  <Modal v-model="modal" title="Edit Category">
     <Form :model="editCategoryForm" :label-width="80">
       <FormItem label="ID">
         <Input :disabled="true" v-model="editCategoryForm.id"></Input>
