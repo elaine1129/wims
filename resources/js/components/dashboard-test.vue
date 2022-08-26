@@ -127,14 +127,16 @@
                       focus:ring-offset-2
                       focus:ring-offset-gray-800
                       focus:ring-white
+                      text-white
                     "
                   >
                     <span class="sr-only">Open user menu</span>
-                    <img
+                    <!-- <img
                       class="h-8 w-8 rounded-full"
                       :src="user.imageUrl"
                       alt=""
-                    />
+                    /> -->
+                    <div>Hello, {{ $store.getters.getUser.username }}</div>
                   </MenuButton>
                 </div>
                 <transition
