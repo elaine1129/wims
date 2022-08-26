@@ -40,11 +40,15 @@
   </table>
   <Modal v-model="countSKUModal" title="Count SKU">
     <div class="grid">
-      <div class="justify-self-center modal-content w-1/2 text-center">
+      <div class="justify-self-center modal-content text-center">
         <Row>
           <Col span="11">Bin Location:</Col>
           <Col span="11">{{
-            selectedSchedule ? selectedSchedule.storage_bin[0].bin_number : "-"
+            selectedSchedule
+              ? selectedSchedule.storage_bin.length == 0
+                ? "No bin assigned! Kindly approach the manager."
+                : selectedSchedule.storage_bin[0].bin_number
+              : "-"
           }}</Col>
         </Row>
         <Row>
