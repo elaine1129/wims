@@ -40,7 +40,7 @@
   </table>
   <Modal v-model="countSKUModal" title="Count SKU">
     <div class="grid">
-      <div class="justify-self-center modal-content text-center">
+      <div class="justify-self-center modal-content w-3/4 text-center">
         <Row>
           <Col span="11">Bin Location:</Col>
           <Col span="11">{{
