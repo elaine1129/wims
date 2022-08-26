@@ -8,7 +8,7 @@
     <body class="h-full">
     ```
   -->
-  <div class="min-h-full min-w-full">
+  <div class="min-h-full min-w-full h-screen">
     <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
       <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
