@@ -19,7 +19,13 @@
         <td>{{ cycle_count.id }}</td>
         <td>{{ cycle_count.schedule.sku.inventory.id }}</td>
         <td>{{ cycle_count.schedule.sku.inventory.name }}</td>
-        <td>{{ cycle_count.schedule.storage_bin[0].bin_number }}</td>
+        <td>
+          {{
+            cycle_count.schedule.storage_bin.length > 0
+              ? cycle_count.schedule.storage_bin[0].bin_number
+              : "-"
+          }}
+        </td>
         <td>
           {{
             cycle_count.schedule.schedule ? cycle_count.schedule.schedule : "-"
