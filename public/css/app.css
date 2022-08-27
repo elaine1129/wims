@@ -610,9 +610,6 @@ select {
   white-space: nowrap;
   border-width: 0;
 }
-.fixed {
-  position: fixed;
-}
 .absolute {
   position: absolute;
 }
@@ -628,9 +625,6 @@ select {
 }
 .right-0 {
   right: 0px;
-}
-.top-0 {
-  top: 0px;
 }
 .col-span-2 {
   grid-column: span 2 / span 2;
@@ -708,9 +702,6 @@ select {
 .h-10 {
   height: 2.5rem;
 }
-.h-screen {
-  height: 100vh;
-}
 .max-h-full {
   max-height: 100%;
 }
@@ -744,11 +735,11 @@ select {
 .w-24 {
   width: 6rem;
 }
-.w-1\/2 {
-  width: 50%;
-}
 .w-3\/4 {
   width: 75%;
+}
+.w-1\/2 {
+  width: 50%;
 }
 .min-w-full {
   min-width: 100%;

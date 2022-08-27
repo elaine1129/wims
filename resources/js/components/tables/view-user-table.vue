@@ -5,6 +5,7 @@
         <th>User ID</th>
         <th>Name</th>
         <th>Email</th>
+        <th>Username</th>
         <th>Contact No.</th>
         <th v-if="this.$store.getters.getUser.role == 'Admin'">Role</th>
         <th
@@ -43,6 +44,7 @@
         </td>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
+        <td>{{ user.username }}</td>
         <td>{{ user.contact_no }}</td>
         <td v-if="this.$store.getters.getUser.role == 'Admin'">
           {{ user.role }}
