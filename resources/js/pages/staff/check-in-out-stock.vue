@@ -193,7 +193,7 @@ export default {
             quantity: 0,
             remarks: "",
             inventory_id: "",
-            // staff_id: "",
+            mode: "checkin",
           };
           this.checkInOutModal = false;
           this.success(
@@ -207,7 +207,7 @@ export default {
             quantity: 0,
             remarks: "",
             inventory_id: "",
-            // staff_id: "",
+            mode: "checkin",
           };
           this.checkInOutModal = false;
           this.smtgWentWrong();
@@ -235,7 +235,7 @@ export default {
               quantity: 0,
               remarks: "",
               inventory_id: "",
-              // staff_id: "",
+              mode: "checkout",
             };
             this.checkInOutModal = false;
             this.success(
@@ -249,7 +249,7 @@ export default {
               quantity: 0,
               remarks: "",
               inventory_id: "",
-              // staff_id: "",
+              mode: "checkout",
             };
             this.checkInOutModal = false;
             this.smtgWentWrong();
