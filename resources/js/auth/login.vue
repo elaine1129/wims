@@ -209,8 +209,8 @@ export default {
           router.push("/");
         })
         .catch((err) => {
-          console.log("error", err);
-          this.error(err.error);
+          console.log("error", err.response);
+          this.handleApiError(err);
           // if (err.response.data.errors) {
           //   this.error(
           //     Object.values(err.response.data.errors)[0],

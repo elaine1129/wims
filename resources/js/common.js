@@ -62,6 +62,8 @@ export default {
                 this.warning(Object.values(error.response.data.errors)[0]);
             } else if (error.response.status == 500) {
                 this.error("Server Error");
+            } else if (error.response.status == 401) { //unauthorized
+                this.error("Username/Password mismatch!", error.response.data.error)
             } else {
                 this.smtgWentWrong();
             }
