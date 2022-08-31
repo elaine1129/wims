@@ -69,6 +69,12 @@ class UserController extends Controller
             "warehouse_id" => "required",
             "address" => "required",
         ]);
+        //just in case contact number was edited. 
+        if ($user["is_first_time_login"] == 1) {
+            $user["password"] = Hash::make($request->contact_no);
+            $user->save();
+        }
+
         if (($user->role == "Manager" && $request->role == "Staff") || ($request->warehouse_id != $user->warehouse_id)) {
             $warehouse = Warehouse::findOrFail($user->warehouse_id);
             $warehouse["manager_id"] = null;
