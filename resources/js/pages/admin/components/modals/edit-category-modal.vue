@@ -10,7 +10,7 @@
     </Form>
 
     <template #footer>
-      <Button>Cancel</Button>
+      <Button @click="closeUpdateCategoryModal">Cancel</Button>
       <Button type="primary" @click="editCategory">Confirm</Button>
     </template>
   </Modal>

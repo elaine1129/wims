@@ -357,7 +357,18 @@ export default {
         variance: this.selectedCycleCount.variance,
       };
       console.log(params);
-      const res = await this.$axiosClient.post("/approve-cycle-count", params);
+      await this.$axiosClient
+        .post("/approve-cycle-count", params)
+        .then((response) => {
+          this.success(
+            "Cycle counting ID: " +
+              params.cycle_counting_id +
+              " approved suceessfully"
+          );
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
       // console.log(res);
     },
     showApproveCycleCountModal(cycle_count) {
@@ -377,7 +388,18 @@ export default {
         schedule_date: this.recountSKU ? moment().format("YYYY-MM-DD") : null,
       };
       console.log(params);
-      const res = await this.$axiosClient.post("/reject-cycle-count", params);
+      await this.$axiosClient
+        .post("/reject-cycle-count", params)
+        .then((response) => {
+          this.success(
+            "Cycle counting ID: " +
+              params.cycle_counting_id +
+              " rejected suceessfully"
+          );
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
       console.log(res);
     },
   },
