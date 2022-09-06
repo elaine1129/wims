@@ -61,17 +61,6 @@ class ScheduleController extends Controller
         } else {
             abort(403);
         }
-
-        // if (Auth::user()->role == 'Staff') {
-        //     return ScheduleResource::collection(CycleCountSchedule::where('staff_id', Auth::id())->get());
-        // } else if (Auth::user()->role == 'Manager') {
-        //     $data = CycleCountSchedule::where(function ($query) {
-        //         $query->whereHas('staff', function ($q) {
-        //             $q->where('warehouse_id', Auth::user()->warehouse_id);
-        //         });
-        //     })->get();
-        //     return ScheduleResource::collection($data);
-        // }
     }
 
     public function reassignStaff(Request $request)

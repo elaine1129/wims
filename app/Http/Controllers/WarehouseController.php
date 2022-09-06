@@ -51,12 +51,10 @@ class WarehouseController extends Controller
             array_push($new_bins, $bin);
         }
         $warehouse["storage_bins"] = $new_bins;
-        if (is_string($warehouse["cycle_counting_settings"])) {
-            $warehouse["cycle_counting_settings"] = json_decode($warehouse->cycle_counting_settings);
-        } else {
-            $warehouse["cycle_counting_settings"] = json_encode($warehouse->cycle_counting_settings);
-        }
 
+        if (is_string($warehouse["cycle_counting_settings"]) == 1) {
+            $warehouse["cycle_counting_settings"] = json_decode($warehouse->cycle_counting_settings);
+        }
         return $warehouse;
     }
 

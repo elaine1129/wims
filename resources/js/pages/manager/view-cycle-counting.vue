@@ -16,72 +16,80 @@
       v-model="currentCCSettingsModal"
       title="Current cycle counting settings"
     >
-      <div class="grid grid-cols-4">
-        <div>Period</div>
-        <div class="col-span-3">
-          {{
-            data.cycle_counting_settings
-              ? data.cycle_counting_settings.start_end_date
-                ? `${this.convertDate(
-                    data.cycle_counting_settings.start_end_date[0]
-                  )} - ${this.convertDate(
-                    data.cycle_counting_settings.start_end_date[1]
-                  )}`
+      <div v-if="data.cycle_counting_settings != null">
+        <div class="grid grid-cols-4">
+          <div>Period</div>
+          <div class="col-span-3">
+            {{
+              data.cycle_counting_settings
+                ? data.cycle_counting_settings.start_end_date
+                  ? `${this.convertDate(
+                      data.cycle_counting_settings.start_end_date[0]
+                    )} - ${this.convertDate(
+                      data.cycle_counting_settings.start_end_date[1]
+                    )}`
+                  : "-"
                 : "-"
-              : "-"
-          }}
+            }}
+          </div>
+          <div>Working day</div>
+          <div class="col-span-3">
+            {{
+              data.cycle_counting_settings
+                ? `${data.cycle_counting_settings.working_day_start} to ${data.cycle_counting_settings.working_day_end}`
+                : "-"
+            }}
+          </div>
+          <div>Counting frequency</div>
+          <div class="col-span-3">
+            <Table
+              :columns="countingFrequencyTableHeader"
+              :data="countingFrequencyData"
+            ></Table>
+          </div>
+          <div>Warehouse</div>
+          <div class="col-span-3">
+            {{ data.warehouse ? data.warehouse.name : "-" }}
+          </div>
+          <div>Assigned Staff</div>
+          <div class="col-span-3">
+            <a @click="staffsAssignedModal = true">{{
+              data.cycle_counting_settings
+                ? data.cycle_counting_settings.staff_ids?.length
+                : "-"
+            }}</a>
+          </div>
+          <div>No. of SKU</div>
+          <div class="col-span-3">
+            <a @click="skuModal = true">{{
+              data.cycle_counting_settings
+                ? data.cycle_counting_settings.inventory_ids?.length
+                : "-"
+            }}</a>
+          </div>
         </div>
-        <div>Working day</div>
-        <div class="col-span-3">
-          {{
-            data.cycle_counting_settings
-              ? `${data.cycle_counting_settings.working_day_start} to ${data.cycle_counting_settings.working_day_end}`
-              : "-"
-          }}
-        </div>
-        <div>Counting frequency</div>
-        <div class="col-span-3">
-          <Table
-            :columns="countingFrequencyTableHeader"
-            :data="countingFrequencyData"
-          ></Table>
-        </div>
-        <div>Warehouse</div>
-        <div class="col-span-3">
-          {{ data.warehouse ? data.warehouse.name : "-" }}
-        </div>
-        <div>Assigned Staff</div>
-        <div class="col-span-3">
-          <a @click="staffsAssignedModal = true">{{
-            data.cycle_counting_settings
-              ? data.cycle_counting_settings.staff_ids?.length
-              : "-"
-          }}</a>
-        </div>
-        <div>No. of SKU</div>
-        <div class="col-span-3">
-          <a @click="skuModal = true">{{
-            data.cycle_counting_settings
-              ? data.cycle_counting_settings.inventory_ids?.length
-              : "-"
-          }}</a>
-        </div>
+        <Table
+          :columns="cycle_counting_summary_table_columns"
+          :data="data.cycle_counting_settings.cycle_count_class"
+          border
+          show-summary
+          :summary-method="handleSummary"
+          height="200"
+        ></Table>
       </div>
-      <Table
-        :columns="cycle_counting_summary_table_columns"
-        :data="data.cycle_counting_settings.cycle_count_class"
-        border
-        show-summary
-        :summary-method="handleSummary"
-        height="200"
-      ></Table>
+      <div v-else>There is no cycle counting yet.</div>
+
       <template #footer>
         <Button type="primary" @click="currentCCSettingsModal = false"
           >OK</Button
         >
       </template>
     </Modal>
-    <Modal v-model="staffsAssignedModal" title="View Staff Assigned">
+    <Modal
+      v-model="staffsAssignedModal"
+      title="View Staff Assigned"
+      v-if="data.cycle_counting_settings != null"
+    >
       <table id="staffsAssignedTable" class="display" style="width: 100%">
         <thead>
           <tr>
@@ -323,6 +331,7 @@ export default {
             new_staff: "",
           };
           this.reassignScheduleModal = false;
+          this.success("Schedules reassigned successfully!");
         })
         .catch((error) => {
           this.handleApiError(error);
@@ -378,30 +387,32 @@ export default {
         console.log(response);
         this.data.cycle_counting_settings =
           response.data.data.cycle_counting_settings;
-        this.data.warehouse = response.data.data;
-        this.countingFrequencyData[0].classA = this.data.cycle_counting_settings
-          .cycle_count_class
-          ? `Every ${this.data.cycle_counting_settings.cycle_count_class[0].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[0].type}(s)`
-          : "-";
-        this.countingFrequencyData[0].classB = this.data.cycle_counting_settings
-          .cycle_count_class
-          ? `Every ${this.data.cycle_counting_settings.cycle_count_class[1].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[1].type}(s)`
-          : "-";
-        this.countingFrequencyData[0].classC = this.data.cycle_counting_settings
-          .cycle_count_class
-          ? `Every ${this.data.cycle_counting_settings.cycle_count_class[2].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[2].type}(s)`
-          : "-";
+        if (response.data.data.cycle_counting_settings != null) {
+          this.data.warehouse = response.data.data;
+          this.countingFrequencyData[0].classA = this.data
+            .cycle_counting_settings.cycle_count_class
+            ? `Every ${this.data.cycle_counting_settings.cycle_count_class[0].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[0].type}(s)`
+            : "-";
+          this.countingFrequencyData[0].classB = this.data
+            .cycle_counting_settings.cycle_count_class
+            ? `Every ${this.data.cycle_counting_settings.cycle_count_class[1].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[1].type}(s)`
+            : "-";
+          this.countingFrequencyData[0].classC = this.data
+            .cycle_counting_settings.cycle_count_class
+            ? `Every ${this.data.cycle_counting_settings.cycle_count_class[2].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[2].type}(s)`
+            : "-";
 
-        let staffs = _.map(
-          this.data.cycle_counting_settings.staff_ids,
-          (staff) => {
-            return {
-              id: _.split(staff, ":", 2)[0],
-              name: _.split(staff, ":", 2)[1],
-            };
-          }
-        );
-        this.data.cycle_counting_settings.staff_ids = staffs;
+          let staffs = _.map(
+            this.data.cycle_counting_settings.staff_ids,
+            (staff) => {
+              return {
+                id: _.split(staff, ":", 2)[0],
+                name: _.split(staff, ":", 2)[1],
+              };
+            }
+          );
+          this.data.cycle_counting_settings.staff_ids = staffs;
+        }
       })
       .catch((error) => {
         this.handleApiError(error);
