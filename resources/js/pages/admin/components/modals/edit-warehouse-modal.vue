@@ -26,7 +26,7 @@
     </Form>
 
     <template #footer>
-      <Button>Cancel</Button>
+      <Button @click="closeUpdateWarehouseModal">Cancel</Button>
       <Button type="primary" @click="editWarehouse">Confirm</Button>
     </template>
   </Modal>
@@ -61,7 +61,7 @@ export default {
   methods: {
     async setProps(modal, selectedWarehouse) {
       console.log(selectedWarehouse);
-      this.editWarehouseForm = selectedWarehouse;
+      this.editWarehouseForm = _.cloneDeep(selectedWarehouse);
 
       if (this.editWarehouseForm.manager == null) {
         this.editWarehouseForm.manager = {

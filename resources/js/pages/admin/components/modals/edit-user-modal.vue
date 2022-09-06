@@ -93,7 +93,7 @@ export default {
   methods: {
     setProps(modal, selectedUser) {
       this.modal = modal;
-      this.editUserForm = selectedUser;
+      this.editUserForm = _.cloneDeep(selectedUser);
       console.log(selectedUser);
     },
     closeEditUserModal() {

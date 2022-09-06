@@ -60,16 +60,24 @@
         size="large"
         ghost
         class="w-24"
-        @click="showEditInventoryModal"
+        @click="showEditWarehouseModal"
         >Edit</Button
       >
-      <Button type="error" size="large" ghost class="w-24" disabled
+      <Button
+        type="error"
+        size="large"
+        ghost
+        class="w-24"
+        @click="showDeleteWarehouseModal"
         >Delete</Button
       >
     </div>
     <EditWarehouseModalTableComponent
       ref="editWarehouseModalComponent"
     ></EditWarehouseModalTableComponent>
+    <DeleteWarehouseModalComponent
+      ref="deleteWarehouseModalComponent"
+    ></DeleteWarehouseModalComponent>
     <Modal v-model="editInventoryModal" title="Edit inventory">
       <Form :model="assignBinForm" :label-width="80">
         <FormItem label="Inventory">
@@ -145,13 +153,14 @@ import PageComponent from "../../components/pages/default-page.vue";
 import ViewWarehouseHeader from "../../components/view-warehouse-header.vue";
 import ViewUserTableComponent from "../../components/tables/view-user-table.vue";
 import EditWarehouseModalTableComponent from "../admin/components/modals/edit-warehouse-modal.vue";
-
+import DeleteWarehouseModalComponent from "../admin/components/modals/delete-warehouse-modal.vue";
 export default {
   components: {
     PageComponent,
     ViewWarehouseHeader,
     ViewUserTableComponent,
     EditWarehouseModalTableComponent,
+    DeleteWarehouseModalComponent,
   },
   data() {
     return {
@@ -228,10 +237,16 @@ export default {
     });
   },
   methods: {
-    showEditInventoryModal() {
+    showEditWarehouseModal() {
       this.$refs.editWarehouseModalComponent.setProps(
         true,
         _.cloneDeep(this.data.warehouse)
+      );
+    },
+    showDeleteWarehouseModal() {
+      this.$refs.deleteWarehouseModalComponent.setProps(
+        true,
+        this.data.warehouse
       );
     },
     async showMultiAssignBinModal() {

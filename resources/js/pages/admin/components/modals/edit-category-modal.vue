@@ -33,7 +33,7 @@ export default {
   created() {},
   methods: {
     async setProps(modal, selectedCategory) {
-      this.editCategoryForm = selectedCategory;
+      this.editCategoryForm = _.cloneDeep(selectedCategory);
       this.modal = modal;
     },
     async editCategory() {

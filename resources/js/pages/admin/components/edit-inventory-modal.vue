@@ -92,7 +92,7 @@ export default {
   methods: {
     setProps(modal, selectedInventory) {
       this.modal = modal;
-      this.editInventoryForm = selectedInventory;
+      this.editInventoryForm = _.cloneDeep(selectedInventory);
       if (!this.editInventoryForm.category) {
         this.editInventoryForm.category = {
           id: "",
