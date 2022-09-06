@@ -306,7 +306,7 @@ export default {
     },
     async showEditInventoryModal(bin) {
       await this.$axiosClient
-        .get("/inventories-unassigned-category")
+        .get("/inventories-unassigned-category/" + this.data.warehouse.id)
         .then((response) => {
           this.data.unassigned_inventories = response.data.data;
         })

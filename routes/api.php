@@ -59,7 +59,7 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('/inventory', [InventoryController::class, 'store']); //
     Route::put('/inventory/{id}', [InventoryController::class, 'update']); //
     Route::delete('/inventory/{id}', [InventoryController::class, 'destroy']); //
-    Route::get('/inventories-unassigned-category', [InventoryController::class, 'unassignedCategoryInventories']); //
+    Route::get('/inventories-unassigned-category/{warehouseId}', [InventoryController::class, 'unassignedCategoryInventories']); //
 
     // stock
     Route::get('/stocks', [StockController::class, 'index']); //
