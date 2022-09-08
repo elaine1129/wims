@@ -49,7 +49,7 @@ export default {
           this.success("User successfully deleted!");
           this.modal = false;
           if (this.$route.name == "admin-manage-user") {
-            this.$emit("deleted", this.selectedUser.id);
+            this.$emit("deleted");
           } else {
             router.go(-1);
           }

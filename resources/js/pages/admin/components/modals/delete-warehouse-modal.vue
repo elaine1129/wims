@@ -50,7 +50,7 @@ export default {
           this.modal = false;
           console.log("route", this.$route);
           if (this.$route.name == "admin-manage-warehouse") {
-            this.$emit("deleted", this.selectedWarehouse.id);
+            this.$emit("deleted");
           } else {
             router.go(-1);
           }

@@ -86,7 +86,10 @@
       </tr>
     </tbody>
   </table>
-  <EditUserModalComponent ref="editUserModalComponent"></EditUserModalComponent>
+  <EditUserModalComponent
+    ref="editUserModalComponent"
+    @edited="editedInChild"
+  ></EditUserModalComponent>
   <DeleteUserModalComponent
     ref="deleteUserModalComponent"
     @deleted="deletedInChild"
@@ -124,8 +127,11 @@ export default {
       this.selectedUser = user;
       this.$refs.deleteUserModalComponent.setProps(true, this.selectedUser);
     },
-    deletedInChild(id) {
-      // this.myData = _.remove(this.data, { id: id });
+    deletedInChild() {
+      this.$emit("deleted");
+    },
+    editedInChild() {
+      this.$emit("edited");
     },
   },
 };

@@ -42,7 +42,7 @@ export default {
           this.success("Category successfully deleted!");
           this.modal = false;
           if (this.$route.name == "admin-manage-category") {
-            this.$emit("deleted", this.selectedCategory.id);
+            this.$emit("deleted");
           } else {
             router.go(-1);
           }

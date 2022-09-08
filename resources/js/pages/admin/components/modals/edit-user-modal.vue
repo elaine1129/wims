@@ -126,6 +126,7 @@ export default {
           };
           this.success("User successfully updated");
           this.closeEditUserModal();
+          this.$emit("edited");
         })
         .catch((error) => {
           this.handleApiError(error);

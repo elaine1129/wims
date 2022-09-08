@@ -63,6 +63,7 @@
     </table>
     <EditCategoryModalComponent
       ref="editCategoryModalComponent"
+      @edited="editedInChild"
     ></EditCategoryModalComponent>
     <DeleteCategoryModalComponent
       ref="deleteCategoryModalComponent"
@@ -75,11 +76,29 @@
 import PageComponent from "../../components/pages/default-page.vue";
 import EditCategoryModalComponent from "../admin/components/modals/edit-category-modal.vue";
 import DeleteCategoryModalComponent from "../admin/components/modals/delete-category-modal.vue";
+import router from "../../router";
 export default {
   components: {
     PageComponent,
     EditCategoryModalComponent,
     DeleteCategoryModalComponent,
+  },
+  watch: {
+    "data.categories": {
+      handler() {
+        var table = $("#categories").DataTable({
+          drawCallback: function (settings) {
+            var api = new $.fn.dataTable.Api(settings);
+            if (api.page() >= 0) {
+              router.push({ query: { page: api.page() + 1 } });
+            }
+          },
+        });
+        table.page(this.$route.query.page - 1).draw(false);
+      },
+      deep: true,
+      flush: "post",
+    },
   },
   data() {
     return {
@@ -97,15 +116,38 @@ export default {
       },
     };
   },
+  beforeCreate() {
+    if (!this.$route.query.page > 0) {
+      router.push({ query: { page: 1 } });
+    }
+  },
   async created() {
-    const res = await this.$axiosClient.get("/categories");
-    console.log(res);
-    this.data.categories = res.data;
-    $(document).ready(function () {
-      $("#categories").DataTable();
-    });
+    await this.$axiosClient
+      .get("/categories")
+      .then((res) => {
+        this.data.categories = res.data;
+      })
+      .catch((error) => {
+        this.handleApiError(error);
+      });
+    // $(document).ready(function () {
+    //   $("#categories").DataTable();
+    // });
   },
   methods: {
+    async refetchData() {
+      await this.$axiosClient
+        .get("/categories")
+        .then((res) => {
+          this.data.categories = res.data;
+
+          $("#categories").DataTable().destroy();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.handleApiError(error);
+        });
+    },
     async addNewCategory() {
       console.log(this.addCategoryForm);
       await this.$axiosClient
@@ -117,6 +159,7 @@ export default {
           };
           this.success("Category Created!");
           this.addCategoryModal = false;
+          this.refetchData();
         })
         .catch((error) => {
           console.log(error.response);
@@ -150,8 +193,11 @@ export default {
         this.selectedCategory
       );
     },
-    deletedInChild(id) {
-      _.remove(this.data.categories, { id: id });
+    editedInChild() {
+      this.refetchData();
+    },
+    deletedInChild() {
+      this.refetchData();
     },
   },
 };

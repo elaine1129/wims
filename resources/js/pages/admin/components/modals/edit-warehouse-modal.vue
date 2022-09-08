@@ -100,6 +100,7 @@ export default {
           };
           this.success("The warehouse has been successfully updated.");
           this.closeUpdateWarehouseModal();
+          this.$emit("edited");
         })
         .catch((error) => {
           this.handleApiError(error);

@@ -46,6 +46,7 @@ export default {
           };
           this.success("The category has been successfully updated.");
           this.closeUpdateCategoryModal();
+          this.$emit("edited");
         })
         .catch((error) => {
           this.handleApiError(error);

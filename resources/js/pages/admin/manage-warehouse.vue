@@ -100,9 +100,11 @@
 
     <EditWarehouseModalTableComponent
       ref="editWarehouseModalComponent"
+      @edited="editedInChild"
     ></EditWarehouseModalTableComponent>
     <DeleteWarehouseModalComponent
       ref="deleteWarehouseModalComponent"
+      @deleted="deletedInChild"
     ></DeleteWarehouseModalComponent>
   </PageComponent>
 </template>
@@ -111,11 +113,29 @@
 import PageComponent from "../../components/pages/default-page.vue";
 import EditWarehouseModalTableComponent from "../admin/components/modals/edit-warehouse-modal.vue";
 import DeleteWarehouseModalComponent from "../admin/components/modals/delete-warehouse-modal.vue";
+import router from "../../router";
 export default {
   components: {
     PageComponent,
     EditWarehouseModalTableComponent,
     DeleteWarehouseModalComponent,
+  },
+  watch: {
+    "data.warehouses": {
+      handler() {
+        var table = $("#warehouses").DataTable({
+          drawCallback: function (settings) {
+            var api = new $.fn.dataTable.Api(settings);
+            if (api.page() >= 0) {
+              router.push({ query: { page: api.page() + 1 } });
+            }
+          },
+        });
+        table.page(this.$route.query.page - 1).draw(false);
+      },
+      deep: true,
+      flush: "post",
+    },
   },
   data() {
     return {
@@ -158,6 +178,11 @@ export default {
       },
     };
   },
+  beforeCreate() {
+    if (!this.$route.query.page > 0) {
+      router.push({ query: { page: 1 } });
+    }
+  },
   async created() {
     await this.$axiosClient
       .get("/warehouses")
@@ -170,11 +195,24 @@ export default {
       });
     // console.log(res);
     // this.data.inventories = res.data.data;
-    $(document).ready(function () {
-      $("#warehouses").DataTable();
-    });
+    // $(document).ready(function () {
+    //   $("#warehouses").DataTable();
+    // });
   },
   methods: {
+    async refetchData() {
+      await this.$axiosClient
+        .get("/warehouses")
+        .then((res) => {
+          this.data.warehouses = res.data.data;
+
+          $("#warehouses").DataTable().destroy();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.handleApiError(error);
+        });
+    },
     validateNumberOfBin(rule, value, callback) {
       if (this.addWarehouseForm.no_of_bins < this.data.categories.length) {
         console.log(this.addWarehouseForm.no_of_bins);
@@ -222,6 +260,7 @@ export default {
           };
           this.success("Warehouse Created!");
           this.addWarehouseModal = false;
+          this.refetchData();
         })
         .catch((error) => {
           this.handleApiError(error);
@@ -304,6 +343,12 @@ export default {
         true,
         this.selectedWarehouse
       );
+    },
+    editedInChild() {
+      this.refetchData();
+    },
+    deletedInChild() {
+      this.refetchData();
     },
   },
 };

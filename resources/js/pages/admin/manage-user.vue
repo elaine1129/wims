@@ -81,6 +81,8 @@
     <ViewUserTableComponent
       name="users"
       :data="data.users"
+      @edited="editedInChild"
+      @deleted="deletedInChild"
     ></ViewUserTableComponent>
   </PageComponent>
 </template>
@@ -88,11 +90,28 @@
 <script>
 import PageComponent from "../../components/pages/default-page.vue";
 import ViewUserTableComponent from "../../components/tables/view-user-table.vue";
-
+import router from "../../router";
 export default {
   components: {
     PageComponent,
     ViewUserTableComponent,
+  },
+  watch: {
+    "data.users": {
+      handler() {
+        var table = $("#users").DataTable({
+          drawCallback: function (settings) {
+            var api = new $.fn.dataTable.Api(settings);
+            if (api.page() >= 0) {
+              router.push({ query: { page: api.page() + 1 } });
+            }
+          },
+        });
+        table.page(this.$route.query.page - 1).draw(false);
+      },
+      deep: true,
+      flush: "post",
+    },
   },
   data() {
     return {
@@ -114,15 +133,39 @@ export default {
       },
     };
   },
+  beforeCreate() {
+    if (!this.$route.query.page > 0) {
+      router.push({ query: { page: 1 } });
+    }
+  },
   async created() {
-    const res = await this.$axiosClient.get("/users");
-    console.log(res);
-    this.data.users = res.data.data;
-    $(document).ready(function () {
-      $("#users").DataTable();
-    });
+    await this.$axiosClient
+      .get("/users")
+      .then((res) => {
+        this.data.users = res.data.data;
+      })
+      .catch((error) => {
+        this.handleApiError(error);
+      });
+
+    // $(document).ready(function () {
+    //   $("#users").DataTable();
+    // });
   },
   methods: {
+    async refetchData() {
+      await this.$axiosClient
+        .get("/users")
+        .then((res) => {
+          this.data.users = res.data.data;
+
+          $("#users").DataTable().destroy();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.handleApiError(error);
+        });
+    },
     async addNewUser() {
       console.log(this.addUserForm);
 
@@ -142,6 +185,7 @@ export default {
           };
           this.success("User Added!");
           this.addUserModal = false;
+          this.refetchData();
         })
         .catch((error) => {
           this.handleApiError(error);
@@ -170,6 +214,12 @@ export default {
         .catch((error) => {
           this.handleApiError(error);
         });
+    },
+    editedInChild() {
+      this.refetchData();
+    },
+    deletedInChild() {
+      this.refetchData();
     },
   },
 };
