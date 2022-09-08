@@ -400,10 +400,13 @@ export default {
     function logout() {
       store.dispatch("logout").then(() => {
         console.log(store.state.user);
-
-        router.push({
-          name: "Login",
-        });
+        router
+          .push({
+            name: "Login",
+          })
+          .then(() => {
+            router.go();
+          });
       });
     }
     return {

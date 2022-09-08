@@ -145,6 +145,7 @@ export default {
           };
 
           this.closeEditInventoryModal();
+          this.$emit("edited");
         })
         .catch((error) => {
           this.handleApiError(error);

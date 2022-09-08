@@ -60,6 +60,7 @@
   </table>
   <EditInventoryModalComponent
     ref="editInventoryModalComponent"
+    @edited="editedInChild"
   ></EditInventoryModalComponent>
   <DeleteInventoryModalComponent
     ref="deleteInventoryModalComponent"
@@ -114,7 +115,11 @@ export default {
       router.push(`/view-inventory-details/${inventory.id}`);
     },
     deletedInChild(id) {
-      this.myData = _.remove(this.data, { id: id });
+      // this.myData = _.remove(this.data, { id: id });
+      this.$emit("deleted");
+    },
+    editedInChild() {
+      this.$emit("edited");
     },
   },
 };
