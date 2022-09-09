@@ -154,6 +154,7 @@ import ViewWarehouseHeader from "../../components/view-warehouse-header.vue";
 import ViewUserTableComponent from "../../components/tables/view-user-table.vue";
 import EditWarehouseModalTableComponent from "../admin/components/modals/edit-warehouse-modal.vue";
 import DeleteWarehouseModalComponent from "../admin/components/modals/delete-warehouse-modal.vue";
+import router from "../../router";
 export default {
   components: {
     PageComponent,
@@ -161,6 +162,49 @@ export default {
     ViewUserTableComponent,
     EditWarehouseModalTableComponent,
     DeleteWarehouseModalComponent,
+  },
+  watch: {
+    "data.storage_bins": {
+      handler() {
+        var table = $("#storage-bins").DataTable({
+          drawCallback: function (settings) {
+            var api = new $.fn.dataTable.Api(settings);
+            if (api.page() >= 0) {
+              router.push({ query: { page: api.page() + 1 } });
+            }
+          },
+          initComplete: function () {
+            this.api()
+              .columns([2])
+              .every(function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                  .appendTo("#filter-category")
+                  .on("change", function () {
+                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                    column
+                      .search(val ? "^" + val + "$" : "", true, false)
+                      .draw();
+                  });
+
+                column
+                  .data()
+                  .unique()
+                  .sort()
+                  .each(function (d, j) {
+                    select.append(
+                      '<option value="' + d + '">' + d + "</option>"
+                    );
+                  });
+              });
+          },
+        });
+        table.page(this.$route.query.page - 1).draw(false);
+      },
+      deep: true,
+      flush: "post",
+    },
   },
   data() {
     return {
@@ -194,6 +238,11 @@ export default {
       },
     };
   },
+  beforeCreate() {
+    if (!this.$route.query.page > 0) {
+      router.push({ query: { page: 1 } });
+    }
+  },
   async created() {
     await this.$axiosClient
       .get("/warehouse/" + this.$route.params.id)
@@ -209,34 +258,49 @@ export default {
     $(document).ready(function () {
       $("#staffs").DataTable();
     });
-    $(document).ready(function () {
-      $("#storage-bins").DataTable({
-        initComplete: function () {
-          this.api()
-            .columns([2])
-            .every(function () {
-              var column = this;
-              var select = $('<select><option value=""></option></select>')
-                .appendTo("#filter-category")
-                .on("change", function () {
-                  var val = $.fn.dataTable.util.escapeRegex($(this).val());
+    // $(document).ready(function () {
+    //   $("#storage-bins").DataTable({
+    //     initComplete: function () {
+    //       this.api()
+    //         .columns([2])
+    //         .every(function () {
+    //           var column = this;
+    //           var select = $('<select><option value=""></option></select>')
+    //             .appendTo("#filter-category")
+    //             .on("change", function () {
+    //               var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                  column.search(val ? "^" + val + "$" : "", true, false).draw();
-                });
+    //               column.search(val ? "^" + val + "$" : "", true, false).draw();
+    //             });
 
-              column
-                .data()
-                .unique()
-                .sort()
-                .each(function (d, j) {
-                  select.append('<option value="' + d + '">' + d + "</option>");
-                });
-            });
-        },
-      });
-    });
+    //           column
+    //             .data()
+    //             .unique()
+    //             .sort()
+    //             .each(function (d, j) {
+    //               select.append('<option value="' + d + '">' + d + "</option>");
+    //             });
+    //         });
+    //     },
+    //   });
+    // });
   },
   methods: {
+    async refetchData() {
+      await this.$axiosClient
+        .get("/warehouse/" + this.$route.params.id)
+        .then((response) => {
+          this.data.warehouse = response.data.data;
+          this.data.staffs = response.data.data.staffs;
+          this.data.storage_bins = response.data.data.storage_bins;
+          $("#storage-bins").DataTable().destroy();
+          $("#filter-category").empty();
+          console.log(this.data.warehouse);
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
+    },
     showEditWarehouseModal() {
       this.$refs.editWarehouseModalComponent.setProps(
         true,
@@ -306,6 +370,7 @@ export default {
         .then((response) => {
           console.log(response);
           this.success("Multiple assignments successful!");
+          this.refetchData();
           this.multiAssignBin = false;
           this.assignBinForm = {
             category: {
@@ -368,6 +433,7 @@ export default {
           this.success(
             `The inventory for stoage bin ${this.selectedBin.bin_number} has been successfully updated!`
           );
+          this.refetchData();
           this.closeEditInventoryModal();
         })
         .catch((error) => {
