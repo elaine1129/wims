@@ -197,11 +197,36 @@ import PageComponent from "../../components/pages/default-page.vue";
 import StockTableComponent from "../tables/stock-table.vue";
 import SummaryReportTableComponent from "../tables/summary-report-table.vue";
 import moment from "moment";
+import router from "../../router";
 export default {
   components: {
     PageComponent,
     StockTableComponent,
     SummaryReportTableComponent,
+  },
+  watch: {
+    "data.cycle_countings_pending": {
+      handler() {
+        var table = $("#approval-report").DataTable({
+          drawCallback: function (settings) {
+            var api = new $.fn.dataTable.Api(settings);
+            if (api.page() >= 0) {
+              router.push({ query: { page: api.page() + 1 } });
+            }
+          },
+        });
+        table.page(this.$route.query.page - 1).draw(false);
+      },
+      deep: true,
+      flush: "post",
+    },
+    "data.cycle_countings_completed": {
+      handler() {
+        $("#summary-report").DataTable();
+      },
+      deep: true,
+      flush: "post",
+    },
   },
   data() {
     return {
@@ -219,6 +244,11 @@ export default {
       rejectCycleCountModal: false,
       recountSKU: false,
     };
+  },
+  beforeCreate() {
+    if (!this.$route.query.page > 0) {
+      router.push({ query: { page: 1 } });
+    }
   },
   async created() {
     var res;
@@ -259,19 +289,7 @@ export default {
       }
     });
 
-    const cycleCountingsRes = await this.$axiosClient.get("/cycle-counts");
-    console.log(cycleCountingsRes);
-    this.data.cycle_countings_pending = _.filter(cycleCountingsRes.data.data, {
-      status: "PENDING",
-    });
-    console.log(this.data.cycle_countings_pending);
-    this.data.cycle_countings_completed = _.filter(
-      cycleCountingsRes.data.data,
-      {
-        status: "COMPLETED",
-      }
-    );
-    console.log(this.data.cycle_countings_completed);
+    await this.fetchData();
     if (this.$store.getters.getUser.role == "Admin") {
       $(document).ready(function () {
         $("#daily-report").DataTable({
@@ -309,14 +327,33 @@ export default {
       });
     }
 
-    $(document).ready(function () {
-      $("#approval-report").DataTable();
-    });
-    $(document).ready(function () {
-      $("#summary-report").DataTable();
-    });
+    // $(document).ready(function () {
+    //   $("#approval-report").DataTable();
+    // });
+    // $(document).ready(function () {
+    //   $("#summary-report").DataTable();
+    // });
   },
   methods: {
+    async fetchData() {
+      const cycleCountingsRes = await this.$axiosClient.get("/cycle-counts");
+      console.log(cycleCountingsRes);
+      $("#approval-report").DataTable().destroy();
+      $("#summary-report").DataTable().destroy();
+      this.data.cycle_countings_pending = _.filter(
+        cycleCountingsRes.data.data,
+        {
+          status: "PENDING",
+        }
+      );
+      console.log(this.data.cycle_countings_pending);
+      this.data.cycle_countings_completed = _.filter(
+        cycleCountingsRes.data.data,
+        {
+          status: "COMPLETED",
+        }
+      );
+    },
     viewDailyReport(report) {
       if (this.$store.getters.getUser.role == "Admin") {
         this.data.selectedDailyReport = _.get(
@@ -365,6 +402,7 @@ export default {
               params.cycle_counting_id +
               " approved suceessfully"
           );
+          this.fetchData();
         })
         .catch((error) => {
           this.handleApiError(error);
@@ -396,6 +434,7 @@ export default {
               params.cycle_counting_id +
               " rejected suceessfully"
           );
+          this.fetchData();
         })
         .catch((error) => {
           this.handleApiError(error);

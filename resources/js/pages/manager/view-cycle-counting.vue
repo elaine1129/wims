@@ -202,6 +202,7 @@
 import PageComponent from "../../components/pages/default-page.vue";
 import TableComponent from "./table.vue";
 import axiosClient from "../../axios";
+import router from "../../router";
 export default {
   components: {
     PageComponent,
@@ -285,6 +286,81 @@ export default {
     };
   },
   methods: {
+    async fetchData() {
+      await this.$axiosClient
+        .get("/warehouse/" + this.$store.getters.getUser.warehouse_id)
+        .then((response) => {
+          console.log(response);
+          this.data.cycle_counting_settings =
+            response.data.data.cycle_counting_settings;
+          if (response.data.data.cycle_counting_settings != null) {
+            this.data.warehouse = response.data.data;
+            this.countingFrequencyData[0].classA = this.data
+              .cycle_counting_settings.cycle_count_class
+              ? `Every ${this.data.cycle_counting_settings.cycle_count_class[0].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[0].type}(s)`
+              : "-";
+            this.countingFrequencyData[0].classB = this.data
+              .cycle_counting_settings.cycle_count_class
+              ? `Every ${this.data.cycle_counting_settings.cycle_count_class[1].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[1].type}(s)`
+              : "-";
+            this.countingFrequencyData[0].classC = this.data
+              .cycle_counting_settings.cycle_count_class
+              ? `Every ${this.data.cycle_counting_settings.cycle_count_class[2].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[2].type}(s)`
+              : "-";
+
+            let staffs = _.map(
+              this.data.cycle_counting_settings.staff_ids,
+              (staff) => {
+                return {
+                  id: _.split(staff, ":", 2)[0],
+                  name: _.split(staff, ":", 2)[1],
+                };
+              }
+            );
+            this.data.cycle_counting_settings.staff_ids = staffs;
+          }
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
+      await this.$axiosClient
+        .get("/skus")
+        .then((response) => {
+          console.log("skus", response);
+          this.data.skus = response.data.data;
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
+      await this.$axiosClient
+        .get("/schedules")
+        .then((res) => {
+          console.log(res.data.data);
+          this.data.cycle_count_schedules.all_schedules = res.data.data;
+        })
+        .catch((error) => {
+          this.handleApiError(error);
+        });
+
+      this.data.cycle_count_schedules.schedules_classA = _.filter(
+        this.data.cycle_count_schedules.all_schedules,
+        function (schedule) {
+          return schedule.sku.class == "A";
+        }
+      );
+      this.data.cycle_count_schedules.schedules_classB = _.filter(
+        this.data.cycle_count_schedules.all_schedules,
+        function (schedule) {
+          return schedule.sku.class == "B";
+        }
+      );
+      this.data.cycle_count_schedules.schedules_classC = _.filter(
+        this.data.cycle_count_schedules.all_schedules,
+        function (schedule) {
+          return schedule.sku.class == "C";
+        }
+      );
+    },
     async reassignSchedule() {
       var unique_staff = _.chain(this.data.cycle_count_schedules.all_schedules)
         .map((schedule) => {
@@ -332,6 +408,7 @@ export default {
           };
           this.reassignScheduleModal = false;
           this.success("Schedules reassigned successfully!");
+          this.fetchData();
         })
         .catch((error) => {
           this.handleApiError(error);
@@ -381,79 +458,7 @@ export default {
     },
   },
   async created() {
-    await this.$axiosClient
-      .get("/warehouse/" + this.$store.getters.getUser.warehouse_id)
-      .then((response) => {
-        console.log(response);
-        this.data.cycle_counting_settings =
-          response.data.data.cycle_counting_settings;
-        if (response.data.data.cycle_counting_settings != null) {
-          this.data.warehouse = response.data.data;
-          this.countingFrequencyData[0].classA = this.data
-            .cycle_counting_settings.cycle_count_class
-            ? `Every ${this.data.cycle_counting_settings.cycle_count_class[0].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[0].type}(s)`
-            : "-";
-          this.countingFrequencyData[0].classB = this.data
-            .cycle_counting_settings.cycle_count_class
-            ? `Every ${this.data.cycle_counting_settings.cycle_count_class[1].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[1].type}(s)`
-            : "-";
-          this.countingFrequencyData[0].classC = this.data
-            .cycle_counting_settings.cycle_count_class
-            ? `Every ${this.data.cycle_counting_settings.cycle_count_class[2].type_freq} ${this.data.cycle_counting_settings.cycle_count_class[2].type}(s)`
-            : "-";
-
-          let staffs = _.map(
-            this.data.cycle_counting_settings.staff_ids,
-            (staff) => {
-              return {
-                id: _.split(staff, ":", 2)[0],
-                name: _.split(staff, ":", 2)[1],
-              };
-            }
-          );
-          this.data.cycle_counting_settings.staff_ids = staffs;
-        }
-      })
-      .catch((error) => {
-        this.handleApiError(error);
-      });
-    await this.$axiosClient
-      .get("/skus")
-      .then((response) => {
-        console.log("skus", response);
-        this.data.skus = response.data.data;
-      })
-      .catch((error) => {
-        this.handleApiError(error);
-      });
-    await this.$axiosClient
-      .get("/schedules")
-      .then((res) => {
-        console.log(res.data.data);
-        this.data.cycle_count_schedules.all_schedules = res.data.data;
-      })
-      .catch((error) => {
-        this.handleApiError(error);
-      });
-
-    this.data.cycle_count_schedules.schedules_classA = _.filter(
-      this.data.cycle_count_schedules.all_schedules,
-      function (schedule) {
-        return schedule.sku.class == "A";
-      }
-    );
-    this.data.cycle_count_schedules.schedules_classB = _.filter(
-      this.data.cycle_count_schedules.all_schedules,
-      function (schedule) {
-        return schedule.sku.class == "B";
-      }
-    );
-    this.data.cycle_count_schedules.schedules_classC = _.filter(
-      this.data.cycle_count_schedules.all_schedules,
-      function (schedule) {
-        return schedule.sku.class == "C";
-      }
-    );
+    await this.fetchData();
 
     $(document).ready(function () {
       $("#classA").DataTable({

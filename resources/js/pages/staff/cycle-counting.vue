@@ -5,6 +5,7 @@
         <CycleCountUpcomingTableComponent
           name="upcoming"
           :data="data.cycle_count_schedules"
+          @newCycleCount="cycleCountInChild"
         ></CycleCountUpcomingTableComponent>
       </TabPane>
       <TabPane label="Pending Approval" name="pending">
@@ -34,6 +35,24 @@ export default {
     CycleCountUpcomingTableComponent,
     CycleCountReportTableComponent,
   },
+  watch: {
+    "data.cycle_count_schedules": {
+      handler() {
+        $("#upcoming").DataTable({
+          order: [[4, "asc"]],
+        });
+      },
+      deep: true,
+      flush: "post",
+    },
+    "data.pending_cycle_counts": {
+      handler() {
+        $("#pending").DataTable();
+      },
+      deep: true,
+      flush: "post",
+    },
+  },
   data() {
     return {
       data: {
@@ -43,34 +62,46 @@ export default {
       },
     };
   },
+
   async created() {
-    const res = await this.$axiosClient.get("/schedules");
-    console.log(res);
-    this.data.cycle_count_schedules = res.data.data;
-    const reportRes = await this.$axiosClient.get("/cycle-counts");
+    await this.fetchData();
 
-    console.log(reportRes);
-    if (reportRes.status == 200) {
-      this.data.pending_cycle_counts = _.filter(reportRes.data.data, {
-        status: "PENDING",
-      });
-      this.data.completed_cycle_counts = _.filter(reportRes.data.data, {
-        status: "COMPLETED",
-      });
-      console.log("pending", this.data.pending_cycle_counts);
-    }
-
-    $(document).ready(function () {
-      $("#upcoming").DataTable({
-        order: [[4, "asc"]],
-      });
-    });
-    $(document).ready(function () {
-      $("#pending").DataTable();
-    });
+    // $(document).ready(function () {
+    //   $("#upcoming").DataTable({
+    //     order: [[4, "asc"]],
+    //   });
+    // });
+    // $(document).ready(function () {
+    //   $("#pending").DataTable();
+    // });
     $(document).ready(function () {
       $("#completed").DataTable();
     });
+  },
+  methods: {
+    async fetchData() {
+      await this.$axiosClient;
+      const res = await this.$axiosClient.get("/schedules");
+      console.log(res);
+      this.data.cycle_count_schedules = res.data.data;
+      $("#upcoming").DataTable().destroy();
+      const reportRes = await this.$axiosClient.get("/cycle-counts");
+
+      console.log(reportRes);
+      if (reportRes.status == 200) {
+        this.data.pending_cycle_counts = _.filter(reportRes.data.data, {
+          status: "PENDING",
+        });
+        $("#pending").DataTable().destroy();
+        this.data.completed_cycle_counts = _.filter(reportRes.data.data, {
+          status: "COMPLETED",
+        });
+        console.log("pending", this.data.pending_cycle_counts);
+      }
+    },
+    cycleCountInChild() {
+      this.fetchData();
+    },
   },
 };
 </script>

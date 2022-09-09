@@ -75,7 +75,13 @@ class ScheduleController extends Controller
         $newelement = $new_staff["id"] . ":" . $new_staff["name"];
         // $new_staffs =
         //     $warehouse->cycle_counting_settings["staff_ids"];
-        $ori_settings = $warehouse->cycle_counting_settings;
+        if (is_string($warehouse->cycle_counting_settings) == 1) {
+            $ori_settings = json_decode($warehouse->cycle_counting_settings);
+        } else {
+            $ori_settings = $warehouse->cycle_counting_settings;
+        }
+
+        // return $ori_settings->staff_ids;
         $new_staffs = $ori_settings->staff_ids;
         $found = false;
         foreach ($new_staffs as $staff) {

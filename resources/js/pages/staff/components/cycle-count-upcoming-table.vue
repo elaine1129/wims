@@ -161,6 +161,7 @@ export default {
         .post("/cycle-count", params)
         .then((response) => {
           this.success("The cycle counting has been recorded.");
+          this.$emit("newCycleCount");
           this.countSKUModal = false;
           this.countSKUForm = {
             actual_count: 0,
