@@ -625,6 +625,7 @@ export default {
       console.log(this.startCycleCountingForm.sku_list);
     },
     calculateFrequency_DailyCount() {
+     
       //CONVERT START AND END DATE TO CORRECT STRING FORMAT
       this.startCycleCountingForm.start_date = this.convertDate(
         this.startCycleCountingForm.start_end_date[0]
@@ -648,13 +649,17 @@ export default {
             this.startCycleCountingForm.classA,
             this.startCycleCountingForm.classAType
           );
+          
           c.daily_count = this.getDailyCount(
             c.number_of_skus,
-            this.startCycleCountingForm.classA,
+            // this.startCycleCountingForm.classA,
+            c.frequency,
             this.startCycleCountingForm.classAType
           );
+         
           c.type = this.startCycleCountingForm.classAType;
           c.type_freq = this.startCycleCountingForm.classA;
+          
         } else if (c.class == "B") {
           c.frequency = this.countFrequency(
             this.startCycleCountingForm.classB,
@@ -662,7 +667,8 @@ export default {
           );
           c.daily_count = this.getDailyCount(
             c.number_of_skus,
-            this.startCycleCountingForm.classB,
+            // this.startCycleCountingForm.classB,
+            c.frequency,
             this.startCycleCountingForm.classBType
           );
           c.type = this.startCycleCountingForm.classBType;
@@ -674,7 +680,8 @@ export default {
           );
           c.daily_count = this.getDailyCount(
             c.number_of_skus,
-            this.startCycleCountingForm.classC,
+            // this.startCycleCountingForm.classC,
+            c.frequency,
             this.startCycleCountingForm.classCType
           );
           c.type = this.startCycleCountingForm.classCType;
@@ -802,16 +809,28 @@ export default {
       return days;
     },
     getDailyCount(number_of_skus, freq, classType) {
-      var multiplications = [1, 7, 30, 365];
-      var types = ["day", "week", "month", "year"];
-      var dailyCount =
-        number_of_skus /
-        (multiplications[
-          _.findIndex(types, (type) => {
-            return type == classType;
-          })
-        ] *
-          freq);
+      // var multiplications = [1, 7, 30, 365];
+      // var types = ["day", "week", "month", "year"];
+      // var dailyCount =
+      //   number_of_skus /
+      //   (multiplications[
+      //     _.findIndex(types, (type) => {
+      //       return type == classType;
+      //     })
+      //   ] *
+      //     freq);
+      //days = array of working days you are looking: 0= sunday,.. 6 = saturday
+      var start_index = _.indexOf(
+        _.map(this.workdays, "value"),
+        this.startCycleCountingForm.workday_start
+      ); //1
+      var end_index = _.indexOf(
+        _.map(this.workdays, "value"),
+        this.startCycleCountingForm.workday_end
+      ); //5
+      var days = this.getArrayOfWorkingDays(start_index, end_index); //GET WORKING DAY INDEX IN ARRAY [1,2,3,4,5] (MONDAY-FRIDAY)
+      console.log("getDailyCount", number_of_skus, freq);
+      var dailyCount = ( number_of_skus * freq) / days.reduce(this.sumWorkingDay, 0);
       console.log("dailyCount ", dailyCount);
       return dailyCount.toFixed(2);
     },
@@ -1074,6 +1093,7 @@ export default {
                   }
                 }
               } else if (c.daily_count > 0) {
+                accum += increment;
                 //if less than one then only max one sku in one day
                 if (accum >= counter) {
                   var startIndex = _.findIndex(all_skus_class, (sku) => {
@@ -1088,7 +1108,7 @@ export default {
                 }
               }
             }
-            accum += increment;
+            // accum += increment;
           });
           all_schedules.push(all_skus_class);
         }
