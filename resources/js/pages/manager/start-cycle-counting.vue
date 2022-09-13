@@ -1,46 +1,23 @@
 <template>
   <PageComponent title="Start Cycle Counting">
-    <Form
-      ref="startCycleCountingForm"
-      :rules="startCycleCountingFormRuleValidate"
-      :model="startCycleCountingForm"
-      :label-width="120"
-      label-position="left"
-      style="min-width: 1200px"
-    >
+    <Form ref="startCycleCountingForm" :rules="startCycleCountingFormRuleValidate" :model="startCycleCountingForm"
+      :label-width="120" label-position="left" style="min-width: 1200px">
       <div class="form-label">Working day of warehouse:</div>
 
       <Row>
         <Col span="6">
-          <FormItem prop="workday_start" :label-width="0"
-            ><Select
-              v-model="startCycleCountingForm.workday_start"
-              placeholder="Select Workday Start"
-            >
-              <Option
-                v-for="item in workdays"
-                :key="item.value"
-                :value="item.value"
-                >{{ item.text }}</Option
-              >
-            </Select></FormItem
-          >
+        <FormItem prop="workday_start" :label-width="0"><Select v-model="startCycleCountingForm.workday_start"
+            placeholder="Select Workday Start">
+            <Option v-for="item in workdays" :key="item.value" :value="item.value">{{ item.text }}</Option>
+          </Select></FormItem>
         </Col>
         <Col span="2" style="text-align: center">to </Col>
         <Col span="6">
-          <FormItem prop="workday_end" :label-width="0">
-            <Select
-              v-model="startCycleCountingForm.workday_end"
-              placeholder="Select Workday End"
-            >
-              <Option
-                v-for="item in workdays"
-                :key="item.value"
-                :value="item.value"
-                >{{ item.text }}</Option
-              >
-            </Select></FormItem
-          >
+        <FormItem prop="workday_end" :label-width="0">
+          <Select v-model="startCycleCountingForm.workday_end" placeholder="Select Workday End">
+            <Option v-for="item in workdays" :key="item.value" :value="item.value">{{ item.text }}</Option>
+          </Select>
+        </FormItem>
         </Col>
       </Row>
 
@@ -48,133 +25,88 @@
       <FormItem label="Class A: Every">
         <Row>
           <Col span="6">
-            <FormItem prop="classA">
-              <Input
-                class="counting-frequency numberType"
-                type="number"
-                v-model="startCycleCountingForm.classA"
-                placeholder="Enter something..."
-              ></Input>
-            </FormItem>
+          <FormItem prop="classA">
+            <Input class="counting-frequency numberType" type="number" v-model="startCycleCountingForm.classA"
+              placeholder="Enter something..."></Input>
+          </FormItem>
           </Col>
           <Col span="6">
-            <FormItem :label-width="0" prop="classAType">
-              <Select
-                class="counting-frequency freqType"
-                v-model="startCycleCountingForm.classAType"
-                placeholder="Select Workday Start"
-              >
-                <Option
-                  v-for="item in cycleCountingFreqType"
-                  :key="item.value"
-                  :value="item.value"
-                  >{{ item.text }}</Option
-                >
-              </Select></FormItem
-            >
+          <FormItem :label-width="0" prop="classAType">
+            <Select class="counting-frequency freqType" v-model="startCycleCountingForm.classAType"
+              placeholder="Select Workday Start">
+              <Option v-for="item in cycleCountingFreqType" :key="item.value" :value="item.value">{{ item.text }}
+              </Option>
+            </Select>
+          </FormItem>
           </Col>
-          <Col span="10"> </Col>
+          <Col span="10">
+          </Col>
         </Row>
       </FormItem>
       <FormItem label="Class B: Every">
         <Row>
           <Col span="6">
-            <FormItem prop="classB">
-              <Input
-                class="counting-frequency numberType"
-                type="number"
-                v-model="startCycleCountingForm.classB"
-                placeholder="Enter something..."
-              ></Input>
-            </FormItem>
+          <FormItem prop="classB">
+            <Input class="counting-frequency numberType" type="number" v-model="startCycleCountingForm.classB"
+              placeholder="Enter something..."></Input>
+          </FormItem>
           </Col>
           <Col span="6">
-            <FormItem :label-width="0" prop="classBType">
-              <Select
-                class="counting-frequency freqType"
-                v-model="startCycleCountingForm.classBType"
-                placeholder="Select Workday Start"
-              >
-                <Option
-                  v-for="item in cycleCountingFreqType"
-                  :key="item.value"
-                  :value="item.value"
-                  >{{ item.text }}</Option
-                >
-              </Select></FormItem
-            >
+          <FormItem :label-width="0" prop="classBType">
+            <Select class="counting-frequency freqType" v-model="startCycleCountingForm.classBType"
+              placeholder="Select Workday Start">
+              <Option v-for="item in cycleCountingFreqType" :key="item.value" :value="item.value">{{ item.text }}
+              </Option>
+            </Select>
+          </FormItem>
           </Col>
-          <Col span="10"> </Col>
+          <Col span="10">
+          </Col>
         </Row>
       </FormItem>
       <FormItem label="Class C: Every">
         <Row>
           <Col span="6">
-            <FormItem prop="classC">
-              <Input
-                class="counting-frequency numberType"
-                type="number"
-                v-model="startCycleCountingForm.classC"
-                placeholder="Enter something..."
-              ></Input>
-            </FormItem>
+          <FormItem prop="classC">
+            <Input class="counting-frequency numberType" type="number" v-model="startCycleCountingForm.classC"
+              placeholder="Enter something..."></Input>
+          </FormItem>
           </Col>
           <Col span="6">
-            <FormItem :label-width="0" prop="classCType">
-              <Select
-                class="counting-frequency freqType"
-                v-model="startCycleCountingForm.classCType"
-                placeholder="Select Workday Start"
-              >
-                <Option
-                  v-for="item in cycleCountingFreqType"
-                  :key="item.value"
-                  :value="item.value"
-                  >{{ item.text }}</Option
-                >
-              </Select></FormItem
-            >
+          <FormItem :label-width="0" prop="classCType">
+            <Select class="counting-frequency freqType" v-model="startCycleCountingForm.classCType"
+              placeholder="Select Workday Start">
+              <Option v-for="item in cycleCountingFreqType" :key="item.value" :value="item.value">{{ item.text }}
+              </Option>
+            </Select>
+          </FormItem>
           </Col>
-          <Col span="10"> </Col>
+          <Col span="10">
+          </Col>
         </Row>
       </FormItem>
 
       <div class="form-label">Assign Staff(s):</div>
       <FormItem :label-width="0" prop="staffs_assigned_str">
-        <Input
-          v-model="startCycleCountingForm.staffs_assigned_str"
-          type="textarea"
-          disabled
-          :autosize="{ minRows: 2, maxRows: 5 }"
-          placeholder="Assign staff"
-        ></Input>
+        <Input v-model="startCycleCountingForm.staffs_assigned_str" type="textarea" disabled
+          :autosize="{ minRows: 2, maxRows: 5 }" placeholder="Assign staff"></Input>
       </FormItem>
       <Button @click="getStaffs">Assign Staff</Button>
 
       <div class="form-label">Select Inventories(s):</div>
       <FormItem :label-width="0" prop="inventories_str">
-        <Input
-          v-model="startCycleCountingForm.inventories_str"
-          type="textarea"
-          disabled
-          :autosize="{ minRows: 2, maxRows: 5 }"
-          placeholder="Select inventories"
-        ></Input>
+        <Input v-model="startCycleCountingForm.inventories_str" type="textarea" disabled
+          :autosize="{ minRows: 2, maxRows: 5 }" placeholder="Select inventories"></Input>
         <Button @click="getInvs">Select inventories</Button>
       </FormItem>
       <div class="form-label">Start and End date:</div>
 
       <Row>
         <Col span="5">
-          <FormItem :label-width="0" prop="start_end_date">
-            <DatePicker
-              v-model="startCycleCountingForm.start_end_date"
-              type="daterange"
-              :options="minDate"
-              placement="bottom-end"
-              placeholder="Start and End date"
-            ></DatePicker>
-          </FormItem>
+        <FormItem :label-width="0" prop="start_end_date">
+          <DatePicker v-model="startCycleCountingForm.start_end_date" type="daterange" :options="minDate"
+            placement="bottom-end" placeholder="Start and End date"></DatePicker>
+        </FormItem>
         </Col>
       </Row>
 
@@ -185,119 +117,65 @@
     </Form>
 
     <!-- ASSIGN STAFF MODAL-->
-    <Modal
-      v-model="assignStaffModal"
-      title="Assign Staff"
-      @on-ok="assignStaff"
-      @on-cancel="closeAssignStaffModal"
-    >
-      <div
-        style="
+    <Modal v-model="assignStaffModal" title="Assign Staff" @on-ok="assignStaff" @on-cancel="closeAssignStaffModal">
+      <div style="
           border-bottom: 1px solid #e9e9e9;
           padding-bottom: 6px;
           margin-bottom: 6px;
-        "
-      >
-        <Checkbox
-          :indeterminate="staff_indeterminate"
-          :model-value="staff_checkAll"
-          @click.prevent="staffHandleCheckAll"
-          >Select All</Checkbox
-        >
+        ">
+        <Checkbox :indeterminate="staff_indeterminate" :model-value="staff_checkAll"
+          @click.prevent="staffHandleCheckAll">Select All</Checkbox>
       </div>
-      <CheckboxGroup
-        v-model="startCycleCountingForm.staffs_assigned"
-        @on-change="staffCheckAllGroupChange"
-      >
-        <Checkbox
-          v-for="staff in staffs"
-          :key="staff.id"
-          :label="`${staff.id}:${staff.name}`"
-        >
+      <CheckboxGroup v-model="startCycleCountingForm.staffs_assigned" @on-change="staffCheckAllGroupChange">
+        <Checkbox v-for="staff in staffs" :key="staff.id" :label="`${staff.id}:${staff.name}`">
         </Checkbox>
       </CheckboxGroup>
     </Modal>
     <!-- SELECT INVENTORY MODAL-->
-    <Modal
-      v-model="selectInvModal"
-      title="Select Inventory"
-      @on-ok="selectInv"
-      @on-cancel="closeSelectInvModal"
-    >
-      <div
-        style="
+    <Modal v-model="selectInvModal" title="Select Inventory" @on-ok="selectInv" @on-cancel="closeSelectInvModal">
+      <div style="
           border-bottom: 1px solid #e9e9e9;
           padding-bottom: 6px;
           margin-bottom: 6px;
-        "
-      >
-        <Checkbox
-          :indeterminate="inv_indeterminate"
-          :model-value="inv_checkAll"
-          @click.prevent="invHandleCheckAll"
-          >Select All</Checkbox
-        >
+        ">
+        <Checkbox :indeterminate="inv_indeterminate" :model-value="inv_checkAll" @click.prevent="invHandleCheckAll">
+          Select All</Checkbox>
       </div>
-      <CheckboxGroup
-        v-model="startCycleCountingForm.inventories"
-        @on-change="invCheckAllGroupChange"
-      >
-        <Checkbox
-          v-for="inventory in inventories"
-          :key="inventory.id"
-          :label="`${inventory.id}:${inventory.name}`"
-        >
+      <CheckboxGroup v-model="startCycleCountingForm.inventories" @on-change="invCheckAllGroupChange">
+        <Checkbox v-for="inventory in inventories" :key="inventory.id" :label="`${inventory.id}:${inventory.name}`">
         </Checkbox>
       </CheckboxGroup>
     </Modal>
-    <Modal
-      v-model="confirmStartCycleCountingModal"
-      title="Are you sure to start the cycle counting with the following information?"
-      :loading="loading"
-      :closable="false"
-      :mask-closable="false"
-    >
+    <Modal v-model="confirmStartCycleCountingModal"
+      title="Are you sure to start the cycle counting with the following information?" :loading="loading"
+      :closable="false" :mask-closable="false">
       <Row>
         <Col span="5">
-          <div>No. of staff:</div>
+        <div>No. of staff:</div>
         </Col>
         <Col span="5">
-          <div>{{ startCycleCountingForm.staffs_assigned.length }}</div>
+        <div>{{ startCycleCountingForm.staffs_assigned.length }}</div>
         </Col>
         <Col span="14" class="text-right">
-          <Icon type="ios-calendar-outline" />
-          {{ startCycleCountingForm.start_date }} -
-          {{ startCycleCountingForm.end_date }}
+        <Icon type="ios-calendar-outline" />
+        {{ startCycleCountingForm.start_date }} -
+        {{ startCycleCountingForm.end_date }}
         </Col>
       </Row>
       <Row>
         <Col span="5">
-          <div>No. of SKU(s):</div>
+        <div>No. of SKU(s):</div>
         </Col>
         <Col span="5">
-          <div>{{ startCycleCountingForm.sku_list.length }}</div>
+        <div>{{ startCycleCountingForm.sku_list.length }}</div>
         </Col>
       </Row>
 
-      <Table
-        :columns="confirm_start_cycle_counting_table_columns"
-        :data="startCycleCountingForm.cycle_count_class"
-        border
-        show-summary
-        :summary-method="handleSummary"
-        height="200"
-      ></Table>
+      <Table :columns="confirm_start_cycle_counting_table_columns" :data="startCycleCountingForm.cycle_count_class"
+        border show-summary :summary-method="handleSummary" height="200"></Table>
       <template #footer>
-        <Button
-          :disabled="disableCancelButton"
-          @click="confirmStartCycleCountingModal = false"
-          >Cancel</Button
-        >
-        <Button
-          type="primary"
-          :loading="loading"
-          @click="confirmStartCycleCounting"
-        >
+        <Button :disabled="disableCancelButton" @click="confirmStartCycleCountingModal = false">Cancel</Button>
+        <Button type="primary" :loading="loading" @click="confirmStartCycleCounting">
           <span v-if="!loading">Create</span>
           <span v-else>Creating...</span>
         </Button>
@@ -608,7 +486,7 @@ export default {
         sku.stock_value = tempInv.stock_value;
         sku.transformed_stock_value = _.round(
           (sku.stock_value - min.stock_value) /
-            (max.stock_value - min.stock_value),
+          (max.stock_value - min.stock_value),
           2
         );
         //CLASSIFY TO CYCLE COUNT CLASS
@@ -625,7 +503,7 @@ export default {
       console.log(this.startCycleCountingForm.sku_list);
     },
     calculateFrequency_DailyCount() {
-     
+
       //CONVERT START AND END DATE TO CORRECT STRING FORMAT
       this.startCycleCountingForm.start_date = this.convertDate(
         this.startCycleCountingForm.start_end_date[0]
@@ -649,17 +527,17 @@ export default {
             this.startCycleCountingForm.classA,
             this.startCycleCountingForm.classAType
           );
-          
+
           c.daily_count = this.getDailyCount(
             c.number_of_skus,
             // this.startCycleCountingForm.classA,
             c.frequency,
             this.startCycleCountingForm.classAType
           );
-         
+
           c.type = this.startCycleCountingForm.classAType;
           c.type_freq = this.startCycleCountingForm.classA;
-          
+
         } else if (c.class == "B") {
           c.frequency = this.countFrequency(
             this.startCycleCountingForm.classB,
@@ -704,7 +582,7 @@ export default {
         this.startCycleCountingForm.start_end_date[0].getDay();
       if (type == "day") {
         //FOR DAY, JUST DIVIDE TOTAL WORKING DAYS WITH COUNT FREQUENCY
-        return days.reduce(this.sumWorkingDay, 0) / count_freq;
+        return days.reduce(this.sumWorkingDay(this.startCycleCountingForm.start_end_date[0], this.startCycleCountingForm.start_end_date[1]), 0) / count_freq;
       } else if (type == "week") {
         //GET HOW MANY DAY FROM THE FIRST DATE TO WORKING DAY START --> SO THAT CAN KNOW WHICH IS THE FIRST DATE TO START COUNT
         var days_from_range = this.getDaysFromRange(days, start_day_index);
@@ -717,7 +595,7 @@ export default {
         //EG. 27/7/2022 - 27/12/2023 = 12 MONTHS
         weeks = Math.ceil(
           Math.abs(this.startCycleCountingForm.start_end_date[1] - first_date) /
-            (1000 * 60 * 60 * 24 * 7)
+          (1000 * 60 * 60 * 24 * 7)
         );
 
         return weeks / count_freq;
@@ -741,13 +619,31 @@ export default {
         //EG = FIRST DATE = 1/8/2022
         months -= first_date.getMonth(); // DEDUCT THE MONTHS BEFORE FIRST DATE  EG. 12 - 8 (IF START DATE IS 27/7/2022)
         months += this.startCycleCountingForm.start_end_date[1].getMonth(); //EG.4+12 = 16MONTHS (27/7/2022 - 27/12/2023)
-        if (
-          this.startCycleCountingForm.start_end_date[1].getDate() >=
-          first_date.getDate()
-        ) {
-          //make sure to consider partial month by adding 1
-          months += 1;
+
+        var dayIndex = _.findIndex(days, (day) => {
+          return day == this.startCycleCountingForm.start_end_date[1].getDay();
+        });
+        // console.log(dayIndex);
+        if (this.startCycleCountingForm.start_end_date[1].getDate() >= first_date.getDate()) {
+          var start = moment(
+            this.startCycleCountingForm.start_end_date[1]
+          ).subtract(this.startCycleCountingForm.start_end_date[1].getDate() - first_date.getDate(), "days")._d; //get the first date of the partial month
+          var number_of_working_days = days.reduce(this.sumWorkingDay(start, this.startCycleCountingForm.start_end_date[1]), 0)
+          console.log("number of working days from first date of partial month:", number_of_working_days);
+          if (number_of_working_days > 0) { //if there are at least one working day after first date of the partial month to the end date
+            months += 1;
+          }
         }
+        // if (this.startCycleCountingForm.start_end_date[1].getDate() == first_date.getDate() && dayIndex != -1) {
+        //   months += 1;
+        // }
+        // else if (
+        //   this.startCycleCountingForm.start_end_date[1].getDate() >
+        //   first_date.getDate()
+        // ) {
+        //   //make sure to consider partial month by adding 1
+        //   months += 1;
+        // }
         months /= count_freq;
         return months <= 0 ? 1 : months;
       } else {
@@ -766,9 +662,9 @@ export default {
         //consider the partial year by adding one
         if (
           this.startCycleCountingForm.start_end_date[1].getDate() >=
-            first_date.getDate() &&
+          first_date.getDate() ||
           this.startCycleCountingForm.start_end_date[1].getMonth() >=
-            first_date.getMonth()
+          first_date.getMonth()
         ) {
           return (Math.abs(Math.round(diff / 365.25)) + 1) / count_freq;
         }
@@ -779,26 +675,29 @@ export default {
       return days.includes(start_day_index)
         ? 0
         : start_day_index < days[0]
-        ? days[0] - start_day_index
-        : 7 - (start_day_index - days[0]);
+          ? days[0] - start_day_index
+          : 7 - (start_day_index - days[0]);
     },
-    sumWorkingDay(a, b) {
-      var ndays = //TOTAL DAYS BETWEEN START AND END DATE
-        1 +
-        Math.round(
-          (this.startCycleCountingForm.start_end_date[1] -
-            this.startCycleCountingForm.start_end_date[0]) /
+    sumWorkingDay(start_date, end_date) {
+      function reducer(a, b) {
+        var ndays = //TOTAL DAYS BETWEEN START AND END DATE
+          1 +
+          Math.round(
+            (end_date -
+              start_date) /
             (24 * 3600 * 1000)
-        ); //31
-      return (
-        a +
-        Math.floor(
-          (ndays +
-            ((this.startCycleCountingForm.start_end_date[0].getDay() + 6 - b) %
-              7)) /
+          ); //31
+        return (
+          a +
+          Math.floor(
+            (ndays +
+              ((start_date.getDay() + 6 - b) %
+                7)) /
             7
-        )
-      );
+          )
+        );
+      }
+      return reducer;
     },
     getArrayOfWorkingDays(start_index, end_index) {
       var days = [];
@@ -830,7 +729,7 @@ export default {
       ); //5
       var days = this.getArrayOfWorkingDays(start_index, end_index); //GET WORKING DAY INDEX IN ARRAY [1,2,3,4,5] (MONDAY-FRIDAY)
       console.log("getDailyCount", number_of_skus, freq);
-      var dailyCount = ( number_of_skus * freq) / days.reduce(this.sumWorkingDay, 0);
+      var dailyCount = (number_of_skus * freq) / days.reduce(this.sumWorkingDay(this.startCycleCountingForm.start_end_date[0], this.startCycleCountingForm.start_end_date[1]), 0);
       console.log("dailyCount ", dailyCount);
       return dailyCount.toFixed(2);
     },
@@ -1162,7 +1061,7 @@ export default {
       await this.$axiosClient
         .put(
           "/storeCycleCountingSettings/" +
-            this.$store.getters.getUser.warehouse_id,
+          this.$store.getters.getUser.warehouse_id,
           this.startCycleCountingForm
         )
         .then((response) => {
@@ -1180,7 +1079,7 @@ export default {
     async createSKU(skus) {
       await this.$axiosClient
         .post("/sku", skus)
-        .then((response) => {})
+        .then((response) => { })
         .catch((error) => {
           this.$Loading.error();
           this.handleApiError(error);
@@ -1199,7 +1098,7 @@ export default {
         });
     },
   },
-  created() {},
+  created() { },
   mounted() {
     console.log(this.startCycleCountingForm);
   },
@@ -1211,9 +1110,11 @@ export default {
   font-size: 15px;
   font-weight: bold;
 }
+
 .ivu-form-item-content .counting-frequency.numberType {
   width: 80px;
 }
+
 .ivu-form-item-content .counting-frequency.freqType {
   width: 150px;
 }

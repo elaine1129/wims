@@ -39,7 +39,7 @@
   </PageHeader>
   <br />
   <StockTableComponent name="stocks" :data="data.stocks"></StockTableComponent>
-  <div class="flex justify-center space-x-4">
+  <div class="flex justify-center space-x-4" v-if="$store.getters.getUser.role == 'Admin'">
     <Button
       type="success"
       size="large"
