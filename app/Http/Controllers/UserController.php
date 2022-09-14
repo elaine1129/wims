@@ -96,10 +96,12 @@ class UserController extends Controller
                 'errors' => ['The user id' . $id . ' is holding some cycle count schedule, Please ask manager to reassign the schedules to another staff first. ']
             ], 501);
         }
-        $warehouse = Warehouse::findOrFail($user->warehouse_id);
-        $warehouse["manager_id"] = null;
-        $warehouse->save();
-        $user["role"] = "Staff"; //change back to staff
+        if ($user->role == "Manager") {
+            $warehouse = Warehouse::findOrFail($user->warehouse_id);
+            $warehouse["manager_id"] = null;
+            $warehouse->save();
+            $user["role"] = "Staff"; //change back to staff
+        }
         $user["status"] = "INACTIVE"; //set inactive so that the data for all reports, stocks still remains for viewing
         $user->save();
         return;
