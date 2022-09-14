@@ -3,36 +3,36 @@
     <template #content>
       <DescriptionList :col="2">
         <Description term="ID " class="headerRow">{{
-          data.selectedInventory.id
+        data.selectedInventory.id
         }}</Description>
         <Description term="Quantity on hand " class="headerRow">{{
-          data.selectedInventory.qty_on_hand
+        data.selectedInventory.qty_on_hand
         }}</Description>
         <Description term="Name " class="headerRow">{{
-          data.selectedInventory.name
+        data.selectedInventory.name
         }}</Description>
         <Description term="Storage bin " class="headerRow">{{
-          data.selectedInventory.storage_bin
-            ? data.selectedInventory.storage_bin[0].bin_number
-            : "-"
+        data.selectedInventory.storage_bin? data.selectedInventory.storage_bin.length > 0
+        ? data.selectedInventory.storage_bin[0].bin_number
+        : "-" : "-"
         }}</Description>
         <Description term="Warehouse " class="headerRow">{{
-          data.selectedInventory.warehouse
-            ? data.selectedInventory.warehouse.name
-            : "-"
+        data.selectedInventory.warehouse
+        ? data.selectedInventory.warehouse.name
+        : "-"
         }}</Description>
         <Description term="Created at " class="headerRow">{{
-          data.selectedInventory.created_by
-            ? data.selectedInventory.created_by
-            : "-"
+        data.selectedInventory.created_by
+        ? data.selectedInventory.created_by
+        : "-"
         }}</Description>
         <Description term="Cost per unit " class="headerRow">{{
-          data.selectedInventory.cost_per_unit
+        data.selectedInventory.cost_per_unit
         }}</Description>
         <Description term="Updated at " class="headerRow">{{
-          data.selectedInventory.updated_by
-            ? data.selectedInventory.updated_by
-            : "-"
+        data.selectedInventory.updated_by
+        ? data.selectedInventory.updated_by
+        : "-"
         }}</Description>
       </DescriptionList>
     </template>
@@ -40,29 +40,11 @@
   <br />
   <StockTableComponent name="stocks" :data="data.stocks"></StockTableComponent>
   <div class="flex justify-center space-x-4" v-if="$store.getters.getUser.role == 'Admin'">
-    <Button
-      type="success"
-      size="large"
-      ghost
-      class="w-24"
-      @click="showEditInventoryModal"
-      >Edit</Button
-    >
-    <Button
-      type="error"
-      size="large"
-      ghost
-      class="w-24"
-      @click="showDeleteInventoryModal"
-      >Delete</Button
-    >
+    <Button type="success" size="large" ghost class="w-24" @click="showEditInventoryModal">Edit</Button>
+    <Button type="error" size="large" ghost class="w-24" @click="showDeleteInventoryModal">Delete</Button>
   </div>
-  <EditInventoryModalComponent
-    ref="editInventoryModalComponent"
-  ></EditInventoryModalComponent>
-  <DeleteInventoryModalComponent
-    ref="deleteInventoryModalComponent"
-  ></DeleteInventoryModalComponent>
+  <EditInventoryModalComponent ref="editInventoryModalComponent"></EditInventoryModalComponent>
+  <DeleteInventoryModalComponent ref="deleteInventoryModalComponent"></DeleteInventoryModalComponent>
 </template>
 
 <script>
