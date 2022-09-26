@@ -32,18 +32,16 @@
             <td>{{ inventory.qty_on_hand }}</td>
             <td>
               {{
-                inventory.storage_bin[0]
-                  ? inventory.storage_bin[0].bin_number
-                  : "-"
+              inventory.storage_bin[0]
+              ? inventory.storage_bin[0].bin_number
+              : "-"
               }}
             </td>
             <td>{{ inventory.category ? inventory.category.name : "-" }}</td>
             <td>{{ inventory.created_by }}</td>
             <td>{{ inventory.updated_by }}</td>
             <td>
-              <Button type="primary" @click="openCheckInOutModal(inventory.id)"
-                >Check In/Out Stock</Button
-              >
+              <Button type="primary" @click="openCheckInOutModal(inventory.id)">Check In/Out Stock</Button>
             </td>
           </tr>
         </tbody>
@@ -69,46 +67,26 @@
           <TabPane label="Check In" name="checkin">
             <Form :model="checkInForm" :label-width="80">
               <FormItem label="Quantity">
-                <Input
-                  class="check-in-out-stock-quantity-input"
-                  v-model="checkInForm.quantity"
-                  type="number"
-                  placeholder="Enter quantity"
-                ></Input>
+                <Input class="check-in-out-stock-quantity-input" v-model="checkInForm.quantity" type="number"
+                  placeholder="Enter quantity"></Input>
               </FormItem>
               <FormItem label="Remarks">
-                <Input
-                  class="check-in-out-stock-remarks-input"
-                  v-model="checkInForm.remarks"
-                  type="textarea"
-                  :autosize="{ minRows: 2, maxRows: 5 }"
-                  :show-word-limit="true"
-                  maxlength="191"
-                  placeholder="Enter remarks"
-                ></Input>
+                <Input class="check-in-out-stock-remarks-input" v-model="checkInForm.remarks" type="textarea"
+                  :autosize="{ minRows: 2, maxRows: 5 }" :show-word-limit="true" maxlength="191"
+                  placeholder="Enter remarks"></Input>
               </FormItem>
             </Form>
           </TabPane>
           <TabPane label="Check Out" name="checkout">
             <Form :model="checkOutForm" :label-width="80">
               <FormItem label="Quantity">
-                <Input
-                  class="check-in-out-stock-quantity-input"
-                  v-model="checkOutForm.quantity"
-                  type="number"
-                  placeholder="Enter quantity"
-                ></Input>
+                <Input class="check-in-out-stock-quantity-input" v-model="checkOutForm.quantity" type="number"
+                  placeholder="Enter quantity"></Input>
               </FormItem>
               <FormItem label="Remarks">
-                <Input
-                  class="check-in-out-stock-remarks-input"
-                  v-model="checkOutForm.remarks"
-                  type="textarea"
-                  :autosize="{ minRows: 2, maxRows: 5 }"
-                  :show-word-limit="true"
-                  maxlength="191"
-                  placeholder="Enter remarks"
-                ></Input>
+                <Input class="check-in-out-stock-remarks-input" v-model="checkOutForm.remarks" type="textarea"
+                  :autosize="{ minRows: 2, maxRows: 5 }" :show-word-limit="true" maxlength="191"
+                  placeholder="Enter remarks"></Input>
               </FormItem>
             </Form>
           </TabPane>
@@ -187,9 +165,8 @@ export default {
         // this.checkInForm.staff_id = this.$store.getters.getUser.id;
         // const res = await this.callApi("POST", "/api/stock", this.checkInForm);
         console.time("newStock");
-        const res = await this.$axiosClient.post("/stock", this.checkInForm);
-        if (res.status == 201) {
-          this.checkInForm = {
+        const res = await this.$axiosClient.post("/stock", this.checkInForm).then(res=>{
+            this.checkInForm = {
             quantity: 0,
             remarks: "",
             inventory_id: "",
@@ -199,19 +176,33 @@ export default {
           this.success(
             "Successfully checked in INV_ID: " + this.checkInOutModalInv.id
           );
-        } else if (res.status == 422) {
-          console.log(res);
-          this.error(Object.values(res.data.errors)[0], res.data.message);
-        } else {
-          this.checkInForm = {
-            quantity: 0,
-            remarks: "",
-            inventory_id: "",
-            mode: "checkin",
-          };
-          this.checkInOutModal = false;
-          this.smtgWentWrong();
-        }
+        }).catch(error=>{
+          this.handleApiError(error);
+        });
+        // if (res.status == 201) {
+        //   this.checkInForm = {
+        //     quantity: 0,
+        //     remarks: "",
+        //     inventory_id: "",
+        //     mode: "checkin",
+        //   };
+        //   this.checkInOutModal = false;
+        //   this.success(
+        //     "Successfully checked in INV_ID: " + this.checkInOutModalInv.id
+        //   );
+        // } else if (res.status == 422) {
+        //   console.log(res);
+        //   this.error(Object.values(res.data.errors)[0], res.data.message);
+        // } else {
+        //   this.checkInForm = {
+        //     quantity: 0,
+        //     remarks: "",
+        //     inventory_id: "",
+        //     mode: "checkin",
+        //   };
+        //   this.checkInOutModal = false;
+        //   this.smtgWentWrong();
+        // }
       } else if (this.checkInOrOutStatus == "checkout") {
         if (this.checkOutForm.quantity >= this.checkInOutModalInv.qty_on_hand) {
           this.error(
@@ -228,10 +219,8 @@ export default {
           //   this.checkOutForm
           // );
           console.time("newStock");
-          const res = await this.$axiosClient.post("/stock", this.checkOutForm);
-
-          if (res.status == 201) {
-            this.checkOutForm = {
+          const res = await this.$axiosClient.post("/stock", this.checkOutForm).then(res=>{
+              this.checkOutForm = {
               quantity: 0,
               remarks: "",
               inventory_id: "",
@@ -241,19 +230,34 @@ export default {
             this.success(
               "Successfully checked out INV_ID: " + this.checkInOutModalInv.id
             );
-          } else if (res.status == 422) {
-            console.log(res);
-            this.error(Object.values(res.data.errors)[0], res.data.message);
-          } else {
-            this.checkOutForm = {
-              quantity: 0,
-              remarks: "",
-              inventory_id: "",
-              mode: "checkout",
-            };
-            this.checkInOutModal = false;
-            this.smtgWentWrong();
-          }
+          }).catch(error=>{
+            this.handleApiError(error);
+          });
+
+          // if (res.status == 201) {
+          //   this.checkOutForm = {
+          //     quantity: 0,
+          //     remarks: "",
+          //     inventory_id: "",
+          //     mode: "checkout",
+          //   };
+          //   this.checkInOutModal = false;
+          //   this.success(
+          //     "Successfully checked out INV_ID: " + this.checkInOutModalInv.id
+          //   );
+          // } else if (res.status == 422) {
+          //   console.log(res);
+          //   this.error(Object.values(res.data.errors)[0], res.data.message);
+          // } else {
+          //   this.checkOutForm = {
+          //     quantity: 0,
+          //     remarks: "",
+          //     inventory_id: "",
+          //     mode: "checkout",
+          //   };
+          //   this.checkInOutModal = false;
+          //   this.smtgWentWrong();
+          // }
         }
       }
     },
