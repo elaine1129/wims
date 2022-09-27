@@ -385,11 +385,12 @@ export default {
     async confirmApprove() {
       let params = {
         cycle_counting_id: this.selectedCycleCount.id,
-        ira: (
-          1 -
-          Math.abs(this.selectedCycleCount.variance) /
-            this.selectedCycleCount.schedule.sku.inventory.qty_on_hand
-        ).toFixed(3),
+        ira:
+          (
+            1 -
+            Math.abs(this.selectedCycleCount.variance) /
+              this.selectedCycleCount.schedule.sku.inventory.qty_on_hand
+          ).toFixed(3) * 100,
         inventory_id: this.selectedCycleCount.schedule.sku.inventory.id,
         variance: this.selectedCycleCount.variance,
       };
